@@ -98,7 +98,7 @@ with sync_playwright() as p:
         pg.screenshot(path=str(SAL / f"{nombre}-05-mis.png"))
 
         # --- Recepción Oficina Central
-        entrar(pg, "Paula Rojas")
+        entrar(pg, "Encargado OIRS")
         pg.screenshot(path=str(SAL / f"{nombre}-06-inicio-recepcion.png"))
         tarjeta(pg, "Mis tareas")
         pg.locator("[data-caso='DP-2027-000004']:visible").first.click()
@@ -144,9 +144,9 @@ with sync_playwright() as p:
         pg.screenshot(path=str(SAL / f"{nombre}-12-reclamo.png"))
         pg.locator("#cerrar").click()
 
-        # --- Firmante: firma una respuesta
-        entrar(pg, "Firmante")
-        pg.screenshot(path=str(SAL / f"{nombre}-13-inicio-firmante.png"))
+        # --- Director o directora: firma una respuesta (v4.3: reemplaza al perfil Firmante)
+        entrar(pg, "Director o directora")
+        pg.screenshot(path=str(SAL / f"{nombre}-13-inicio-director.png"))
         tarjeta(pg, "Por firmar")
         pg.locator("[data-caso='DP-2026-000104']:visible").first.click()
         pg.fill("#a-doc", "Carta Oficial N° 21 (ficticia)")
@@ -175,7 +175,7 @@ with sync_playwright() as p:
         pg.screenshot(path=str(SAL / f"{nombre}-09-responsables.png"))
         ok(pg.evaluate("document.documentElement.scrollWidth") <= op["viewport"]["width"], f"{nombre}: la tabla de responsables no desborda la página")
         pg.locator(".celda-resp[data-s='Dirección Regional Valparaíso'][data-k='recibe']").click()
-        pg.select_option("#e-u", "u3")  # v4.3: en regiones recibe el Encargado OIRS
+        pg.select_option("#e-u", "u2")  # v4.3: el Encargado OIRS recibe en todas las sedes
         pg.locator("#e-ok").click()
         pg.get_by_role("button", name="Volver al inicio").click()
         tarjeta(pg, "Casos sin responsable")

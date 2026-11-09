@@ -55,7 +55,7 @@ with sync_playwright() as p:
         pg.goto(URL)
         pg.wait_for_selector("#login:not([hidden])")
         pg.evaluate("window.tostada = () => {}")
-        pg.locator("#login .l-usuario", has_text="Sergio Bravo").first.click()
+        pg.locator("#login .l-usuario", has_text="Delegado de protección").first.click()
         pg.wait_for_selector("#vista .hero")
 
         # --- Delegado: dos secciones de accesos; los de la segunda llevan a su vista
@@ -66,7 +66,7 @@ with sync_playwright() as p:
         ok(sin_desborde(), f"{nombre}: convenios sin scroll horizontal")
 
         # --- Área (antes Dueño, fusionado en v4.3): sólo sus fichas; completa la devuelta y la envía
-        como(pg, "Natalia Herrera")
+        como(pg, "Área que trata")
         ok(pg.locator(".acceso").count() == 6, f"{nombre}: el área ve 6 accesos (3 del canal y 3 de la línea 2)")
         ev(pg, "ir('tratamientos')")
         ok(pg.locator("[data-trat]").count() == 4, f"{nombre}: el área ve sus 4 tratamientos (sus dos ámbitos)")
@@ -87,7 +87,7 @@ with sync_playwright() as p:
         ev(pg, "cerrarCapa()")
 
         # --- Delegado: aprueba, asigna dueño, ajusta un riesgo
-        como(pg, "Sergio Bravo")
+        como(pg, "Delegado de protección")
         ev(pg, "ir('tratamientos'); abrirTrat('T-04')")
         pg.click("#t-aprobar")
         ok(ev(pg, "TRAT('T-04').estado") == "aprobado", f"{nombre}: el delegado aprueba la ficha")
@@ -105,7 +105,7 @@ with sync_playwright() as p:
         ev(pg, "cerrarCapa()")
 
         # --- Seguridad registra y evalúa; el delegado reporta, comunica y cierra
-        como(pg, "Daniela Ossandón")
+        como(pg, "Seguridad de la información")
         ev(pg, "ir('vulneraciones')")
         pg.click("#v-nueva")
         pg.select_option("#nv-t", "T-02")
@@ -118,7 +118,7 @@ with sync_playwright() as p:
         pg.click("#ev-ok")
         ok(ev(pg, "VULNERACIONES[0].paso") == "decision", f"{nombre}: evaluada, pasa a decisión del delegado")
         ev(pg, "cerrarCapa()")
-        como(pg, "Sergio Bravo")
+        como(pg, "Delegado de protección")
         ev(pg, "ir('vulneraciones'); abrirVul('V-2027-002')")
         pg.click("#d-rep")
         ok(ev(pg, "VULNERACIONES[0].agencia") == ev(pg, "HOY"), f"{nombre}: el reporte a la Agencia queda con fecha")
@@ -130,12 +130,12 @@ with sync_playwright() as p:
         ok(sin_desborde(), f"{nombre}: vulneraciones sin scroll horizontal")
 
         # --- Evaluación de impacto: dueño inicia y envía; Fiscalía termina
-        como(pg, "Natalia Herrera")
+        como(pg, "Área que trata")
         ev(pg, "ir('eipd')")
         pg.click("[data-eipd='T-06']")
         pg.click("[data-eipd='T-06']")
         ok(ev(pg, "EIPD['T-06'].estado") == "fiscalia", f"{nombre}: el dueño inicia la evaluación y la envía a Fiscalía")
-        como(pg, "Andrés Contreras")
+        como(pg, "Fiscalía")
         ok(pg.locator(".acceso", has_text="Mis tareas").count() == 1, f"{nombre}: Fiscalía conserva sus tareas del canal")
         ev(pg, "ir('eipd')")
         pg.click("[data-eipd='T-06']")
@@ -152,7 +152,7 @@ with sync_playwright() as p:
         ok(ev(pg, "CONVENIOS.find(c => c.id === 'CV-03').pub.includes(MES_PUB)"), f"{nombre}: se registra la publicación mensual del convenio")
 
         # --- Bitácora y barrido
-        como(pg, "Sergio Bravo")
+        como(pg, "Delegado de protección")
         ev(pg, "ir('bitacora')")
         txt = pg.inner_text("#vista")
         ok("V-2027-002" in txt and "T-04" in txt, f"{nombre}: la bitácora registra las acciones de la línea 2")

@@ -1,5 +1,5 @@
-"""Pruebas de los cambios de la v4.3: perfiles regionales, selector de sede del Responsable de datos y fusión del
-Dueño de tratamiento con el Área que trata los datos.
+"""Pruebas de la v4.3: una cuenta por función (en todas las sedes), sin nombres ficticios en pantalla,
+Director o directora que revisa y firma (sin Firmante) y Área que trata los datos fusionada con el Dueño.
 
 Uso (desde la raíz del repositorio):  python -X utf8 pruebas/probar_v43.py [ruta-o-url]
 """
@@ -12,6 +12,8 @@ RAIZ = pathlib.Path(__file__).resolve().parent.parent
 OBJ = sys.argv[1] if len(sys.argv) > 1 else str(RAIZ / "index.html")
 URL = OBJ if OBJ.startswith("http") else pathlib.Path(OBJ).resolve().as_uri()
 fallas, oks = [], 0
+NOMBRES_FICTICIOS = ["Paula Rojas", "Marcelo Fuentes", "Andrés Contreras", "Natalia Herrera", "Carmen Lillo",
+                     "Jorge Medina", "Ricardo Fuenzalida", "Sergio Bravo", "Valeria Soto", "Daniela Ossandón"]
 
 
 def ok(cond, msg):
@@ -24,9 +26,9 @@ def ok(cond, msg):
         print("FALLA", msg)
 
 
-def entrar(pg, nombre):
+def entrar(pg, perfil):
     pg.goto(URL)
-    pg.locator("#login .l-usuario", has_text=nombre).first.click()
+    pg.locator("#login .l-usuario", has_text=perfil).first.click()
     pg.wait_for_selector("#vista .hero", timeout=5000)
 
 
@@ -42,65 +44,59 @@ with sync_playwright() as p:
     errores = []
     pg.on("pageerror", lambda e: errores.append(str(e)))
 
-    # 1. Cada perfil aparece una sola vez en la lista de ingreso
+    # 1. Una sola cuenta por función y sin los perfiles retirados
     pg.goto(URL)
     etiquetas = pg.locator("#l-interno .l-usuario b").all_inner_texts()
-    for perfil in ["Responsable de datos", "Encargado OIRS regional", "Director o directora regional",
-                   "Unidad jurídica regional", "Área que trata los datos", "Fiscalía", "Firmante",
+    for perfil in ["Encargado OIRS", "Fiscalía y unidad jurídica", "Director o directora", "Área que trata los datos",
                    "Delegado de protección de datos", "Administración del canal", "Seguridad de la información"]:
         n = etiquetas.count(perfil)
         ok(n == 1, f"ingreso: «{perfil}» aparece {n} vez (debe ser 1)")
-    ok("Dueño de tratamiento" not in etiquetas, "ingreso: no existe el perfil Dueño de tratamiento")
+    for retirado in ["Responsable de datos", "Encargado OIRS regional", "Unidad jurídica regional", "Firmante",
+                     "Dueño de tratamiento"]:
+        ok(retirado not in etiquetas, f"ingreso: ya no existe «{retirado}»")
+    ok(pg.evaluate("new Set(USUARIOS.filter(u => u.perfil !== 'solicitante').map(u => u.perfil)).size === "
+                   "USUARIOS.filter(u => u.perfil !== 'solicitante').length"),
+       "datos: cada perfil tiene una sola cuenta")
 
-    # 2. Responsable de datos: selector de sede en lectura
-    entrar(pg, "Paula Rojas")
+    # 2. Sin nombres ficticios en el ingreso ni en la sesión
+    texto_ingreso = pg.locator("#l-interno").inner_text()
+    ok(not any(n in texto_ingreso for n in NOMBRES_FICTICIOS), "ingreso: no aparecen nombres ficticios")
+
+    # 3. Encargado OIRS: ve y registra en todas las sedes, sin selector de sede propio
+    entrar(pg, "Encargado OIRS")
+    ok(not any(n in pg.locator("#quien").inner_text() for n in NOMBRES_FICTICIOS),
+       "sesión: el encabezado muestra el perfil, no un nombre ficticio")
     ev(pg, 'ir("casos")')
-    pg.wait_for_selector("#vista-sede", timeout=5000)
-    ok(pg.locator("#vista-sede").count() == 1, "Responsable: aparece el selector «Sede que consulta»")
-    pg.locator("#vista-sede").select_option("Dirección Regional Biobío")
-    pg.wait_for_timeout(250)
-    ok(pg.evaluate("VISTA_SEDE") == "Dirección Regional Biobío", "Responsable: el selector cambia la sede consultada")
-    biobio = pg.evaluate("misCasos().filter(c => c.sede === 'Dirección Regional Biobío').length")
-    ok(biobio >= 1, f"Responsable: en lectura ve {biobio} casos de Biobío")
-    ok(pg.evaluate("responsable(CASOS.find(c => c.sede === 'Dirección Regional Biobío' && abierto(c)))") != "u2",
-       "Responsable: no es responsable de los casos de Biobío (sólo lectura)")
-    pg.locator("#vista-sede").select_option("Oficina Central")
-    pg.wait_for_timeout(150)
+    pg.wait_for_selector("#c-q", timeout=5000)
+    sedes = ev(pg, "[...new Set(misCasos().map(c => c.sede))]")
+    ok("Oficina Central" in sedes and "Dirección Regional Biobío" in sedes,
+       f"Encargado: ve casos de varias sedes ({len(sedes)})")
+    ok(pg.locator("#vista-sede").count() == 0, "Encargado: ya no hay selector «Sede que consulta»")
+    ok(ev(pg, "RECEPTOR.includes(SESION.perfil)") is True, "Encargado: se reconoce como perfil receptor")
 
-    # 3. Encargado OIRS: recibe y registra en su región
-    entrar(pg, "Marcelo Fuentes")
-    vistos = pg.evaluate("misCasos().map(c => c.sede)")
-    ok(len(vistos) >= 1 and set(vistos) == {"Dirección Regional Biobío"},
-       f"OIRS: ve sólo casos de Biobío ({len(vistos)} casos)")
-    tareas = pg.evaluate("misTareas().length")
-    ok(tareas == 0, f"OIRS: sin tareas abiertas en su etapa (ninguno de Biobío está en «recibe») ({tareas})")
-    ok(pg.evaluate("RECEPTOR.includes(SESION.perfil)") is True, "OIRS: se reconoce como perfil receptor")
-    ok(pg.locator("#vista .hero").count() == 1, "OIRS: carga el inicio")
-    ok(pg.evaluate("misCasos().some(c => c.sede === 'Oficina Central')") is False,
-       "OIRS: no ve casos de Oficina Central")
-
-    # 4. Director regional: firma en su región
-    entrar(pg, "Carmen Lillo")
-    firma = pg.evaluate("misTareas().filter(c => c.etapa === 'firma').map(c => c.num)")
+    # 4. Director o directora: firma en todas las sedes y no deriva
+    entrar(pg, "Director o directora")
+    firma = ev(pg, "misTareas().filter(c => c.etapa === 'firma').map(c => c.num)")
     ok("DP-2026-000112" in firma, f"Director: tiene a firmar el caso DP-2026-000112 ({firma})")
+    ok(ev(pg, "SEDES.every(s => RESP[s].deriva !== 'u12')") is True, "Director: no deriva en ninguna sede")
+    ok(ev(pg, "SEDES.every(s => RESP[s].firma === 'u12' || !RESP[s].prueba)") is True,
+       "Director: es quien firma en las sedes con asignación de prueba")
 
-    # 5. Unidad jurídica regional: sólo ve casos de su región en revisión
-    entrar(pg, "Jorge Medina")
-    jur = pg.evaluate("misCasos().map(c => c.sede)")
-    ok(all(s == "Dirección Regional Biobío" for s in jur), f"Jurídica: sólo ve casos de Biobío ({len(jur)})")
+    # 5. Fiscalía y unidad jurídica: una sola cuenta con la revisión de todas las sedes
+    entrar(pg, "Fiscalía y unidad jurídica")
+    ok(ev(pg, "RESP['Dirección Regional Biobío'].revision === 'u4' && RESP['Oficina Central'].revision === 'u4'") is True,
+       "Fiscalía: hace la revisión (V°B°) en Oficina Central y en Biobío")
 
-    # 6. Área que trata los datos: una sola persona con sus dos ámbitos
-    entrar(pg, "Natalia Herrera")
-    ambitos = pg.evaluate("[...new Set(misCasos().map(c => c.ambito))]")
-    ok(pg.evaluate("AMBITOS.filter(a => a.resp === 'u5').map(a => a.k)") == ["personal", "asp"],
-       "Área: Natalia es responsable de los ámbitos personal y ASP")
-    ok(pg.evaluate("TRATAMIENTOS.filter(t => t.dueno === 'u5').length") == 4,
+    # 6. Área que trata los datos: una persona con sus ámbitos y tratamientos
+    entrar(pg, "Área que trata los datos")
+    ok(ev(pg, "AMBITOS.filter(a => a.resp === 'u5').map(a => a.k)") == ["personal", "asp"],
+       "Área: responsable de los ámbitos personal y ASP")
+    ok(ev(pg, "TRATAMIENTOS.filter(t => t.dueno === 'u5').length") == 4,
        "Área: sus 4 tratamientos del registro (fusión con el Dueño)")
 
     # 7. Sin errores de script y sin correos institucionales en pantalla
     ok(not errores, f"sin errores de script ({errores[:2]})")
-    textos = pg.evaluate("document.body.innerText")
-    ok("@conaf.cl" not in textos, "sin correos @conaf.cl en pantalla")
+    ok("@conaf.cl" not in pg.evaluate("document.body.innerText"), "sin correos @conaf.cl en pantalla")
     nav.close()
 
 print(f"\n{oks} OK · {len(fallas)} fallas")

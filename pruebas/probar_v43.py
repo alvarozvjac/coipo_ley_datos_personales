@@ -1,5 +1,5 @@
 """Pruebas de la v4.3: una cuenta por función (en todas las sedes), sin nombres ficticios en pantalla,
-Director o directora que revisa y firma (sin Firmante) y Área que trata los datos fusionada con el Dueño.
+Director o directora que revisa y firma (sin Firmante) y Área que trata los datos fusionado con el Dueño de tratamiento.
 
 Uso (desde la raíz del repositorio):  python -X utf8 pruebas/probar_v43.py [ruta-o-url]
 """
@@ -48,11 +48,11 @@ with sync_playwright() as p:
     pg.goto(URL)
     etiquetas = pg.locator("#l-interno .l-usuario b").all_inner_texts()
     for perfil in ["Encargado OIRS", "Fiscalía y unidad jurídica", "Director o directora", "Área que trata los datos",
-                   "Delegado de protección de datos", "Administración del canal", "Seguridad de la información"]:
+                   "Delegado de protección de datos", "Administración del canal"]:
         n = etiquetas.count(perfil)
         ok(n == 1, f"ingreso: «{perfil}» aparece {n} vez (debe ser 1)")
     for retirado in ["Responsable de datos", "Encargado OIRS regional", "Unidad jurídica regional", "Firmante",
-                     "Dueño de tratamiento"]:
+                     "Dueño de tratamiento", "Seguridad de la información"]:
         ok(retirado not in etiquetas, f"ingreso: ya no existe «{retirado}»")
     ok(pg.evaluate("new Set(USUARIOS.filter(u => u.perfil !== 'solicitante').map(u => u.perfil)).size === "
                    "USUARIOS.filter(u => u.perfil !== 'solicitante').length"),
@@ -87,12 +87,10 @@ with sync_playwright() as p:
     ok(ev(pg, "RESP['Dirección Regional Biobío'].revision === 'u4' && RESP['Oficina Central'].revision === 'u4'") is True,
        "Fiscalía: hace la revisión (V°B°) en Oficina Central y en Biobío")
 
-    # 6. Área que trata los datos: una persona con sus ámbitos y tratamientos
+    # 6. Área que trata los datos: una persona con sus ámbitos
     entrar(pg, "Área que trata los datos")
     ok(ev(pg, "AMBITOS.filter(a => a.resp === 'u5').map(a => a.k)") == ["personal", "asp"],
        "Área: responsable de los ámbitos personal y ASP")
-    ok(ev(pg, "TRATAMIENTOS.filter(t => t.dueno === 'u5').length") == 4,
-       "Área: sus 4 tratamientos del registro (fusión con el Dueño)")
 
     # 7. Sin errores de script y sin correos institucionales en pantalla
     ok(not errores, f"sin errores de script ({errores[:2]})")

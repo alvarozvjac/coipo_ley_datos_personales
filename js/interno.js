@@ -42,7 +42,7 @@ function vInicioInterno() {
   const amplio = ["admin", "delegado"].includes(p);
   const urg = (amplio ? CASOS.filter(c => abierto(c) || reclamoPendiente(c)) : t).slice().sort((a, b) => urgencia(a) - urgencia(b)).slice(0, 4);
   return heroHTML(u.cargo, PERFILES[p].n, textos[p]) +
-    `<h2 class="sec-tit">${ico("flecha")}¿Qué necesitas hacer?</h2>` + accesosHTML(A) + seccionLinea2(p) +
+    `<h2 class="sec-tit">${ico("flecha")}¿Qué necesitas hacer?</h2>` + accesosHTML(A) +
     `<section class="panel"><header><h2>${amplio ? "Lo más urgente del canal" : "Lo más urgente para usted"}</h2></header><div class="cuerpo">${urg.length ? urg.map(filaTarea).join("") : `<p class="vacio-chico">No tiene casos pendientes.</p>`}</div></section>`;
 }
 function sedesDe(u) { return SEDES.filter(s => ["recibe", "deriva", "responde"].some(k => RESP[s][k] === u.id)); }
@@ -54,7 +54,7 @@ function accionPendiente(c) {
   if (sinResponsable(c)) return "Sin responsable en " + ETAPA[c.etapa].n.toLowerCase();
   return { recepcion: c.identidad ? "Pasar a admisibilidad" : "Verificar identidad y registrar", admisibilidad: c.ant && c.ant.rec ? "Revisar los antecedentes aportados" : "Resolver la admisibilidad", derivacion: "Derivar al área que trata los datos", analisis: "Analizar y proponer la respuesta", revision: "Revisar la propuesta de respuesta", firma: "Firmar la respuesta", respuesta: "Enviar la respuesta y cerrar" }[c.etapa];
 }
-POST.inicio = () => { if (SESION && SESION.perfil !== "solicitante") { enlazarCasos(); POST.inicio2(); } };
+POST.inicio = () => { if (SESION && SESION.perfil !== "solicitante") { enlazarCasos(); } };
 function enlazarCasos() { $$("[data-caso]").forEach(b => b.onclick = e => { e.stopPropagation(); abrirCaso(b.dataset.caso); }); }
 
 /* ---------- Casos ---------- */

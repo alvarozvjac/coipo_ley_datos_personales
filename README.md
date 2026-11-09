@@ -21,10 +21,13 @@ Información y Análisis (UIA), línea de Gobernanza de Datos.
 
 Ajustes tras la revisión de la maqueta 4.2:
 
-- **Perfiles regionales.** Se agregan tres perfiles que se asignan por sede: **Encargado OIRS regional** (recibe y responde en cada región), **Director o directora regional** (deriva y firma) y **Unidad jurídica regional** (V°B°). Fiscalía mantiene la admisibilidad. El flujo sigue el procedimiento de transparencia que describe la Encargada de Gestión (OC).
+- **Una cuenta por función, en todas las sedes.** Oficina Central y las regiones comparten los mismos perfiles; la sede es un dato del caso, no del perfil. Se eliminan los perfiles duplicados Encargado OIRS regional, Unidad jurídica regional y Firmante.
+- **Encargado OIRS.** Recibe y registra (incluida la Oficina de Partes), verifica identidad, deriva y responde en todas las sedes.
+- **Fiscalía y unidad jurídica.** Una sola cuenta para admisibilidad, revisión jurídica (V°B°) y reclamos ante la Agencia, en todas las sedes.
+- **Director o directora.** Revisa y firma en todas las sedes; no deriva. Representa a la Directora Ejecutiva en Oficina Central y a los directores regionales.
+- **Ingreso sin nombres ficticios.** Cada usuario de prueba se identifica por su perfil y su cargo, también en el encabezado, la tostada y la bitácora.
 - **Oficinas regionales.** Cada región tiene dirección y teléfono, que se muestran al elegir el retiro presencial. Los correos no se muestran: la maqueta no usa correos `@conaf.cl`.
-- **Responsable de datos.** Tiene un selector «Sede que consulta» que permite ver en lectura los casos de cualquier sede; sólo actúa donde está asignado.
-- **Dueño de tratamiento fusionado con Área que trata los datos.** Cada perfil aparece una sola vez en el ingreso. El Área tiene una sola persona de prueba, responsable de los ámbitos personal y ASP, y de sus tratamientos.
+- **Dueño de tratamiento fusionado con Área que trata los datos.** Una sola persona de prueba, responsable de los ámbitos personal y ASP, y de sus tratamientos.
 - **Pruebas:** `pruebas/probar_v43.py` (26 comprobaciones) cubre estos cambios.
 
 ## Versión 4.2 (borrador, sin aprobar)
@@ -45,13 +48,10 @@ del art. 14 ter.
 | Perfil | Qué hace |
 |---|---|
 | Persona solicitante | Página del art. 14 ter, solicitud en 4 pasos con Clave Única simulada, acuse y **Mis solicitudes** (estado y envío de antecedentes) |
-| Responsable de datos | Registro (incluido el formulario físico de Oficina de Partes), verificación de identidad, derivación, prórroga, respuesta y comunicación a cesionarios (art. 6°). Selector de sede en lectura |
-| Encargado OIRS regional | Recibe y responde las solicitudes de su región |
-| Director o directora regional | Deriva y firma las respuestas de su región |
-| Unidad jurídica regional | Visto bueno (V°B°) de las respuestas de su región |
-| Fiscalía | Admisibilidad, bloqueo temporal (2 días hábiles; el rechazo se comunica a la Agencia), revisión jurídica y **reclamos ante la Agencia** (art. 41) |
+| Encargado OIRS | Registro (incluido el formulario físico de Oficina de Partes), verificación de identidad, derivación, prórroga, respuesta y comunicación a cesionarios (art. 6°), en todas las sedes |
+| Director o directora | Revisa y firma las respuestas de todas las sedes; no deriva |
+| Fiscalía y unidad jurídica | Admisibilidad, bloqueo temporal (2 días hábiles; el rechazo se comunica a la Agencia), revisión jurídica (V°B°) y **reclamos ante la Agencia** (art. 41) |
 | Área que trata los datos | Análisis y propuesta de respuesta de sus ámbitos; mantiene sus tratamientos (en la Línea 2) |
-| Firmante | Firma de las respuestas de su sede |
 | Delegado de protección de datos | Supervisión: vencidos, bloqueos, reclamos, casos sin responsable, bitácora y observaciones (art. 50) |
 | Administración del canal | Responsables por etapa y sede, asignación de las solicitudes web, plazos internos y feriados |
 
@@ -78,7 +78,7 @@ por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py`
 
 ### Lo que no está decidido (pendiente de la contraparte)
 
-- Responsables por etapa en cada región: la v4.3 asigna Oficina Central y Biobío como prueba; el resto de las regiones queda por definir.
+- Asignación real de personas por sede: la maqueta usa una cuenta por función para todas las sedes; por confirmar si cada región tendrá su propia persona en esas funciones.
 - Correos de las oficinas regionales: se omiten en la maqueta; por confirmar si se muestran.
 - Línea 2 (cumplimiento interno): pendiente de aprobación en la reunión con Ignacio Valenzuela y Leslie Escobar.
 - Quién firma y si la firma se tramita en Cero Papel; a qué sede van las solicitudes web; plazos internos.

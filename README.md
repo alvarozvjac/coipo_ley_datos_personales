@@ -74,7 +74,7 @@ del mapa de calor son una propuesta tomada de material de IusConsult, por confir
 
 **Manual de usuario:** [`manual/manual-usuario.pdf`](manual/manual-usuario.pdf), con un capítulo
 por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py` y
-`manual/imprimir.py`. Aún no refleja la v4.3.
+`manual/imprimir.py`. Describe la v4.3.
 
 ### Lo que no está decidido (pendiente de la contraparte)
 

@@ -7,8 +7,8 @@ Información y Análisis (UIA), línea de Gobernanza de Datos.
 
 **Versiones:**
 
-- **Publicada (v4.1, rama `main`):** https://alvarozvjac.github.io/coipo_ley_datos_personales/
-- **En revisión (v4.3, rama `v4.3-ajustes`):** sin publicar; se abre desde esa rama: https://github.com/alvarozvjac/coipo_ley_datos_personales/tree/v4.3-ajustes
+- **Publicada (v4.1, rama `main`):** [abrir la maqueta publicada](https://alvarozvjac.github.io/coipo_ley_datos_personales/)
+- **En revisión (v4.3, rama `v4.3-ajustes`):** sin publicar; [abrir la rama v4.3-ajustes](https://github.com/alvarozvjac/coipo_ley_datos_personales/tree/v4.3-ajustes)
 
 > Demostración no operacional. Personas, RUN, casos y responsables son ficticios; los RUN
 > tienen dígito verificador inválido a propósito. Fecha simulada: lunes 11-01-2027. Nada se

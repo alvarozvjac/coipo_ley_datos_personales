@@ -11,6 +11,6 @@ with sync_playwright() as p:
     pg.evaluate("document.fonts.ready")
     pg.pdf(path=str(RAIZ / "manual-usuario.pdf"), format="A4", print_background=True, prefer_css_page_size=True,
            display_header_footer=True, header_template="<span></span>",
-           footer_template='<div style="font-size:8px;width:100%;text-align:center;color:#5b6560">CON012 · Manual de usuario · maqueta v4.2 · página <span class="pageNumber"></span> de <span class="totalPages"></span></div>')
+           footer_template='<div style="font-size:8px;width:100%;text-align:center;color:#5b6560">CON012 · Manual de usuario · maqueta v4.3 · página <span class="pageNumber"></span> de <span class="totalPages"></span></div>')
     nav.close()
 print("manual-usuario.pdf listo")

@@ -14,22 +14,22 @@ const VISTAS = {
 const grupo = () => !SESION ? null : ["solicitante", "admin", "delegado", "fiscalia"].includes(SESION.perfil) ? SESION.perfil : ["seguridad"].includes(SESION.perfil) ? "cumplimiento" : "interno";
 
 function pintarLogin() {
-  const li = u => `<li><button type="button" class="l-usuario" data-u="${u.id}">${ico(PERFILES[u.perfil].ico)}<span><b>${esc(PERFILES[u.perfil].n)}</b><br><span class="peq tenue">${esc(u.nom)} · ${esc(u.cargo)}</span></span>${ico("flecha", "ico fin")}</button></li>`;
+  const li = u => `<li><button type="button" class="l-usuario" data-u="${u.id}">${ico(PERFILES[u.perfil].ico)}<span><b>${esc(PERFILES[u.perfil].n)}</b><br><span class="peq tenue">${esc(u.cargo)}</span></span>${ico("flecha", "ico fin")}</button></li>`;
   $("#l-externo").innerHTML = USUARIOS.filter(u => u.perfil === "solicitante").map(li).join("");
   $("#l-interno").innerHTML = USUARIOS.filter(u => u.perfil !== "solicitante").map(li).join("");
   $$("#login [data-u]").forEach(b => b.onclick = () => entrar(b.dataset.u));
 }
 function entrar(id) {
   SESION = U[id]; document.body.classList.remove("sin-sesion"); $("#login").hidden = true;
-  tostada(SESION.perfil === "solicitante" ? "Sitio público de conaf.cl (simulado)" : "Sesión de prueba: " + SESION.nom + " · " + PERFILES[SESION.perfil].n);
+  tostada(SESION.perfil === "solicitante" ? "Sitio público de conaf.cl (simulado)" : "Sesión de prueba: " + PERFILES[SESION.perfil].n + " · " + SESION.cargo);
   ir("inicio");
 }
 function salir() { SESION = null; cerrarCapa(); document.body.classList.add("sin-sesion"); $("#login").hidden = false; $("#vista").innerHTML = ""; try { history.replaceState(null, "", location.pathname); } catch (e) { } window.scrollTo(0, 0); }
 
 function pintarBarra() {
-  const p = PERFILES[SESION.perfil], ini = SESION.nom.split(" ").filter(Boolean);
+  const p = PERFILES[SESION.perfil], ini = p.n.split(" ").filter(Boolean);
   $("#rol-chip").innerHTML = ico(p.ico) + esc(p.n);
-  $("#quien").innerHTML = `<span class="avatar" aria-hidden="true">${esc((ini[0][0] + (ini[ini.length - 2] || ini[1] || " ")[0]).toUpperCase())}</span><span class="qtxt"><b>${esc(SESION.nom)}</b><span>${esc(SESION.cargo)}</span></span>`;
+  $("#quien").innerHTML = `<span class="avatar" aria-hidden="true">${esc((ini[0][0] + (ini[ini.length - 2] || ini[1] || " ")[0]).toUpperCase())}</span><span class="qtxt"><b>${esc(p.n)}</b><span>${esc(SESION.cargo)}</span></span>`;
 }
 function ir(v) {
   const g = VISTAS[grupo()];

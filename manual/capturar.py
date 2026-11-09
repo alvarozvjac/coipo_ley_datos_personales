@@ -73,9 +73,9 @@ with sync_playwright() as p:
     pg.get_by_role("button", name="Ver mis solicitudes").click()
     foto(pg, "09-mis")
 
-    # Responsable de datos
-    entrar(pg, "Paula Rojas")
-    foto(pg, "10-inicio-responsable")
+    # Encargado OIRS (recibe en todas las sedes)
+    entrar(pg, "Encargado OIRS")
+    foto(pg, "10-inicio-encargado")
     pg.locator(".acceso", has_text="Mis tareas").first.click()
     foto(pg, "11-casos")
     caso(pg, "DP-2027-000004", "12-caso-recepcion")
@@ -97,9 +97,9 @@ with sync_playwright() as p:
     foto(pg, "30-inicio-area")
     caso(pg, "DP-2026-000106", "31-caso-analisis")
 
-    # Firmante
-    entrar(pg, "Firmante")
-    foto(pg, "40-inicio-firmante")
+    # Director o directora (revisa y firma; no deriva)
+    entrar(pg, "Director o directora")
+    foto(pg, "40-inicio-director")
     caso(pg, "DP-2026-000104", "41-caso-firma")
 
     # Delegado
@@ -125,20 +125,20 @@ with sync_playwright() as p:
     foto(pg, "64-bitacora")
 
     # Línea 2 · cumplimiento interno
-    entrar(pg, "Ignacia Paredes")
+    entrar(pg, "Área que trata")
     foto(pg, "90-inicio-dueno")
     pg.evaluate("ir('tratamientos')")
     foto(pg, "91-tratamientos")
     pg.evaluate("abrirTrat('T-04')")
     foto(pg, "92-ficha", ".cajon")
     pg.evaluate("cerrarCapa()")
-    entrar(pg, "Sergio Bravo")
+    entrar(pg, "Delegado de protección")
     pg.evaluate("ir('riesgos')")
     foto(pg, "93-riesgos")
     pg.evaluate("abrirRiesgo('R-01')")
     foto(pg, "94-riesgo", ".cajon")
     pg.evaluate("cerrarCapa()")
-    entrar(pg, "Daniela Ossandón")
+    entrar(pg, "Seguridad de la información")
     foto(pg, "95-inicio-seguridad")
     pg.evaluate("ir('vulneraciones')")
     foto(pg, "96-vulneraciones")
@@ -147,7 +147,7 @@ with sync_playwright() as p:
     pg.click("#nv-ok")
     foto(pg, "97-vul-evaluacion", ".cajon")
     pg.evaluate("cerrarCapa()")
-    entrar(pg, "Sergio Bravo")
+    entrar(pg, "Delegado de protección")
     pg.evaluate("abrirVul('V-2027-001')")
     foto(pg, "98-vul-decision", ".cajon")
     pg.evaluate("cerrarCapa()")

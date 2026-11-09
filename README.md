@@ -5,7 +5,10 @@ sobre datos personales (acceso, rectificación, supresión, oposición, portabil
 bloqueo temporal), según la Ley N° 21.719. Iniciativa CON012, elaborada por la Unidad de
 Información y Análisis (UIA), línea de Gobernanza de Datos.
 
-**Ver la maqueta publicada (v4.1, rama `main`):** https://alvarozvjac.github.io/coipo_ley_datos_personales/
+**Versiones:**
+
+- **Publicada (v4.1, rama `main`):** https://alvarozvjac.github.io/coipo_ley_datos_personales/
+- **En revisión (v4.3, rama `v4.3-ajustes`):** sin publicar; se abre desde esa rama.
 
 > Demostración no operacional. Personas, RUN, casos y responsables son ficticios; los RUN
 > tienen dígito verificador inválido a propósito. Fecha simulada: lunes 11-01-2027. Nada se
@@ -13,6 +16,19 @@ Información y Análisis (UIA), línea de Gobernanza de Datos.
 > integración.
 
 **Vista celular:** en computador, el botón flotante «Vista celular», abajo a la izquierda muestra la maqueta dentro de un marco de teléfono de 390 × 844 px, para presentarla sin abrir las herramientas del navegador. Se cierra con «Cerrar» o Esc. En un teléfono real el botón no aparece.
+
+## Versión 4.3 (en revisión, sin aprobar)
+
+Ajustes tras la revisión de la maqueta 4.2:
+
+- **Una cuenta por función, en todas las sedes.** Oficina Central y las regiones comparten los mismos perfiles; la sede es un dato del caso, no del perfil. Se eliminan los perfiles duplicados Encargado OIRS regional, Unidad jurídica regional y Firmante.
+- **Encargado OIRS.** Recibe y registra (incluida la Oficina de Partes), verifica identidad, deriva y responde en todas las sedes.
+- **Fiscalía y unidad jurídica.** Una sola cuenta para admisibilidad, revisión jurídica (V°B°) y reclamos ante la Agencia, en todas las sedes.
+- **Director o directora.** Revisa y firma en todas las sedes; no deriva. Representa a la Directora Ejecutiva en Oficina Central y a los directores regionales.
+- **Ingreso sin nombres ficticios.** Cada usuario de prueba se identifica por su perfil y su cargo, también en el encabezado, la tostada y la bitácora.
+- **Oficinas regionales.** Cada región tiene dirección y teléfono, que se muestran al elegir el retiro presencial. Los correos no se muestran: la maqueta no usa correos `@conaf.cl`.
+- **Dueño de tratamiento fusionado con Área que trata los datos.** Una sola persona de prueba, responsable de los ámbitos personal y ASP, y de sus tratamientos.
+- **Pruebas:** `pruebas/probar_v43.py` (26 comprobaciones) cubre estos cambios.
 
 ## Versión 4.2 (borrador, sin aprobar)
 
@@ -32,37 +48,39 @@ del art. 14 ter.
 | Perfil | Qué hace |
 |---|---|
 | Persona solicitante | Página del art. 14 ter, solicitud en 4 pasos con Clave Única simulada, acuse y **Mis solicitudes** (estado y envío de antecedentes) |
-| Responsable de datos | Registro (incluido el formulario físico de Oficina de Partes), verificación de identidad, derivación, prórroga, respuesta y comunicación a cesionarios (art. 6°) |
-| Fiscalía | Admisibilidad, bloqueo temporal (2 días hábiles; el rechazo se comunica a la Agencia), revisión jurídica y **reclamos ante la Agencia** (art. 41) |
-| Área que trata los datos | Análisis y propuesta de respuesta |
-| Firmante | Firma de las respuestas de su sede |
+| Encargado OIRS | Registro (incluido el formulario físico de Oficina de Partes), verificación de identidad, derivación, prórroga, respuesta y comunicación a cesionarios (art. 6°), en todas las sedes |
+| Director o directora | Revisa y firma las respuestas de todas las sedes; no deriva |
+| Fiscalía y unidad jurídica | Admisibilidad, bloqueo temporal (2 días hábiles; el rechazo se comunica a la Agencia), revisión jurídica (V°B°) y **reclamos ante la Agencia** (art. 41) |
+| Área que trata los datos | Análisis y propuesta de respuesta de sus ámbitos; mantiene sus tratamientos (en la Línea 2) |
 | Delegado de protección de datos | Supervisión: vencidos, bloqueos, reclamos, casos sin responsable, bitácora y observaciones (art. 50) |
 | Administración del canal | Responsables por etapa y sede, asignación de las solicitudes web, plazos internos y feriados |
 
-### Línea 2 · Cumplimiento interno (nueva en la v4.2, propuesta sin contraparte)
+### Línea 2 · Cumplimiento interno (nueva en la v4.2, pendiente de aprobación)
 
 Con datos de ejemplo, sin datos reales, hasta cargar la matriz de datos personales. Archivos: `js/cumplimiento-datos.js`,
-`js/cumplimiento.js` y `js/cumplimiento-instrumentos.js`.
+`js/cumplimiento.js` y `js/cumplimiento-instrumentos.js`. Su contenido queda igual hasta la reunión con la contraparte.
 
 | Módulo | Quién lo usa | Fuente |
 |---|---|---|
-| Registro de tratamientos | Dueño de tratamiento completa, delegado aprueba | Art. 49 c); art. 14 ter d), h), i), j) |
-| Matriz de riesgos y controles (mapa de calor 5 × 5; control sin evidencia no se cierra) | Delegado; dueños y seguridad cumplen controles | Art. 49 d) y e); art. 14 quinquies |
+| Registro de tratamientos | Área que trata los datos completa, delegado aprueba | Art. 49 c); art. 14 ter d), h), i), j) |
+| Matriz de riesgos y controles (mapa de calor 5 × 5; control sin evidencia no se cierra) | Delegado; áreas cumplen controles | Art. 49 d) y e); art. 14 quinquies |
 | Vulneraciones de seguridad (reporte a la Agencia y comunicación a titulares) | Seguridad de la información y delegado | Art. 14 sexies |
-| Evaluaciones de impacto | Dueño elabora, Fiscalía revisa | Art. 15 ter [VERIFICAR exigibilidad: el art. 21 no lo nombra] |
+| Evaluaciones de impacto | Área elabora, Fiscalía revisa | Art. 15 ter [VERIFICAR exigibilidad: el art. 21 no lo nombra] |
 | Encargados de tratamiento (cláusulas del contrato) | Fiscalía y delegado | Art. 15 bis |
 | Convenios de cesión y su publicación mensual | Fiscalía y delegado | Art. 22 |
 
-Perfiles nuevos: **Dueño de tratamiento** y **Seguridad de la información**. La gravedad de cada infracción y los cortes
+Perfil nuevo: **Seguridad de la información**. El Dueño de tratamiento se fusionó con el Área que trata los datos. La gravedad de cada infracción y los cortes
 del mapa de calor son una propuesta tomada de material de IusConsult, por confirmar con Fiscalía (arts. 34 bis a 34 quáter).
 
 **Manual de usuario:** [`manual/manual-usuario.pdf`](manual/manual-usuario.pdf), con un capítulo
 por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py` y
-`manual/imprimir.py`.
+`manual/imprimir.py`. Describe la v4.3.
 
 ### Lo que no está decidido (pendiente de la contraparte)
 
-- Responsables por etapa en Oficina Central y regiones (sólo Oficina Central y Biobío tienen asignación de prueba).
+- Asignación real de personas por sede: la maqueta usa una cuenta por función para todas las sedes; por confirmar si cada región tendrá su propia persona en esas funciones.
+- Correos de las oficinas regionales: se omiten en la maqueta; por confirmar si se muestran.
+- Línea 2 (cumplimiento interno): pendiente de aprobación en la reunión con Ignacio Valenzuela y Leslie Escobar.
 - Quién firma y si la firma se tramita en Cero Papel; a qué sede van las solicitudes web; plazos internos.
 - Procedencia de la portabilidad ante órganos públicos (los arts. 21 y 23 no la mencionan).
 - Plazo para aportar antecedentes: la ley no lo fija (la maqueta propone 5 días hábiles).
@@ -72,8 +90,9 @@ por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py`
 ## Pruebas
 
 ```bash
-python -X utf8 pruebas/probar_v4.py            # 55 comprobaciones del canal, escritorio y teléfono
-python -X utf8 pruebas/probar_v42.py           # 59 comprobaciones de la línea 2, escritorio y teléfono
+python -X utf8 pruebas/probar_v43.py          # 26 comprobaciones de la v4.3: perfiles regionales, sede y área fusionada
+python -X utf8 pruebas/probar_v4.py           # 57 comprobaciones del canal, escritorio y teléfono
+python -X utf8 pruebas/probar_v42.py          # 59 comprobaciones de la línea 2, escritorio y teléfono
 ```
 
 Requiere `playwright` para Python con Chromium. Las capturas quedan en `pruebas/capturas/`
@@ -87,6 +106,7 @@ a la versión 3.x, que queda en el historial (commit `775435f`).
 - `js/`: `comun.js`, `datos.js`, `casos.js`, `publico.js`, `interno.js`, `admin.js`, `app.js` y `territorio.js` (línea 1); `cumplimiento-datos.js`, `cumplimiento.js` y `cumplimiento-instrumentos.js` (línea 2).
 - `img/`: banner de la Secretaría de Asuntos Institucionales generado por la semilla.
 - `manual/`: manual en PDF, su fuente HTML y los scripts de capturas e impresión.
+- `pruebas/`: pruebas con Playwright (`probar_v43.py`, `probar_v4.py`, `probar_v42.py`).
 
 Norma de referencia: Ley N° 21.719 (vigencia 01-12-2026) y el procedimiento institucional V1
 de atención de solicitudes de derechos.

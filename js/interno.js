@@ -12,18 +12,15 @@ function vInicioInterno() {
   const n = f => mis.filter(f).length;
   const sinR = CASOS.filter(sinResponsable).length, venc = mis.filter(c => abierto(c) && diasLegal(c) < 0).length;
   const textos = {
-    recepcion: "Solicitudes por registrar, verificar, derivar y responder en " + sedesDe(u).map(corta).join(" y ") + ".",
-    oirs: "Solicitudes de su región por registrar, verificar, derivar y responder.",
-    director: "Propuestas de respuesta de su región para derivar y firmar.",
-    juridica: "Propuestas de respuesta de su región para revisar antes de la firma.",
-    fiscalia: "Admisibilidad, bloqueos temporales y revisión jurídica de las propuestas de respuesta.",
+    encargado: "Solicitudes por registrar, verificar, derivar y responder en todas las sedes.",
+    director: "Propuestas de respuesta por revisar y firmar en todas las sedes.",
+    fiscalia: "Admisibilidad, bloqueos temporales, revisión jurídica (V°B°) y reclamos ante la Agencia.",
     gerencia: "Casos derivados a su ámbito para localizar los datos y proponer la respuesta.",
-    firmante: "Respuestas revisadas por Fiscalía que esperan su firma.",
     delegado: "Supervisión del canal: vencimientos, bloqueos, reclamos ante la Agencia y casos sin responsable. Puede dejar observaciones en cualquier caso.",
     admin: "Estado del canal, responsables por etapa y sede, plazos internos y bitácora."
   };
   const A = [];
-  if (!["admin", "delegado"].includes(p)) A.push({ t: p === "firmante" ? "Por firmar" : "Mis tareas", d: "Casos en los que le toca actuar, del más urgente al menos urgente.", ico: "lista", cta: "Ver tareas", v: "casos", pre: conFiltro("tareas"), n: t.length, principal: true, aviso: t.some(c => diasLegal(c) <= 2) });
+  if (!["admin", "delegado"].includes(p)) A.push({ t: p === "director" ? "Por firmar" : "Mis tareas", d: "Casos en los que le toca actuar, del más urgente al menos urgente.", ico: "lista", cta: "Ver tareas", v: "casos", pre: conFiltro("tareas"), n: t.length, principal: true, aviso: t.some(c => diasLegal(c) <= 2) });
   if (RECEPTOR.includes(p)) A.push({ t: "Registrar solicitud de Oficina de Partes", d: "Ingrese un formulario físico recibido con timbre: el plazo corre desde esa fecha.", ico: "plus", cta: "Registrar", v: "registrar" });
   if (p === "fiscalia") A.push({ t: "Bloqueos por resolver", d: "Bloqueos temporales que se resuelven en " + PARAM.BLOQUEO + " días hábiles.", ico: "alerta", cta: "Ver bloqueos", v: "casos", pre: conFiltro("bloqueo"), n: n(bloqueoPendiente), aviso: true, nl: "bloqueos pendientes" });
   if (p === "fiscalia" || p === "delegado") A.push({ t: "Reclamos ante la Agencia", d: "Reclamos notificados por la Agencia: CONAF responde en " + PARAM.RECLAMO_RESP + " días corridos, prorrogables (art. 41 d).", ico: "balanza", cta: "Ver reclamos", v: "casos", pre: conFiltro("reclamos"), n: n(reclamoPendiente), aviso: true, nl: "reclamos por responder", principal: p === "delegado" });
@@ -40,11 +37,11 @@ function vInicioInterno() {
   }
   A.push({ t: ["admin", "delegado"].includes(p) ? "Todos los casos" : "Casos de mi alcance", d: "Lista con filtros por estado, vía, derecho y sede.", ico: "doc", cta: "Ver casos", v: "casos", pre: conFiltro("todos"), n: venc || null, aviso: true, nl: "vencidos" });
   A.push({ t: "Calendario de vencimientos", d: "Vencimientos legales, bloqueos y plazos de antecedentes, día a día.", ico: "calendario", cta: "Abrir calendario", v: "calendario" });
-  if (!["gerencia", "firmante"].includes(p)) A.push({ t: "Reportes", d: "Cifras del canal y planilla Excel mensual o anual, sin datos de los titulares.", ico: "grafico", cta: "Ver reportes", v: "reportes" });
+  if (!["gerencia", "director"].includes(p)) A.push({ t: "Reportes", d: "Cifras del canal y planilla Excel mensual o anual, sin datos de los titulares.", ico: "grafico", cta: "Ver reportes", v: "reportes" });
   if (p === "admin" || p === "delegado") A.push({ t: "Bitácora", d: "Registro de acciones sobre los casos y la configuración.", ico: "lista", cta: "Ver bitácora", v: "bitacora" });
   const amplio = ["admin", "delegado"].includes(p);
   const urg = (amplio ? CASOS.filter(c => abierto(c) || reclamoPendiente(c)) : t).slice().sort((a, b) => urgencia(a) - urgencia(b)).slice(0, 4);
-  return heroHTML(PERFILES[p].n + " · " + u.cargo, "Hola, " + u.nom.split(" ")[0], textos[p]) +
+  return heroHTML(u.cargo, PERFILES[p].n, textos[p]) +
     `<h2 class="sec-tit">${ico("flecha")}¿Qué necesitas hacer?</h2>` + accesosHTML(A) + seccionLinea2(p) +
     `<section class="panel"><header><h2>${amplio ? "Lo más urgente del canal" : "Lo más urgente para usted"}</h2></header><div class="cuerpo">${urg.length ? urg.map(filaTarea).join("") : `<p class="vacio-chico">No tiene casos pendientes.</p>`}</div></section>`;
 }
@@ -70,7 +67,6 @@ function vCasos() {
   const L = base.filter(fg).filter(c => (!FILTRO.via || c.via === FILTRO.via) && (!FILTRO.der || c.derechos.includes(FILTRO.der)) && (!FILTRO.sede || c.sede === FILTRO.sede) && (!q || (c.num + " " + c.detalle).toLowerCase().includes(q))).sort((a, b) => urgencia(a) - urgencia(b));
   const sedes = [...new Set(base.map(c => c.sede))];
   return volverHTML() + cab(adm ? "Todos los casos" : "Casos", "Ordenados por urgencia: primero los bloqueos pendientes y luego el plazo legal. El RUN se muestra enmascarado.", "") +
-    (SESION.perfil === "recepcion" ? `<div class="campo"><label for="vista-sede">Sede que consulta</label><select id="vista-sede">${SEDES.map(s => `<option ${VISTA_SEDE === s ? "selected" : ""}>${s}</option>`).join("")}</select><span class="ayuda">Puede ver en lectura los casos de cualquier sede; sólo actúa donde está asignado.</span></div>` : "") +
     filtrosHTML(G, FILTRO.g, "data-g") +
     `<div class="barra-herr" style="margin-top:var(--e-3)"><input type="search" id="c-q" placeholder="Buscar por número o detalle" value="${esc(FILTRO.q)}" aria-label="Buscar casos">
     <div class="acciones"><select id="c-via" aria-label="Vía"><option value="">Todas las vías</option>${Object.entries(VIAS).map(([k, v]) => `<option value="${k}" ${FILTRO.via === k ? "selected" : ""}>${v}</option>`).join("")}</select>
@@ -81,7 +77,6 @@ function vCasos() {
     <div class="leyenda">${chip("Con holgura · 10 días o más", "c-disp", "●")}${chip("Esta semana · 3 a 9 días", "c-pend", "!")}${chip("Urgente · 2 días o menos", "c-malo", "▲")}${chip("Vencido", "c-malo", "✕")}<span class="tenue peq">Días corridos hasta el vencimiento legal.</span></div></section>`;
 }
 POST.casos = () => {
-  const vs = $("#vista-sede"); if (vs) vs.onchange = () => { VISTA_SEDE = vs.value; render(); };
   $$("[data-g]").forEach(b => b.onclick = () => { FILTRO.g = b.dataset.g; render(); });
   const q = $("#c-q"); q.oninput = () => { FILTRO.q = q.value; clearTimeout(q._t); q._t = setTimeout(() => { render(); const n = $("#c-q"); n.focus(); n.setSelectionRange(n.value.length, n.value.length); }, 250); };
   [["c-via", "via"], ["c-der", "der"], ["c-sede", "sede"]].forEach(([id, k]) => { if ($("#" + id)) $("#" + id).onchange = e => { FILTRO[k] = e.target.value; render(); }; });

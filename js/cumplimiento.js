@@ -43,7 +43,7 @@ function vInicioCumpl() {
   const pend = p === "gerencia" ? misControles().filter(c => c.estado !== "hecho") : CONTROLES.filter(c => c.resp === u.id && c.estado !== "hecho");
   const filas = (p === "seguridad" ? vulAbiertas().map(v => `<div class="tarea"><span class="mono peq">${v.id}</span><div class="q">${esc(PASOS_VUL.find(x => x[0] === v.paso)[1])}<small>${esc(v.tipo)} · ${esc(TRAT(v.trat).n)}</small></div><div class="estado-linea">${chip(corridosEntre(v.det, HOY) + " días desde la detección", "c-pend", "◷")}<button class="boton chico" type="button" data-vul="${v.id}">Abrir</button></div></div>`) : [])
     .concat(pend.sort((a, b) => a.plazo.localeCompare(b.plazo)).map(filaControl));
-  return heroHTML(PERFILES[p].n + " · " + u.cargo, "Hola, " + u.nom.split(" ")[0], txt) +
+  return heroHTML(u.cargo, PERFILES[p].n, txt) +
     `<h2 class="sec-tit">${ico("flecha")}¿Qué necesitas hacer? ${linea2()}</h2>` + accesosHTML(accesosLinea2(p), true) +
     `<section class="panel"><header><h2>Lo más urgente para usted</h2></header><div class="cuerpo">${filas.length ? filas.join("") : `<p class="vacio-chico">No tiene pendientes.</p>`}</div></section>`;
 }

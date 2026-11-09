@@ -55,9 +55,8 @@ function visibleParaUsuario(c, u) {
   if (u.perfil === "admin" || u.perfil === "delegado") return true;
   if (u.perfil === "fiscalia") return r.admisibilidad === u.id || r.revision === u.id || r.reclamos === u.id;
   if (u.perfil === "gerencia") return AMBITOS.some(a => a.resp === u.id && a.k === c.ambito);
-  if (u.perfil === "firmante") return r.firma === u.id && ["firma", "respuesta", "cerrado"].includes(c.etapa);
-  if (u.perfil === "recepcion") return c.sede === VISTA_SEDE || ["recibe", "deriva", "responde"].some(k => r[k] === u.id);
-  if (["oirs", "director", "juridica"].includes(u.perfil)) return ["recibe", "deriva", "responde", "revision", "firma"].some(k => r[k] === u.id);
+  if (u.perfil === "director") return r.firma === u.id;
+  if (u.perfil === "encargado") return ["recibe", "deriva", "responde"].some(k => r[k] === u.id);
   return false;
 }
 /* Reclamos ante la Agencia (art. 41): CONAF responde en 30 días corridos desde la notificación, prorrogables. */

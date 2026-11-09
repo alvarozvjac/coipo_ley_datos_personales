@@ -13,6 +13,9 @@ function vInicioInterno() {
   const sinR = CASOS.filter(sinResponsable).length, venc = mis.filter(c => abierto(c) && diasLegal(c) < 0).length;
   const textos = {
     recepcion: "Solicitudes por registrar, verificar, derivar y responder en " + sedesDe(u).map(corta).join(" y ") + ".",
+    oirs: "Solicitudes de su región por registrar, verificar, derivar y responder.",
+    director: "Propuestas de respuesta de su región para derivar y firmar.",
+    juridica: "Propuestas de respuesta de su región para revisar antes de la firma.",
     fiscalia: "Admisibilidad, bloqueos temporales y revisión jurídica de las propuestas de respuesta.",
     gerencia: "Casos derivados a su ámbito para localizar los datos y proponer la respuesta.",
     firmante: "Respuestas revisadas por Fiscalía que esperan su firma.",
@@ -21,7 +24,7 @@ function vInicioInterno() {
   };
   const A = [];
   if (!["admin", "delegado"].includes(p)) A.push({ t: p === "firmante" ? "Por firmar" : "Mis tareas", d: "Casos en los que le toca actuar, del más urgente al menos urgente.", ico: "lista", cta: "Ver tareas", v: "casos", pre: conFiltro("tareas"), n: t.length, principal: true, aviso: t.some(c => diasLegal(c) <= 2) });
-  if (p === "recepcion") A.push({ t: "Registrar solicitud de Oficina de Partes", d: "Ingrese un formulario físico recibido con timbre: el plazo corre desde esa fecha.", ico: "plus", cta: "Registrar", v: "registrar" });
+  if (RECEPTOR.includes(p)) A.push({ t: "Registrar solicitud de Oficina de Partes", d: "Ingrese un formulario físico recibido con timbre: el plazo corre desde esa fecha.", ico: "plus", cta: "Registrar", v: "registrar" });
   if (p === "fiscalia") A.push({ t: "Bloqueos por resolver", d: "Bloqueos temporales que se resuelven en " + PARAM.BLOQUEO + " días hábiles.", ico: "alerta", cta: "Ver bloqueos", v: "casos", pre: conFiltro("bloqueo"), n: n(bloqueoPendiente), aviso: true, nl: "bloqueos pendientes" });
   if (p === "fiscalia" || p === "delegado") A.push({ t: "Reclamos ante la Agencia", d: "Reclamos notificados por la Agencia: CONAF responde en " + PARAM.RECLAMO_RESP + " días corridos, prorrogables (art. 41 d).", ico: "balanza", cta: "Ver reclamos", v: "casos", pre: conFiltro("reclamos"), n: n(reclamoPendiente), aviso: true, nl: "reclamos por responder", principal: p === "delegado" });
   if (p === "delegado") {
@@ -67,6 +70,7 @@ function vCasos() {
   const L = base.filter(fg).filter(c => (!FILTRO.via || c.via === FILTRO.via) && (!FILTRO.der || c.derechos.includes(FILTRO.der)) && (!FILTRO.sede || c.sede === FILTRO.sede) && (!q || (c.num + " " + c.detalle).toLowerCase().includes(q))).sort((a, b) => urgencia(a) - urgencia(b));
   const sedes = [...new Set(base.map(c => c.sede))];
   return volverHTML() + cab(adm ? "Todos los casos" : "Casos", "Ordenados por urgencia: primero los bloqueos pendientes y luego el plazo legal. El RUN se muestra enmascarado.", "") +
+    (SESION.perfil === "recepcion" ? `<div class="campo"><label for="vista-sede">Sede que consulta</label><select id="vista-sede">${SEDES.map(s => `<option ${VISTA_SEDE === s ? "selected" : ""}>${s}</option>`).join("")}</select><span class="ayuda">Puede ver en lectura los casos de cualquier sede; sólo actúa donde está asignado.</span></div>` : "") +
     filtrosHTML(G, FILTRO.g, "data-g") +
     `<div class="barra-herr" style="margin-top:var(--e-3)"><input type="search" id="c-q" placeholder="Buscar por número o detalle" value="${esc(FILTRO.q)}" aria-label="Buscar casos">
     <div class="acciones"><select id="c-via" aria-label="Vía"><option value="">Todas las vías</option>${Object.entries(VIAS).map(([k, v]) => `<option value="${k}" ${FILTRO.via === k ? "selected" : ""}>${v}</option>`).join("")}</select>
@@ -77,6 +81,7 @@ function vCasos() {
     <div class="leyenda">${chip("Con holgura · 10 días o más", "c-disp", "●")}${chip("Esta semana · 3 a 9 días", "c-pend", "!")}${chip("Urgente · 2 días o menos", "c-malo", "▲")}${chip("Vencido", "c-malo", "✕")}<span class="tenue peq">Días corridos hasta el vencimiento legal.</span></div></section>`;
 }
 POST.casos = () => {
+  const vs = $("#vista-sede"); if (vs) vs.onchange = () => { VISTA_SEDE = vs.value; render(); };
   $$("[data-g]").forEach(b => b.onclick = () => { FILTRO.g = b.dataset.g; render(); });
   const q = $("#c-q"); q.oninput = () => { FILTRO.q = q.value; clearTimeout(q._t); q._t = setTimeout(() => { render(); const n = $("#c-q"); n.focus(); n.setSelectionRange(n.value.length, n.value.length); }, 250); };
   [["c-via", "via"], ["c-der", "der"], ["c-sede", "sede"]].forEach(([id, k]) => { if ($("#" + id)) $("#" + id).onchange = e => { FILTRO[k] = e.target.value; render(); }; });
@@ -107,7 +112,7 @@ function abrirCaso(num) {
     <div class="seccion"><h3>Solicitud</h3><dl class="ficha">
       <dt>Ingreso</dt><dd class="num">${fLarga(c.ingreso)} · ${VIAS[c.via]}${c.folio ? ` · folio <span class="mono">${esc(c.folio)}</span>` : ""}</dd>
       <dt>Sede</dt><dd>${esc(c.sede)}</dd><dt>Calidad</dt><dd>${CALIDAD[c.calidad]}</dd>
-      <dt>Titular</dt><dd>${esc(c.tit.nom)} · <span class="mono">${verRun ? esc(c.tit.run) : runMascara(c.tit.run)}</span> ${!verRun && u.perfil === "recepcion" ? `<button class="pin-reveal" type="button" id="ver-run">Ver RUN completo</button>` : ""}</dd>
+      <dt>Titular</dt><dd>${esc(c.tit.nom)} · <span class="mono">${verRun ? esc(c.tit.run) : runMascara(c.tit.run)}</span> ${!verRun && RECEPTOR.includes(u.perfil) ? `<button class="pin-reveal" type="button" id="ver-run">Ver RUN completo</button>` : ""}</dd>
       ${c.rep ? `<dt>Representante</dt><dd>${esc(c.rep.nom)}</dd>` : ""}
       <dt>Derechos</dt><dd>${c.derechos.map(k => DER[k]).join(", ")}</dd><dt>Detalle</dt><dd>${esc(c.detalle)}</dd>
       <dt>Respuesta por</dt><dd>${MEDIOS[c.medio]}${c.retiro && c.medio === "retiro" ? " · " + esc(c.retiro) : ""}</dd>
@@ -142,7 +147,7 @@ function accionesHTML(c) {
     if (k === "firma") A.push(`<div class="grupo-acc">Firma</div><p><b>${esc(c.decision || "")}</b> · ${esc(c.propuesta)}</p>${c.decision !== "Acoge" ? `<p class="peq">${chip("Denegación total o parcial", "c-pend", "!")} La respuesta debe indicar la causa, sus antecedentes y el plazo de 30 días hábiles para reclamar ante la Agencia (art. 11 inc. 4°).</p>` : ""}<p class="peq">Si la firma se tramita en la plataforma, en Cero Papel o en ambos: ${porDefinir("por definir con Informática")}.</p><div class="campos"><div class="campo"><label for="a-doc">N° del documento *</label><input type="text" id="a-doc" placeholder="Carta Oficial N°"></div></div><div class="acciones"><button class="boton" type="button" data-a="firmada">${ico("firma")}Firmar la respuesta</button></div>`);
     if (k === "respuesta") A.push(`<div class="grupo-acc">Respuesta y cierre</div><p class="peq">Se envía por escrito por ${MEDIOS[c.medio].toLowerCase()} y se guarda el respaldo con fecha, destinatario y contenido íntegro (art. 11 inc. 3°).</p>${c.decision !== "Rechaza" && c.derechos.some(d => ["rectificacion", "supresion", "oposicion"].includes(d)) ? `<fieldset><legend>Comunicación a destinatarios (art. 6° y art. 11)</legend><div class="lista-opciones"><label class="opcion"><input type="radio" name="a-ces" value="Se comunicaron los cambios a los destinatarios a quienes se cedieron los datos"><span><b>Se comunicaron los cambios</b><small>A quienes CONAF comunicó o cedió los datos.</small></span></label><label class="opcion"><input type="radio" name="a-ces" value="Los datos no se comunicaron ni cedieron a terceros"><span><b>No hubo cesiones</b><small>Los datos no se comunicaron a terceros.</small></span></label></div></fieldset>` : ""}<div class="acciones"><button class="boton" type="button" data-a="cerrar">${ico("enviar")}Enviar la respuesta y cerrar</button></div>`);
   }
-  if (u.perfil === "recepcion" && abierto(c) && RESP[c.sede].responde === u.id && !c.prorroga) A.push(`<div class="grupo-acc">Prórroga</div><p class="peq">${c.pidePror ? chip("El área pidió prórroga", "c-pend", "!") + " " : ""}Una sola vez, hasta ${PARAM.PRORROGA} días corridos, comunicada al titular antes del vencimiento.</p>${diasLegal(c) < 0 ? `<p class="peq">${chip("No se puede prorrogar: el plazo ya venció", "c-malo", "✕")}</p>` : `<div class="acciones"><button class="boton secundario" type="button" data-a="prorrogar">Prorrogar y comunicar al titular</button></div>`}`);
+  if (RECEPTOR.includes(u.perfil) && abierto(c) && RESP[c.sede].responde === u.id && !c.prorroga) A.push(`<div class="grupo-acc">Prórroga</div><p class="peq">${c.pidePror ? chip("El área pidió prórroga", "c-pend", "!") + " " : ""}Una sola vez, hasta ${PARAM.PRORROGA} días corridos, comunicada al titular antes del vencimiento.</p>${diasLegal(c) < 0 ? `<p class="peq">${chip("No se puede prorrogar: el plazo ya venció", "c-malo", "✕")}</p>` : `<div class="acciones"><button class="boton secundario" type="button" data-a="prorrogar">Prorrogar y comunicar al titular</button></div>`}`);
   if (RESP[c.sede].reclamos === u.id) {
     if (reclamoPendiente(c)) A.push(`<div class="grupo-acc">Reclamo ante la Agencia (art. 41)</div><p class="peq">${esc(c.reclamo.folio)} · notificado el ${fF(c.reclamo.notif)}. CONAF responde a más tardar el <b>${fF(venceReclamo(c))}</b>, con todos los antecedentes${c.reclamo.prorroga ? " (prorrogado)" : ""}.</p><div class="campo"><label for="a-rec">Respuesta a la Agencia *</label><textarea id="a-rec" rows="2"></textarea></div><div class="acciones"><button class="boton" type="button" data-a="rec-resp">Registrar la respuesta enviada</button>${!c.reclamo.prorroga ? `<button class="boton secundario" type="button" data-a="rec-pror">Prorrogar ${PARAM.RECLAMO_RESP} días</button>` : ""}</div>`);
     else if (!c.reclamo && ((!abierto(c) && c.cierre.res !== "Acogida") || (abierto(c) && diasLegal(c) < 0))) A.push(`<div class="grupo-acc">Reclamo ante la Agencia (art. 41)</div><p class="peq">El titular puede reclamar dentro de 30 días hábiles${abierto(c) ? " desde que venció el plazo sin respuesta" : " desde la respuesta negativa"}.</p><div class="campos"><div class="campo"><label for="a-rnot">Fecha de notificación</label><input type="date" id="a-rnot" max="${HOY}" value="${HOY}"></div><div class="campo"><label for="a-rfol">Folio de la Agencia *</label><input type="text" id="a-rfol"></div></div><div class="acciones"><button class="boton secundario" type="button" data-a="rec-nuevo">Registrar reclamo notificado</button></div>`);

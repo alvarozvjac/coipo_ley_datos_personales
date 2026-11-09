@@ -76,7 +76,7 @@ function paso3() {
       <div class="campo"><label for="s-prov">Provincia *</label><select id="s-prov" ${SOL.region ? "" : "disabled"}><option value="">${SOL.region ? "Seleccione" : "Seleccione región primero"}</option>${SOL.region ? TERRITORIO.find(r => r.r === SOL.region).p.map(p => `<option ${SOL.prov === p[0] ? "selected" : ""}>${p[0]}</option>`).join("") : ""}</select></div>
       <div class="campo"><label for="s-com">Comuna *</label><select id="s-com" ${SOL.prov ? "" : "disabled"}><option value="">${SOL.prov ? "Seleccione" : "Seleccione provincia primero"}</option>${SOL.prov ? TERRITORIO.find(r => r.r === SOL.region).p.find(p => p[0] === SOL.prov)[1].map(c => `<option ${SOL.comuna === c ? "selected" : ""}>${c}</option>`).join("") : ""}</select></div>
       <div class="campo"><label for="s-dom">Domicilio *</label><input type="text" id="s-dom" value="${esc(SOL.dom)}" autocomplete="street-address"></div>` : ""}
-    ${SOL.medio === "retiro" ? `<div class="campo ancho"><label for="s-ret">Oficina de Partes donde retirará la respuesta *</label><select id="s-ret">${ops}</select></div>` : ""}</div></fieldset>`;
+    ${SOL.medio === "retiro" ? `<div class="campo ancho"><label for="s-ret">Oficina de Partes donde retirará la respuesta *</label><select id="s-ret">${ops}</select>${oficinaDe(SOL.retiro) ? `<span class="ayuda">${esc(oficinaDe(SOL.retiro).d)}${oficinaDe(SOL.retiro).t ? " · Tel. " + esc(oficinaDe(SOL.retiro).t) : ""}${oficinaDe(SOL.retiro).c ? " · " + esc(oficinaDe(SOL.retiro).c) : ""}</span>` : ""}</div>` : ""}</div></fieldset>`;
 }
 function paso4() {
   const ders = Object.keys(SOL.der).filter(k => SOL.der[k]);

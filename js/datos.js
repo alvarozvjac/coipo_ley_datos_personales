@@ -26,6 +26,26 @@ const PARAM = {
 };
 
 const SEDES = ["Oficina Central"].concat(TERRITORIO.map(r => "Dirección Regional " + r.r));
+const OFICINAS = {
+  "Oficina Central": { d: "Paseo Bulnes 285, Santiago", t: "+56 (2) 2663 0000", c: "" },
+  "Dirección Regional Arica y Parinacota": { d: "AVDA. BENJAMÍN VICUÑA MACKENNA N° 820, ARICA", t: "+56 58 2201201", c: "" },
+  "Dirección Regional Tarapacá": { d: "AVDA. DIAGONAL FRANCISCO BILBAO N° 3692, IQUIQUE", t: "+56 57 2383537", c: "" },
+  "Dirección Regional Antofagasta": { d: "AVDA. ARGENTINA N° 2510, ANTOFAGASTA", t: "+56 55 2602618", c: "" },
+  "Dirección Regional Atacama": { d: "JUAN MARTÍNEZ N° 55 – COPIAPO", t: "+56 52 2213404", c: "" },
+  "Dirección Regional Coquimbo": { d: "REGIMIENTO ARICA N° 901, SECTOR PEÑUELAS, COQUIMBO", t: "+56 51 2244769", c: "" },
+  "Dirección Regional Valparaíso": { d: "3 NORTE N° 541 – VIÑA DEL MAR", t: "+56 32 2320212", c: "" },
+  "Dirección Regional O'Higgins": { d: "TENIENTE CORONEL JOSÉ BDO. CUEVAS N° 480, RANCAGUA", t: "+56 72 2204611", c: "" },
+  "Dirección Regional Maule": { d: "4 NORTE N° 1673, TALCA", t: "+56 71 2209510", c: "" },
+  "Dirección Regional Ñuble": { d: "PANAMERICANA NORTE N° 3430, CHILLAN", t: "+56 42 2221085", c: "" },
+  "Dirección Regional Biobío": { d: "BARROS ARANA N° 514, 3er. PISO LOCAL A, CONCEPCIÓN", t: "+56 41 2624000", c: "" },
+  "Dirección Regional La Araucanía": { d: "FRANCISCO BILBAO N° 931 – 2do. PISO, TEMUCO", t: "+56 45 2298114", c: "" },
+  "Dirección Regional Los Ríos": { d: "LOS CASTAÑOS N° 100 – ISLA TEJA, VALDIVIA", t: "+56 63 2283426", c: "" },
+  "Dirección Regional Los Lagos": { d: "OCHAGAVÍA N° 458 – PUERTO MONTT", t: "+56 65 2486101", c: "" },
+  "Dirección Regional Aysén del General Carlos Ibáñez del Campo": { d: "AVDA. OGANA N° 1060 – COYHAIQUE", t: "+56 67 2212109", c: "" },
+  "Dirección Regional Magallanes y de la Antártica Chilena": { d: "AVDA. BULNES N° 0309 4º PISO, PUNTA ARENAS", t: "+56 61 2238554", c: "" },
+  "Dirección Regional Metropolitana de Santiago": { d: "SAN PIO X N° 2475 – PROVIDENCIA, STGO", t: "+56 22 3280300", c: "" },
+};
+const oficinaDe = s => OFICINAS[s] || null;
 const corta = s => s === "Oficina Central" ? "Oficina Central" : s.replace("Dirección Regional ", "DR ");
 
 /* ---------- Etapas (procedimiento V1, como lo citaba la v3.7; arts. 11 y 23 de la ley) ---------- */
@@ -40,11 +60,19 @@ const ETAPAS = [
 ];
 const ETAPA = Object.fromEntries(ETAPAS.map(e => [e.k, e]));
 const COLS = [["recibe", "Recibe y registra", "recepcion"], ["admisibilidad", "Admisibilidad y bloqueo", "fiscalia"], ["deriva", "Deriva", "recepcion"], ["revision", "Revisión jurídica", "fiscalia"], ["firma", "Firma", "firmante"], ["responde", "Responde y cierra", "recepcion"], ["reclamos", "Reclamos ante la Agencia", "fiscalia"]];
+/* Perfil que hace cada etapa en una sede regional (las regiones tienen OIRS, Director y unidad jurídica propios). */
+const COLS_REG = { recibe: "oirs", admisibilidad: "fiscalia", deriva: "director", revision: "juridica", firma: "director", responde: "oirs", reclamos: "fiscalia" };
+const PERFIL_EN = (s, k) => s === "Oficina Central" ? COLS.find(c => c[0] === k)[2] : COLS_REG[k];
+const RECEPTOR = ["recepcion", "oirs"];   // perfiles que reciben y registran
+let VISTA_SEDE = "Oficina Central";        // sede que consulta el Responsable de datos (lectura)
 
 /* ---------- Perfiles: derivados de las funciones del canal ---------- */
 const PERFILES = {
   solicitante: { n: "Persona solicitante", ico: "user", d: "Titular, representante o heredero. Presenta solicitudes y consulta su estado." },
-  recepcion: { n: "Responsable de datos", ico: "oficina", d: "Recibe y registra (incluida la vía física), verifica identidad, deriva, responde y prorroga." },
+  recepcion: { n: "Responsable de datos", ico: "oficina", d: "Oficina Central: recibe y registra (incluida la vía física), verifica identidad, deriva, responde y prorroga. Puede consultar las demás sedes en lectura." },
+  oirs: { n: "Encargado OIRS regional", ico: "oficina", d: "Recibe y registra las solicitudes de su región (incluida la Oficina de Partes regional), verifica identidad, deriva al Director Regional y responde." },
+  director: { n: "Director o directora regional", ico: "firma", d: "Deriva la solicitud a la jefatura técnica, recibe la propuesta y firma las respuestas de su región." },
+  juridica: { n: "Unidad jurídica regional", ico: "balanza", d: "Revisa la propuesta de respuesta y otorga el visto bueno antes de la firma regional." },
   fiscalia: { n: "Fiscalía", ico: "balanza", d: "Admisibilidad, bloqueo temporal, revisión jurídica y reclamos ante la Agencia." },
   gerencia: { n: "Área que trata los datos", ico: "equipo", d: "Analiza los casos de su ámbito y propone la respuesta." },
   firmante: { n: "Firmante", ico: "firma", d: "Firma las respuestas de su sede." },
@@ -54,9 +82,11 @@ const PERFILES = {
 const USUARIOS = [
   { id: "u1", perfil: "solicitante", nom: "Carolina Andrea Muñoz Pérez", run: runFicticio(16482337), cargo: "Titular de los datos" },
   { id: "u2", perfil: "recepcion", nom: "Paula Rojas Soto", cargo: "Oficina Central" },
-  { id: "u3", perfil: "recepcion", nom: "Marcelo Fuentes Díaz", cargo: "Dirección Regional Biobío" },
+  { id: "u3", perfil: "oirs", nom: "Marcelo Fuentes Díaz", cargo: "Encargado OIRS · Dirección Regional Biobío" },
   { id: "u4", perfil: "fiscalia", nom: "Andrés Contreras Silva", cargo: "Abogado de Fiscalía" },
-  { id: "u5", perfil: "gerencia", nom: "Natalia Herrera Torres", cargo: "Ámbito Personal y ex funcionarios" },
+  { id: "u5", perfil: "gerencia", nom: "Natalia Herrera Torres", cargo: "Ámbitos: Personal y ex funcionarios · Áreas Silvestres Protegidas" },
+  { id: "u12", perfil: "director", nom: "Carmen Lillo Varas", cargo: "Director regional · Biobío" },
+  { id: "u13", perfil: "juridica", nom: "Jorge Medina Lagos", cargo: "Unidad jurídica regional · Biobío" },
   { id: "u7", perfil: "firmante", nom: "Ricardo Fuenzalida Mella", cargo: "Firmante de prueba · Oficina Central" },
   { id: "u8", perfil: "delegado", nom: "Sergio Bravo Ulloa", cargo: "Usuario de prueba" },
   { id: "u6", perfil: "admin", nom: "Valeria Soto Araya", cargo: "Usuario de prueba" }
@@ -68,12 +98,12 @@ const nomU = id => U[id] ? U[id].nom : "—";
    Oficina Central y Biobío llevan una asignación DE PRUEBA para poder recorrer la maqueta. */
 const RESP = Object.fromEntries(SEDES.map(s => [s, { recibe: null, admisibilidad: null, deriva: null, revision: null, firma: null, responde: null, reclamos: null, prueba: false }]));
 Object.assign(RESP["Oficina Central"], { recibe: "u2", admisibilidad: "u4", deriva: "u2", revision: "u4", firma: "u7", responde: "u2", reclamos: "u4", prueba: true });
-Object.assign(RESP["Dirección Regional Biobío"], { recibe: "u3", admisibilidad: "u4", deriva: "u3", revision: "u4", responde: "u3", reclamos: "u4", prueba: true });
+Object.assign(RESP["Dirección Regional Biobío"], { recibe: "u3", admisibilidad: "u4", deriva: "u12", revision: "u13", firma: "u12", responde: "u3", reclamos: "u4", prueba: true });
 
 /* Ámbitos de EJEMPLO hasta cargar la matriz de datos personales (compartida por el delegado el 28-10-2026). */
 const AMBITOS = [
   { k: "personal", n: "Personal y ex funcionarios", resp: "u5" },
-  { k: "asp", n: "Áreas Silvestres Protegidas", resp: null },
+  { k: "asp", n: "Áreas Silvestres Protegidas", resp: "u5" },
   { k: "fiscalizacion", n: "Fiscalización forestal", resp: null },
   { k: "programas", n: "Programas y beneficios", resp: null },
   { k: "tramites", n: "Trámites forestales", resp: null }

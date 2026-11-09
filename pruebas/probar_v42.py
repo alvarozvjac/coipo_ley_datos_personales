@@ -65,11 +65,11 @@ with sync_playwright() as p:
         ok(pg.locator("h1", has_text="Convenios de cesión").count() == 1, f"{nombre}: el acceso de la segunda sección abre su vista")
         ok(sin_desborde(), f"{nombre}: convenios sin scroll horizontal")
 
-        # --- Dueño: sólo sus fichas; completa la devuelta y la envía
-        como(pg, "Ignacia Paredes")
-        ok(pg.locator(".acceso").count() == 3, f"{nombre}: el dueño ve 3 accesos")
+        # --- Área (antes Dueño, fusionado en v4.3): sólo sus fichas; completa la devuelta y la envía
+        como(pg, "Natalia Herrera")
+        ok(pg.locator(".acceso").count() == 6, f"{nombre}: el área ve 6 accesos (3 del canal y 3 de la línea 2)")
         ev(pg, "ir('tratamientos')")
-        ok(pg.locator("[data-trat]").count() == 2, f"{nombre}: el dueño ve sólo sus 2 tratamientos")
+        ok(pg.locator("[data-trat]").count() == 4, f"{nombre}: el área ve sus 4 tratamientos (sus dos ámbitos)")
         ok(sin_desborde(), f"{nombre}: registro de tratamientos sin scroll horizontal")
         pg.screenshot(path=str(SAL / f"{nombre}-l2-tratamientos.png"), full_page=True)
         ev(pg, "abrirTrat('T-04')")
@@ -92,9 +92,9 @@ with sync_playwright() as p:
         pg.click("#t-aprobar")
         ok(ev(pg, "TRAT('T-04').estado") == "aprobado", f"{nombre}: el delegado aprueba la ficha")
         ev(pg, "abrirTrat('T-03')")
-        pg.select_option("#t-dueno", "u10")
+        pg.select_option("#t-dueno", "u5")
         pg.click("#t-asig")
-        ok(ev(pg, "TRAT('T-03').dueno") == "u10", f"{nombre}: el delegado asigna dueño a una ficha sin dueño")
+        ok(ev(pg, "TRAT('T-03').dueno") == "u5", f"{nombre}: el delegado asigna dueño a una ficha sin dueño")
         ev(pg, "cerrarCapa(); ir('riesgos')")
         pg.screenshot(path=str(SAL / f"{nombre}-l2-riesgos.png"), full_page=True)
         ok(pg.locator(".mc-c").count() == 25, f"{nombre}: el mapa de calor tiene 5 × 5 celdas")
@@ -130,7 +130,7 @@ with sync_playwright() as p:
         ok(sin_desborde(), f"{nombre}: vulneraciones sin scroll horizontal")
 
         # --- Evaluación de impacto: dueño inicia y envía; Fiscalía termina
-        como(pg, "Gonzalo Vega")
+        como(pg, "Natalia Herrera")
         ev(pg, "ir('eipd')")
         pg.click("[data-eipd='T-06']")
         pg.click("[data-eipd='T-06']")

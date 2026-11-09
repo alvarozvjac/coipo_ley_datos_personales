@@ -26,8 +26,8 @@ POST.responsables = () => {
 };
 function editarCelda(s, k) {
   const t = COLS.find(c => c[0] === k)[1], v = RESP[s][k];
-  const ops = USUARIOS.filter(u => u.perfil === perfilDeCol(k));
-  cajon(t, esc(s), `<div class="campo"><label for="e-u">Responsable</label><select id="e-u"><option value="">Por definir</option>${ops.map(u => `<option value="${u.id}" ${v === u.id ? "selected" : ""}>${esc(u.nom)} · ${esc(u.cargo)}</option>`).join("")}</select><span class="ayuda">En la maqueta sólo hay usuarios de prueba del perfil ${esc(PERFILES[perfilDeCol(k)].n)}. En la versión institucional se eligen desde el sistema de identidad de CONAF.</span></div><div class="acciones"><button class="boton" type="button" id="e-ok">Guardar</button></div>`, render);
+  const ops = USUARIOS.filter(u => u.perfil === PERFIL_EN(s, k));
+  cajon(t, esc(s), `<div class="campo"><label for="e-u">Responsable</label><select id="e-u"><option value="">Por definir</option>${ops.map(u => `<option value="${u.id}" ${v === u.id ? "selected" : ""}>${esc(u.nom)} · ${esc(u.cargo)}</option>`).join("")}</select><span class="ayuda">En la maqueta sólo hay usuarios de prueba del perfil ${esc(PERFILES[PERFIL_EN(s, k)].n)}. En la versión institucional se eligen desde el sistema de identidad de CONAF.</span></div><div class="acciones"><button class="boton" type="button" id="e-ok">Guardar</button></div>`, render);
   $("#e-ok").onclick = () => {
     const nv = $("#e-u").value || null;
     RESP[s][k] = nv; RESP[s].prueba = RESP[s].prueba && !!nv;

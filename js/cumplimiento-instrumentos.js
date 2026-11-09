@@ -57,10 +57,10 @@ function abrirVul(id) {
 
 /* ---------- Evaluaciones de impacto (art. 15 ter) ---------- */
 function vEipd() {
-  const p = SESION.perfil, L = TRATAMIENTOS.filter(t => criteriosDe(t).length && (p !== "dueno" || t.dueno === SESION.id));
+  const p = SESION.perfil, L = TRATAMIENTOS.filter(t => criteriosDe(t).length && (p !== "gerencia" || t.dueno === SESION.id));
   const est = t => (EIPD[t.id] || (EIPD[t.id] = { estado: "falta" })).estado;
-  const boton = t => { const e = est(t); if (p === "dueno" && t.dueno === SESION.id && e === "falta") return `<button class="boton chico" type="button" data-eipd="${t.id}" data-a="curso">Iniciar</button>`;
-    if (p === "dueno" && t.dueno === SESION.id && e === "curso") return `<button class="boton chico" type="button" data-eipd="${t.id}" data-a="fiscalia">Enviar a Fiscalía</button>`;
+  const boton = t => { const e = est(t); if (p === "gerencia" && t.dueno === SESION.id && e === "falta") return `<button class="boton chico" type="button" data-eipd="${t.id}" data-a="curso">Iniciar</button>`;
+    if (p === "gerencia" && t.dueno === SESION.id && e === "curso") return `<button class="boton chico" type="button" data-eipd="${t.id}" data-a="fiscalia">Enviar a Fiscalía</button>`;
     if (p === "fiscalia" && e === "fiscalia") return `<button class="boton chico" type="button" data-eipd="${t.id}" data-a="lista">Dar por terminada</button>`; return ""; };
   return volverHTML() + cab("Evaluaciones de impacto", "Antes de iniciar un tratamiento de alto riesgo se evalúan su necesidad y proporcionalidad, sus riesgos y las medidas para mitigarlos.", "Art. 15 ter") + avisoEjemplo() +
     `<div class="regla av" style="margin-bottom:var(--e-4)"><span class="ico">?</span><div><b>Exigibilidad por confirmar con Fiscalía</b><span>El art. 21 enumera los artículos que se aplican a los órganos públicos y no nombra el art. 15 ter. Mientras Fiscalía no lo confirme, la plataforma la trata como buena práctica.</span></div></div>

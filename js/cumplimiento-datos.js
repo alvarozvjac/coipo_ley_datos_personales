@@ -7,24 +7,21 @@
 
 /* ---------- Perfiles y usuarios de la línea 2 ---------- */
 Object.assign(PERFILES, {
-  dueno: { n: "Dueño de tratamiento", ico: "doc", d: "Jefatura de la unidad que trata los datos: mantiene su ficha del registro y cumple sus controles." },
   seguridad: { n: "Seguridad de la información", ico: "candado", d: "Registra y evalúa las vulneraciones de seguridad y aporta evidencia de las medidas (arts. 14 quinquies y 14 sexies)." }
 });
 USUARIOS.splice(USUARIOS.length - 1, 0,
-  { id: "u9", perfil: "dueno", nom: "Ignacia Paredes Lobos", cargo: "Usuario de prueba · Personal y ex funcionarios" },
-  { id: "u10", perfil: "dueno", nom: "Gonzalo Vega Riquelme", cargo: "Usuario de prueba · Áreas Silvestres Protegidas" },
   { id: "u11", perfil: "seguridad", nom: "Daniela Ossandón Pérez", cargo: "Usuario de prueba" });
 USUARIOS.forEach(u => U[u.id] = u);
 
 /* ---------- Registro de tratamientos (art. 49 c; art. 14 ter d, h, i, j) ---------- */
 const EST_TRAT = { borrador: ["Borrador", "c-neu", "○"], revision: ["En revisión del delegado", "c-pend", "◷"], aprobado: ["Aprobado", "c-disp", "✓"], observado: ["Con observaciones", "c-malo", "!"] };
 const TRATAMIENTOS = [
-  { id: "T-01", n: "Gestión del personal y remuneraciones", amb: "personal", dueno: "u9", estado: "aprobado",
+  { id: "T-01", n: "Gestión del personal y remuneraciones", amb: "personal", dueno: "u5", estado: "aprobado",
     fin: "Administrar la relación laboral, pagar remuneraciones y cumplir obligaciones previsionales.", base: "Funciones legales del órgano (art. 20) [VERIFICAR]",
     datos: ["Identificación", "Contacto", "Remuneraciones y previsión", "Salud laboral y licencias"], titulares: "Funcionarios y ex funcionarios",
     dest: "Organismos previsionales y de fiscalización (ejemplo)", internacional: "Correo institucional en nube extranjera [PENDIENTE]", conserva: "Según normas de archivo [VERIFICAR]",
     fuente: "El propio titular", sistema: "Sistema de remuneraciones (ejemplo)", sensible: true, nna: false, masivo: false, monitoreo: false },
-  { id: "T-02", n: "Reservas y control de visitantes de áreas protegidas", amb: "asp", dueno: "u10", estado: "revision",
+  { id: "T-02", n: "Reservas y control de visitantes de áreas protegidas", amb: "asp", dueno: "u5", estado: "revision",
     fin: "Gestionar reservas, cobros y aforo de las áreas silvestres protegidas.", base: "Funciones legales del órgano (art. 20) [VERIFICAR]",
     datos: ["Identificación", "Contacto", "Nacionalidad", "Grupo de viaje, incluidos menores de edad"], titulares: "Visitantes nacionales y extranjeros",
     dest: "Encargado de la plataforma de reservas", internacional: "Por confirmar con el encargado [PENDIENTE]", conserva: "2 años desde la visita; luego se anonimiza (propuesta del dueño)",
@@ -34,7 +31,7 @@ const TRATAMIENTOS = [
     datos: ["Identificación", "Domicilio", "Infracciones administrativas (art. 25)", "Geolocalización de predios"], titulares: "Propietarios y presuntos infractores",
     dest: "Tribunales y otros órganos cuando corresponda (ejemplo)", internacional: "No", conserva: null,
     fuente: "Fiscalización en terreno y registros públicos", sistema: "Sistema de fiscalización (ejemplo)", sensible: false, nna: false, masivo: false, monitoreo: false },
-  { id: "T-04", n: "Brigadas de temporada", amb: "personal", dueno: "u9", estado: "observado",
+  { id: "T-04", n: "Brigadas de temporada", amb: "personal", dueno: "u5", estado: "observado",
     fin: "Contratar y gestionar brigadistas para la temporada de incendios.", base: "Funciones legales del órgano (art. 20) [VERIFICAR]",
     datos: ["Identificación", "Contacto", "Aptitud física y exámenes de salud"], titulares: "Postulantes y brigadistas",
     dest: "Mutualidad (ejemplo)", internacional: "No", conserva: null,
@@ -45,7 +42,7 @@ const TRATAMIENTOS = [
     datos: ["RUN", "Nombre", "Contacto", "Contenido de la solicitud y adjuntos"], titulares: "Personas que ejercen derechos ante CONAF",
     dest: "Agencia de Protección de Datos Personales, si hay reclamo", internacional: "No", conserva: null,
     fuente: "El propio titular", sistema: "CON012", sensible: false, nna: false, masivo: false, monitoreo: false },
-  { id: "T-06", n: "Cámaras en accesos de áreas protegidas", amb: "asp", dueno: "u10", estado: "borrador",
+  { id: "T-06", n: "Cámaras en accesos de áreas protegidas", amb: "asp", dueno: "u5", estado: "borrador",
     fin: "Seguridad de visitantes y del patrimonio en accesos y centros de información.", base: "Por definir [VERIFICAR]",
     datos: ["Imagen de personas"], titulares: "Visitantes y personal", dest: "Ninguno previsto", internacional: "No", conserva: null,
     fuente: "Captura directa", sistema: "Sistema de cámaras (ejemplo)", sensible: false, nna: true, masivo: false, monitoreo: true }
@@ -68,13 +65,13 @@ const RIESGOS = [
 const EST_CTRL = { pendiente: ["Pendiente", "c-neu", "○"], curso: ["En curso", "c-pend", "◷"], hecho: ["Implementado", "c-disp", "✓"] };
 const CONTROLES = [
   { id: "C-01", riesgo: "R-01", n: "Acceso a licencias sólo por perfil, con registro de lecturas", resp: "u11", plazo: "2027-01-29", estado: "curso", ev: 1 },
-  { id: "C-02", riesgo: "R-01", n: "Revisión trimestral de usuarios con acceso", resp: "u9", plazo: "2027-02-26", estado: "pendiente", ev: 0 },
-  { id: "C-03", riesgo: "R-02", n: "Aviso de información y consentimiento del adulto a cargo en la reserva", resp: "u10", plazo: "2027-01-08", estado: "pendiente", ev: 0 },
+  { id: "C-02", riesgo: "R-01", n: "Revisión trimestral de usuarios con acceso", resp: "u5", plazo: "2027-02-26", estado: "pendiente", ev: 0 },
+  { id: "C-03", riesgo: "R-02", n: "Aviso de información y consentimiento del adulto a cargo en la reserva", resp: "u5", plazo: "2027-01-08", estado: "pendiente", ev: 0 },
   { id: "C-04", riesgo: "R-03", n: "Cláusula de ubicación de los datos en el contrato de encargo", resp: "u4", plazo: "2027-02-15", estado: "curso", ev: 0 },
-  { id: "C-05", riesgo: "R-04", n: "Supresión de exámenes de no seleccionados al cerrar el concurso", resp: "u9", plazo: "2027-01-15", estado: "pendiente", ev: 0 },
+  { id: "C-05", riesgo: "R-04", n: "Supresión de exámenes de no seleccionados al cerrar el concurso", resp: "u5", plazo: "2027-01-15", estado: "pendiente", ev: 0 },
   { id: "C-06", riesgo: "R-05", n: "Alertas de vencimiento del canal (línea 1)", resp: "u8", plazo: "2026-12-01", estado: "hecho", ev: 2 },
   { id: "C-07", riesgo: "R-06", n: "Publicar la ficha del tratamiento en la página del art. 14 ter", resp: "u8", plazo: "2027-03-01", estado: "pendiente", ev: 0 },
-  { id: "C-08", riesgo: "R-07", n: "Letrero de aviso y plazo de borrado automático", resp: "u10", plazo: "2027-02-01", estado: "pendiente", ev: 0 }
+  { id: "C-08", riesgo: "R-07", n: "Letrero de aviso y plazo de borrado automático", resp: "u5", plazo: "2027-02-01", estado: "pendiente", ev: 0 }
 ];
 
 /* ---------- Vulneraciones de seguridad (art. 14 sexies). La ley no fija un plazo en horas: «sin dilaciones indebidas» ---------- */

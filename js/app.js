@@ -4,14 +4,14 @@
 let SESION = null, vista = "inicio";
 const VISTAS = {
   solicitante: { inicio: () => vPagina(), pagina: () => vPagina(), solicitud: () => vSolicitud(), acuse: () => vAcuse(), mis: () => vMis() },
-  interno: { inicio: () => vInicioInterno(), casos: () => vCasos(), registrar: () => vRegistrar(), calendario: () => vCalendario(), reportes: () => vReportes() },
+  interno: { inicio: () => vInicioInterno(), casos: () => vCasos(), registrar: () => vRegistrar(), calendario: () => vCalendario(), reportes: () => vReportes(), tratamientos: () => vTratamientos(), riesgos: () => vRiesgos(), eipd: () => vEipd() },
   fiscalia: { inicio: () => vInicioInterno(), casos: () => vCasos(), calendario: () => vCalendario(), reportes: () => vReportes(), tratamientos: () => vTratamientos(), eipd: () => vEipd(), encargados: () => vEncargados(), convenios: () => vConvenios() },
   delegado: { inicio: () => vInicioInterno(), casos: () => vCasos(), calendario: () => vCalendario(), reportes: () => vReportes(), bitacora: () => vBitacora(), tratamientos: () => vTratamientos(), riesgos: () => vRiesgos(), vulneraciones: () => vVulneraciones(), eipd: () => vEipd(), encargados: () => vEncargados(), convenios: () => vConvenios() },
   admin: { inicio: () => vInicioInterno(), casos: () => vCasos(), calendario: () => vCalendario(), reportes: () => vReportes(), responsables: () => vResponsables(), parametros: () => vParametros(), bitacora: () => vBitacora() },
   // Línea 2: perfiles que sólo participan del cumplimiento interno
   cumplimiento: { inicio: () => vInicioCumpl(), tratamientos: () => vTratamientos(), riesgos: () => vRiesgos(), vulneraciones: () => vVulneraciones(), eipd: () => vEipd() }
 };
-const grupo = () => !SESION ? null : ["solicitante", "admin", "delegado", "fiscalia"].includes(SESION.perfil) ? SESION.perfil : ["dueno", "seguridad"].includes(SESION.perfil) ? "cumplimiento" : "interno";
+const grupo = () => !SESION ? null : ["solicitante", "admin", "delegado", "fiscalia"].includes(SESION.perfil) ? SESION.perfil : ["seguridad"].includes(SESION.perfil) ? "cumplimiento" : "interno";
 
 function pintarLogin() {
   const li = u => `<li><button type="button" class="l-usuario" data-u="${u.id}">${ico(PERFILES[u.perfil].ico)}<span><b>${esc(PERFILES[u.perfil].n)}</b><br><span class="peq tenue">${esc(u.nom)} · ${esc(u.cargo)}</span></span>${ico("flecha", "ico fin")}</button></li>`;

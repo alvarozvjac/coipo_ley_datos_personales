@@ -85,7 +85,7 @@ with sync_playwright() as p:
     foto(pg, "15-registrar")
 
     # Fiscalía
-    entrar(pg, "Fiscalía")
+    entrar(pg, "Unidad Jurídica")
     foto(pg, "20-inicio-fiscalia")
     caso(pg, "DP-2027-000003", "21-caso-bloqueo")
     caso(pg, "DP-2027-000002", "22-caso-admisibilidad")

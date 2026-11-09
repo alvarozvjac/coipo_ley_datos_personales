@@ -47,7 +47,7 @@ with sync_playwright() as p:
     # 1. Una sola cuenta por función y sin los perfiles retirados
     pg.goto(URL)
     etiquetas = pg.locator("#l-interno .l-usuario b").all_inner_texts()
-    for perfil in ["Encargado OIRS", "Fiscalía y unidad jurídica", "Director o directora", "Área que trata los datos",
+    for perfil in ["Encargado OIRS", "Unidad Jurídica", "Director o directora", "Área que trata los datos",
                    "Delegado de protección de datos", "Administración del canal"]:
         n = etiquetas.count(perfil)
         ok(n == 1, f"ingreso: «{perfil}» aparece {n} vez (debe ser 1)")
@@ -82,8 +82,8 @@ with sync_playwright() as p:
     ok(ev(pg, "SEDES.every(s => RESP[s].firma === 'u12' || !RESP[s].prueba)") is True,
        "Director: es quien firma en las sedes con asignación de prueba")
 
-    # 5. Fiscalía y unidad jurídica: una sola cuenta con la revisión de todas las sedes
-    entrar(pg, "Fiscalía y unidad jurídica")
+    # 5. Unidad Jurídica: una sola cuenta con la revisión de todas las sedes
+    entrar(pg, "Unidad Jurídica")
     ok(ev(pg, "RESP['Dirección Regional Biobío'].revision === 'u4' && RESP['Oficina Central'].revision === 'u4'") is True,
        "Fiscalía: hace la revisión (V°B°) en Oficina Central y en Biobío")
 

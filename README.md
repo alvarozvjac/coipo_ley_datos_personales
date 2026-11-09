@@ -1,4 +1,4 @@
-# coipo_le_datos_personales — Maqueta del canal de ejercicio de derechos (Ley N° 21.719)
+# coipo_ley_datos_personales — Maqueta del canal de ejercicio de derechos (Ley N° 21.719)
 
 Maqueta de validación del canal por el que las personas ejercen ante CONAF sus derechos
 sobre datos personales (acceso, rectificación, supresión, oposición, portabilidad y

@@ -70,7 +70,7 @@ body.sin-sesion .barra, body.sin-sesion #vista, body.sin-sesion .pie-app { displ
 
 /* ---------- Área de trabajo ---------- */
 main { display: block; padding: var(--e-6) var(--e-4) var(--e-7); max-width: 92rem; margin: 0 auto; }
-main:focus { outline: none; }
+main:focus:not(:focus-visible) { outline: none; }
 .cab-vista { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--e-4); flex-wrap: wrap; margin-block-end: var(--e-5); }
 .cab-vista h1 { font-size: var(--f-2xl); }
 .cab-vista p { color: var(--texto-tenue); max-width: var(--medida); margin-block-start: var(--e-2); }

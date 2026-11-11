@@ -124,7 +124,7 @@ with sync_playwright() as p:
         pg.locator("#cerrar").click()
 
         # --- Fiscalía: bloqueo
-        entrar(pg, "Fiscalía")
+        entrar(pg, "Unidad Jurídica")
         tarjeta(pg, "Bloqueos por resolver")
         pg.locator("[data-caso='DP-2027-000003']:visible").first.click()
         pg.locator("[data-a='bloq-no']").click()
@@ -134,7 +134,7 @@ with sync_playwright() as p:
         pg.locator("#cerrar").click()
 
         # --- Fiscalía: reclamo ante la Agencia (art. 41)
-        entrar(pg, "Fiscalía")
+        entrar(pg, "Unidad Jurídica")
         tarjeta(pg, "Reclamos ante la Agencia")
         pg.locator("[data-caso='DP-2026-000103']:visible").first.click()
         ok("03-02-2027" in pg.locator("#capa").inner_text(), f"{nombre}: el reclamo vence 30 días corridos después de la notificación")

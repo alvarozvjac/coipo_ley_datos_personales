@@ -67,7 +67,7 @@ const RECEPTOR = ["encargado"];   // perfiles que reciben y registran
 /* ---------- Perfiles: derivados de las funciones del canal ---------- */
 const PERFILES = {
   solicitante: { n: "Persona solicitante", ico: "user", d: "Titular, representante o heredero. Presenta solicitudes y consulta su estado." },
-  encargado: { n: "Encargado OIRS", ico: "oficina", d: "Recibe y registra las solicitudes de todas las sedes (incluida la Oficina de Partes), verifica identidad, deriva, responde y prorroga. Asigna los responsables por etapa y sede, define plazos internos y feriados, y lleva la bitácora." },
+  encargado: { n: "Encargado de Gestión", ico: "oficina", d: "Recibe y registra las solicitudes de todas las sedes (incluida la Oficina de Partes), verifica identidad, deriva, responde y prorroga. Asigna los responsables por etapa y sede, define plazos internos y feriados, y lleva la bitácora." },
   fiscalia: { n: "Unidad Jurídica", ico: "balanza", d: "Admisibilidad, bloqueo temporal, revisión jurídica (V°B°), reclamos ante la Agencia y reporte de vulneraciones (art. 14 sexies), en todas las sedes." },
   director: { n: "Director o directora", ico: "firma", d: "Revisa y firma las respuestas de todas las sedes. No deriva." },
   gerencia: { n: "Área que trata los datos", ico: "equipo", d: "Analiza los casos de su ámbito y propone la respuesta." }

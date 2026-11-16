@@ -16,11 +16,18 @@ const ITEMS_14TER = [ // art. 14 ter de la Ley N° 21.719, letras a) a l)
   ["k", "Retiro del consentimiento", "Cuando un tratamiento se basa en el consentimiento, el derecho a retirarlo en cualquier momento.", porDefinir("Por confirmar si aplica")],
   ["l", "Decisiones automatizadas", "Si existen decisiones automatizadas o perfiles, la lógica aplicada y sus consecuencias.", porDefinir("Por confirmar")]
 ];
+/* Entrada: sólo la identificación con Clave Única. Nada más hasta autenticarse. */
 function vPagina() {
+  if (!SESION.cu) return vIngreso();
   return cab("Protección de datos personales", "Información que CONAF publica sobre el tratamiento de sus datos y cómo ejercer sus derechos.", "Art. 14 ter, letras a) a l) · propuesta") +
     `<div class="acciones" style="margin-bottom:var(--e-5)"><button class="boton grande" type="button" data-ir="solicitud">${ico("plus")}Presentar una solicitud</button><button class="boton secundario grande" type="button" data-ir="mis">${ico("buscar")}Consultar mis solicitudes</button></div>
     <ol class="items-14ter">${ITEMS_14TER.map(([l, t, d, e]) => `<li><span class="n num">${l}</span><div><h3>${t}</h3><p>${d}</p></div><div class="e">${e}</div></li>`).join("")}</ol>
     <p class="nota" style="margin-top:var(--e-4)">¿No tiene Clave Única? Puede presentar su solicitud con el formulario físico en la Oficina de Partes de Oficina Central o de cualquier dirección regional de CONAF.</p>`;
+}
+
+function vIngreso() {
+  return cab("Ingreso", "Identifíquese con Clave Única para presentar solicitudes y consultar las suyas.", "") +
+    `<section class="panel"><div class="cuerpo"><p>Clave Única es la forma de identificarse ante el Estado. Con ella CONAF verifica su RUN y su nombre antes de recibir la solicitud.</p><div class="acciones" style="margin-top:var(--e-3)"><button class="boton grande" type="button" onclick="pedirClaveUnica(() => ir('pagina'))">${ico("candado")}Ingresar con Clave Única</button></div></div></section>`;
 }
 
 /* ---------- Clave Única (simulada) ---------- */

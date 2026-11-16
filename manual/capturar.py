@@ -28,7 +28,7 @@ def entrar(pg, texto):
     pg.wait_for_selector("#login:not([hidden])")
     pg.evaluate("window.tostada = () => {}")  # sin avisos flotantes en las capturas
     pg.locator("#login .l-usuario", has_text=texto).first.click()
-    pg.wait_for_selector("#vista .hero, #vista .items-14ter, #vista .panel")
+    pg.wait_for_selector("#vista .hero, #vista .items-14ter")
 
 
 def caso(pg, num, nombre):
@@ -46,12 +46,11 @@ with sync_playwright() as p:
 
     # Persona solicitante
     entrar(pg, "Persona solicitante")
-    foto(pg, "02-ingreso")
+    foto(pg, "02-pagina")
+    pg.get_by_role("button", name="Presentar una solicitud").click()
     pg.get_by_role("button", name="Ingresar con Clave Única").click()
     foto(pg, "03-clave-unica", ".cajon")
     pg.locator("#cu-ok").click()
-    foto(pg, "02-pagina")
-    pg.get_by_role("button", name="Presentar una solicitud").click()
     foto(pg, "04-paso1")
     pg.get_by_role("button", name="Continuar →").click()
     pg.locator("input[name=der][value=rectificacion]").check()
@@ -126,8 +125,6 @@ with sync_playwright() as p:
     tel.wait_for_selector("#login:not([hidden])")
     tel.evaluate("window.tostada = () => {}")
     tel.locator("#login .l-usuario", has_text="Persona solicitante").first.click()
-    tel.get_by_role("button", name="Ingresar con Clave Única").click()
-    tel.locator("#cu-ok").click()
     tel.wait_for_selector("#vista .items-14ter")
     foto(tel, "80-telefono-pagina")
     nav.close()

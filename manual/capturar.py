@@ -72,8 +72,8 @@ with sync_playwright() as p:
     pg.get_by_role("button", name="Ver mis solicitudes").click()
     foto(pg, "09-mis")
 
-    # Encargado OIRS (recibe en todas las sedes)
-    entrar(pg, "Encargado OIRS")
+    # Encargado de Gestión (recibe en todas las sedes)
+    entrar(pg, "Encargado de Gestión")
     foto(pg, "10-inicio-encargado")
     pg.locator(".acceso", has_text="Mis tareas").first.click()
     foto(pg, "11-casos")
@@ -101,8 +101,8 @@ with sync_playwright() as p:
     foto(pg, "40-inicio-director")
     caso(pg, "DP-2026-000104", "41-caso-firma")
 
-    # Encargado OIRS, en la parte de administración del canal (antes perfil «Administración del canal»)
-    entrar(pg, "Encargado OIRS")
+    # Encargado de Gestión, en la parte de administración del canal (antes perfil «Administración del canal»)
+    entrar(pg, "Encargado de Gestión")
     pg.evaluate("ir('responsables')")
     foto(pg, "61-responsables")
     pg.evaluate("editarCelda('Dirección Regional Valparaíso', 'recibe')")

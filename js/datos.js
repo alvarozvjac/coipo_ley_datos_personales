@@ -67,7 +67,7 @@ const RECEPTOR = ["encargado"];   // perfiles que reciben y registran
 /* ---------- Perfiles: derivados de las funciones del canal ---------- */
 const PERFILES = {
   solicitante: { n: "Persona solicitante", ico: "user", d: "Titular, representante o heredero. Presenta solicitudes y consulta su estado." },
-  encargado: { n: "Encargado OIRS", ico: "oficina", d: "Recibe y registra las solicitudes de todas las sedes (incluida la Oficina de Partes), verifica identidad, deriva, responde y prorroga. Asigna los responsables por etapa y sede, define plazos internos y feriados, y lleva la bitácora." },
+  encargado: { n: "Encargado de Gestión", ico: "oficina", d: "Recibe y registra las solicitudes de todas las sedes (incluida la Oficina de Partes), verifica identidad, deriva, responde y prorroga. Asigna los responsables por etapa y sede, define plazos internos y feriados, y lleva la bitácora." },
   fiscalia: { n: "Unidad Jurídica", ico: "balanza", d: "Admisibilidad, bloqueo temporal, revisión jurídica (V°B°), reclamos ante la Agencia y reporte de vulneraciones (art. 14 sexies), en todas las sedes." },
   director: { n: "Director o directora", ico: "firma", d: "Revisa y firma las respuestas de todas las sedes. No deriva." },
   gerencia: { n: "Área que trata los datos", ico: "equipo", d: "Analiza los casos de su ámbito y propone la respuesta." }
@@ -110,7 +110,7 @@ const DERECHOS = [
 const DER = Object.fromEntries(DERECHOS.map(d => [d.k, d.n]));
 const VIAS = { web: "Formulario web", fisica: "Formulario físico · Oficina de Partes" };
 const MEDIOS = { correo: "Correo electrónico", carta: "Carta al domicilio", retiro: "Retiro en Oficina de Partes" };
-const CALIDAD = { titular: "Titular", representante: "Representante o mandatario", heredero: "Heredero de titular fallecido" };
+const CALIDAD = { titular: "Titular de los datos", representante: "Representante del titular (poder notarial)", heredero: "Heredero del titular fallecido" };
 
 /* ---------- Casos ficticios (fecha simulada: lunes 11-01-2027) ---------- */
 const NOMBRES = ["Javiera Soto Rivas", "Felipe Araya Morales", "Rosa Contreras León", "Tomás Sepúlveda Vera", "Elena Díaz Bravo", "Héctor Pinto Lagos", "Sofía Torres Garrido", "Diego Fuentes Lara", "Patricia Vidal Cáceres", "Luis Molina Reyes", "Francisca Navarro Gómez", "Jorge Espinoza Toro", "Camila Ortiz Vargas", "Matías Castro Peña"];

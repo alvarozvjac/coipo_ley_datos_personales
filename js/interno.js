@@ -19,7 +19,7 @@ function vInicioInterno() {
   };
   const A = [];
   A.push({ t: p === "director" ? "Por firmar" : "Mis tareas", d: "Casos en los que le toca actuar, del más urgente al menos urgente.", ico: "lista", cta: "Ver tareas", v: "casos", pre: conFiltro("tareas"), n: t.length, principal: true, aviso: t.some(c => diasLegal(c) <= 2) });
-  if (RECEPTOR.includes(p)) A.push({ t: "Registrar solicitud de Oficina de Partes", d: "Ingrese un formulario físico recibido con timbre: el plazo corre desde esa fecha.", ico: "plus", cta: "Registrar", v: "registrar" });
+  if (RECEPTOR.includes(p)) A.push({ t: "Registrar solicitud en formulario físico", d: "Ingrese un formulario físico recibido. El plazo corre desde la fecha de recepción en CONAF.", ico: "plus", cta: "Registrar", v: "registrar" });
   if (p === "fiscalia") A.push({ t: "Bloqueos por resolver", d: "Bloqueos temporales que se resuelven en " + PARAM.BLOQUEO + " días hábiles.", ico: "alerta", cta: "Ver bloqueos", v: "casos", pre: conFiltro("bloqueo"), n: n(bloqueoPendiente), aviso: true, nl: "bloqueos pendientes" });
   if (p === "fiscalia") A.push({ t: "Reclamos ante la Agencia", d: "Reclamos notificados por la Agencia: CONAF responde en " + PARAM.RECLAMO_RESP + " días corridos, prorrogables (art. 41 d).", ico: "balanza", cta: "Ver reclamos", v: "casos", pre: conFiltro("reclamos"), n: n(reclamoPendiente), aviso: true, nl: "reclamos por responder"});
   if (p === "encargado") {
@@ -89,7 +89,7 @@ function abrirCaso(num) {
   const c = CASOS.find(x => x.num === num); if (!c) return;
   const u = SESION, e = ETAPA[c.etapa], vi = venceInterno(c);
   const avisos = [];
-  if (sinResponsable(c)) avisos.push(`<div class="regla bl"><span class="ico">!</span><div><b>Sin responsable en «${e.n}»</b><span>${c.etapa === "analisis" && !c.ambito ? "El caso no tiene ámbito asignado." : `${esc(c.sede)} no tiene responsable para esta etapa${c.etapa === "analisis" ? " en el ámbito " + esc(AMB(c.ambito).n) : ""}.`} El caso no avanza hasta que el Encargado OIRS lo asigne.${u.perfil === "encargado" ? ` <button class="boton secundario chico" type="button" data-ir-cfg>Asignar responsables</button>` : ""}</span></div></div>`);
+  if (sinResponsable(c)) avisos.push(`<div class="regla bl"><span class="ico">!</span><div><b>Sin responsable en «${e.n}»</b><span>${c.etapa === "analisis" && !c.ambito ? "El caso no tiene ámbito asignado." : `${esc(c.sede)} no tiene responsable para esta etapa${c.etapa === "analisis" ? " en el ámbito " + esc(AMB(c.ambito).n) : ""}.`} El caso no avanza hasta que el Encargado de Gestión lo asigne.${u.perfil === "encargado" ? ` <button class="boton secundario chico" type="button" data-ir-cfg>Asignar responsables</button>` : ""}</span></div></div>`);
   if (c.derechos.includes("portabilidad")) avisos.push(`<div class="regla av"><span class="ico">?</span><div><b>Portabilidad: procedencia por confirmar</b><span>Los arts. 21 y 23 de la Ley N° 21.719, que regulan los derechos ante órganos públicos, no mencionan la portabilidad (art. 9°). Consultar a Fiscalía antes de resolver.</span></div></div>`);
   if (reclamoPendiente(c)) avisos.push(`<div class="regla bl"><span class="ico">⚖</span><div><b>Reclamo ante la Agencia por responder</b><span>${esc(c.reclamo.folio)} · notificado el ${fF(c.reclamo.notif)} · responder a más tardar el ${fF(venceReclamo(c))} (art. 41 d).</span></div></div>`);
   if (c.bloq && c.bloq.agencia) avisos.push(`<div class="regla inf"><span class="ico">i</span><div><b>Rechazo del bloqueo comunicado a la Agencia</b><span>${fF(c.bloq.agencia)} (art. 11).</span></div></div>`);
@@ -101,8 +101,8 @@ function abrirCaso(num) {
   const cuerpo = `${lineaEtapas(c)}${avisos.length ? `<div class="revision">${avisos.join("")}</div>` : ""}
     ${accionesHTML(c)}
     <div class="seccion"><h3>Solicitud</h3><dl class="ficha">
-      <dt>Ingreso</dt><dd class="num">${fLarga(c.ingreso)} · ${VIAS[c.via]}${c.folio ? ` · folio <span class="mono">${esc(c.folio)}</span>` : ""}</dd>
-      <dt>Sede</dt><dd>${esc(c.sede)}</dd><dt>Calidad</dt><dd>${CALIDAD[c.calidad]}</dd>
+      <dt>Ingreso</dt><dd class="num">${fLarga(c.ingreso)} · ${VIAS[c.via]}${c.folio ? ` · número de registro <span class="mono">${esc(c.folio)}</span>` : ""}</dd>
+      <dt>Sede</dt><dd>${esc(c.sede)}</dd><dt>Quién solicita</dt><dd>${CALIDAD[c.calidad]}</dd>
       <dt>Titular</dt><dd>${esc(c.tit.nom)} · <span class="mono">${verRun ? esc(c.tit.run) : runMascara(c.tit.run)}</span> ${!verRun && RECEPTOR.includes(u.perfil) ? `<button class="pin-reveal" type="button" id="ver-run">Ver RUN completo</button>` : ""}</dd>
       ${c.rep ? `<dt>Representante</dt><dd>${esc(c.rep.nom)}</dd>` : ""}
       <dt>Derechos</dt><dd>${c.derechos.map(k => DER[k]).join(", ")}</dd><dt>Detalle</dt><dd>${esc(c.detalle)}</dd>
@@ -177,13 +177,13 @@ let REG = null;
 function vRegistrar() {
   const sedes = sedesDe(SESION).filter(s => RESP[s].recibe === SESION.id);
   if (!REG) REG = { sede: sedes[0] || "", err: [] };
-  return volverHTML() + cab("Registrar solicitud de Oficina de Partes", "Formulario físico recibido con timbre. El plazo legal corre desde la fecha del timbre, no desde este registro.", "") +
+  return volverHTML() + cab("Registrar solicitud en formulario físico", "Formulario físico recibido. El plazo legal corre desde la fecha de recepción en CONAF, no desde este registro.", "") +
     `${REG.err.length ? `<div class="faltan" role="alert" id="faltan" tabindex="-1"><b>Revise lo siguiente:</b><ul>${REG.err.map(e => `<li>${esc(e)}</li>`).join("")}</ul></div>` : ""}
     <form id="f-reg" class="grid" novalidate><fieldset><legend>Ingreso</legend><div class="campos">
     <div class="campo"><label for="r-sede">Oficina de Partes</label><select id="r-sede">${sedes.map(s => `<option ${REG.sede === s ? "selected" : ""}>${s}</option>`).join("")}</select></div>
-    <div class="campo"><label for="r-fecha">Fecha del timbre *</label><input type="date" id="r-fecha" max="${HOY}" value="${REG.fecha || HOY}"></div>
-    <div class="campo"><label for="r-folio">Folio de Oficina de Partes *</label><input type="text" id="r-folio" class="mono" value="${esc(REG.folio || "")}"></div>
-    <div class="campo"><label for="r-cal">Calidad</label><select id="r-cal">${Object.entries(CALIDAD).map(([k, v]) => `<option value="${k}" ${REG.cal === k ? "selected" : ""}>${v}</option>`).join("")}</select></div></div></fieldset>
+    <div class="campo"><label for="r-fecha">Fecha de recepción en CONAF *</label><input type="date" id="r-fecha" max="${HOY}" value="${REG.fecha || HOY}"></div>
+    <div class="campo"><label for="r-folio">Número de registro *</label><input type="text" id="r-folio" class="mono" value="${esc(REG.folio || "")}"></div>
+    <div class="campo"><label for="r-cal">Quién solicita</label><select id="r-cal">${Object.entries(CALIDAD).map(([k, v]) => `<option value="${k}" ${REG.cal === k ? "selected" : ""}>${v}</option>`).join("")}</select></div></div></fieldset>
     <fieldset><legend>Titular</legend><div class="campos"><div class="campo"><label for="r-run">RUN *</label><input type="text" id="r-run" class="mono" placeholder="12.345.678-9" maxlength="12" value="${esc(REG.run || "")}"></div><div class="campo"><label for="r-nom">Nombre *</label><input type="text" id="r-nom" value="${esc(REG.nom || "")}"></div>
     <div class="campo ancho"><label class="adj"><input type="checkbox" id="r-ced" ${REG.ced ? "checked" : ""}> Identidad verificada con la cédula exhibida o su copia</label><span class="ayuda">Si no viene, el caso queda en «Requiere antecedentes» y no se responde sin ella.</span></div></div></fieldset>
     <fieldset><legend>Solicitud</legend><div class="check-grid">${DERECHOS.map(d => `<label><input type="checkbox" name="r-der" value="${d.k}" ${(REG.ders || []).includes(d.k) ? "checked" : ""}> ${d.n}</label>`).join("")}</div>
@@ -199,8 +199,8 @@ POST.registrar = () => {
     Object.assign(REG, { sede: v("r-sede"), fecha: v("r-fecha"), folio: v("r-folio"), run: v("r-run"), nom: v("r-nom"), det: v("r-det") });
     const ders = $$("input[name=r-der]:checked").map(i => i.value), err = [];
     Object.assign(REG, { ders, cal: v("r-cal"), medio: v("r-medio"), ced: $("#r-ced").checked });
-    if (!REG.fecha || REG.fecha > HOY) err.push("La fecha del timbre no puede ser posterior a hoy.");
-    if (!REG.folio) err.push("Indique el folio de Oficina de Partes.");
+    if (!REG.fecha || REG.fecha > HOY) err.push("La fecha de recepción en CONAF no puede ser posterior a hoy.");
+    if (!REG.folio) err.push("Indique el número de registro.");
     if (!/^\d{1,2}\.?\d{3}\.?\d{3}-[\dkK]$/.test(REG.run) || !REG.nom) err.push("Indique RUN y nombre del titular.");
     if (!ders.length) err.push("Marque al menos un derecho.");
     if (!REG.det) err.push("Describa qué pide el titular.");
@@ -208,7 +208,7 @@ POST.registrar = () => {
     REG.err = err; if (err.length) { render(); return; }
     const ced = $("#r-ced").checked;
     const c = nuevoCaso({ num: nuevoNumero(), ingreso: REG.fecha, desde: HOY, via: "fisica", folio: REG.folio, sede: REG.sede, calidad: v("r-cal"), derechos: ders, detalle: REG.det, medio: v("r-medio"), tit: { nom: REG.nom, run: REG.run }, identidad: ced, bloq: ders.includes("bloqueo") ? { pide: REG.fecha, res: null } : null, ant: ced ? null : { pide: HOY, que: "Copia de la cédula de identidad del titular." } });
-    c.bit.push({ f: HOY, u: nomU(SESION.id), a: `Registro manual · folio ${REG.folio} · timbre ${fF(REG.fecha)} (${corridosEntre(REG.fecha, HOY)} días antes del registro)` });
+    c.bit.push({ f: HOY, u: nomU(SESION.id), a: `Registro manual · número de registro ${REG.folio} · recepción en CONAF ${fF(REG.fecha)} (${corridosEntre(REG.fecha, HOY)} días antes del registro)` });
     CASOS.push(c); BIT.unshift({ f: HOY, u: nomU(SESION.id), caso: c.num, a: "Registro de formulario físico" });
     REG = null; tostada("Caso " + c.num + " registrado · vence " + fF(venceLegal(c))); ir("inicio"); abrirCaso(c.num);
   };

@@ -47,10 +47,10 @@ with sync_playwright() as p:
     # 1. Una sola cuenta por función y sin los perfiles retirados
     pg.goto(URL)
     etiquetas = pg.locator("#l-interno .l-usuario b").all_inner_texts()
-    for perfil in ["Encargado OIRS", "Unidad Jurídica", "Director o directora", "Área que trata los datos"]:
+    for perfil in ["Encargado de Gestión", "Unidad Jurídica", "Director o directora", "Área que trata los datos"]:
         n = etiquetas.count(perfil)
         ok(n == 1, f"ingreso: «{perfil}» aparece {n} vez (debe ser 1)")
-    for retirado in ["Responsable de datos", "Encargado OIRS regional", "Unidad jurídica regional", "Firmante",
+    for retirado in ["Responsable de datos", "Encargado de Gestión regional", "Unidad jurídica regional", "Firmante",
                      "Dueño de tratamiento", "Seguridad de la información",
                      "Delegado de protección de datos", "Administración del canal"]:
         ok(retirado not in etiquetas, f"ingreso: ya no existe «{retirado}»")
@@ -62,8 +62,8 @@ with sync_playwright() as p:
     texto_ingreso = pg.locator("#l-interno").inner_text()
     ok(not any(n in texto_ingreso for n in NOMBRES_FICTICIOS), "ingreso: no aparecen nombres ficticios")
 
-    # 3. Encargado OIRS: ve y registra en todas las sedes, sin selector de sede propio
-    entrar(pg, "Encargado OIRS")
+    # 3. Encargado de Gestión: ve y registra en todas las sedes, sin selector de sede propio
+    entrar(pg, "Encargado de Gestión")
     ok(not any(n in pg.locator("#quien").inner_text() for n in NOMBRES_FICTICIOS),
        "sesión: el encabezado muestra el perfil, no un nombre ficticio")
     ev(pg, 'ir("casos")')

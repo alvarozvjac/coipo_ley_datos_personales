@@ -104,7 +104,7 @@ with sync_playwright() as p:
         pg.screenshot(path=str(SAL / f"{nombre}-05-mis.png"))
 
         # --- Recepción Oficina Central
-        entrar(pg, "Encargado OIRS")
+        entrar(pg, "Encargado de Gestión")
         pg.screenshot(path=str(SAL / f"{nombre}-06-inicio-recepcion.png"))
         tarjeta(pg, "Mis tareas")
         pg.locator("[data-caso='DP-2027-000004']:visible").first.click()
@@ -126,7 +126,7 @@ with sync_playwright() as p:
         pg.locator("#r-scan").check()
         pg.get_by_role("button", name="Registrar y acusar recibo").click()
         txt = pg.locator("#capa").inner_text()
-        ok("07-02-2027" in txt and "Requiere antecedentes" in txt, f"{nombre}: el plazo corre desde el timbre y pide la cédula")
+        ok("07-02-2027" in txt and "Requiere antecedentes" in txt, f"{nombre}: el plazo corre desde la recepción en CONAF y pide la cédula")
         pg.locator("#cerrar").click()
 
         # --- Fiscalía: bloqueo
@@ -160,8 +160,8 @@ with sync_playwright() as p:
         ok("Firmada · por enviar" in pg.locator("#capa").inner_text(), f"{nombre}: el firmante firma y el caso pasa a envío")
         pg.locator("#cerrar").click()
 
-        # --- Encargado OIRS (incluye la antigua Administración del canal): responsables por sede
-        entrar(pg, "Encargado OIRS")
+        # --- Encargado de Gestión (incluye la antigua Administración del canal): responsables por sede
+        entrar(pg, "Encargado de Gestión")
         pg.screenshot(path=str(SAL / f"{nombre}-08-inicio-encargado.png"))
         tarjeta(pg, "Casos sin responsable")
         n0 = pg.locator("[data-caso]:visible").count()
@@ -171,7 +171,7 @@ with sync_playwright() as p:
         pg.screenshot(path=str(SAL / f"{nombre}-09-responsables.png"))
         ok(pg.evaluate("document.documentElement.scrollWidth") <= op["viewport"]["width"], f"{nombre}: la tabla de responsables no desborda la página")
         pg.locator(".celda-resp[data-s='Dirección Regional Valparaíso'][data-k='recibe']").click()
-        pg.select_option("#e-u", "u2")  # v4.3: el Encargado OIRS recibe en todas las sedes
+        pg.select_option("#e-u", "u2")  # v4.3: el Encargado de Gestión recibe en todas las sedes
         pg.locator("#e-ok").click()
         pg.get_by_role("button", name="Volver al inicio").click()
         tarjeta(pg, "Casos sin responsable")

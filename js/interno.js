@@ -12,34 +12,31 @@ function vInicioInterno() {
   const n = f => mis.filter(f).length;
   const sinR = CASOS.filter(sinResponsable).length, venc = mis.filter(c => abierto(c) && diasLegal(c) < 0).length;
   const textos = {
-    encargado: "Solicitudes por registrar, verificar, derivar y responder en todas las sedes.",
+    encargado: "Solicitudes por registrar, verificar, derivar y responder en todas las sedes. Además, responsables por etapa y sede, plazos internos, feriados y bitácora.",
     director: "Propuestas de respuesta por revisar y firmar en todas las sedes.",
-    fiscalia: "Admisibilidad, bloqueos temporales, revisión jurídica (V°B°) y reclamos ante la Agencia.",
+    fiscalia: "Admisibilidad, bloqueos temporales, revisión jurídica (V°B°), reclamos ante la Agencia y reporte de vulneraciones (art. 14 sexies).",
     gerencia: "Casos derivados a su ámbito para localizar los datos y proponer la respuesta.",
-    delegado: "Supervisión del canal: vencimientos, bloqueos, reclamos ante la Agencia y casos sin responsable. Puede dejar observaciones en cualquier caso.",
-    admin: "Estado del canal, responsables por etapa y sede, plazos internos y bitácora."
   };
   const A = [];
-  if (!["admin", "delegado"].includes(p)) A.push({ t: p === "director" ? "Por firmar" : "Mis tareas", d: "Casos en los que le toca actuar, del más urgente al menos urgente.", ico: "lista", cta: "Ver tareas", v: "casos", pre: conFiltro("tareas"), n: t.length, principal: true, aviso: t.some(c => diasLegal(c) <= 2) });
+  A.push({ t: p === "director" ? "Por firmar" : "Mis tareas", d: "Casos en los que le toca actuar, del más urgente al menos urgente.", ico: "lista", cta: "Ver tareas", v: "casos", pre: conFiltro("tareas"), n: t.length, principal: true, aviso: t.some(c => diasLegal(c) <= 2) });
   if (RECEPTOR.includes(p)) A.push({ t: "Registrar solicitud de Oficina de Partes", d: "Ingrese un formulario físico recibido con timbre: el plazo corre desde esa fecha.", ico: "plus", cta: "Registrar", v: "registrar" });
   if (p === "fiscalia") A.push({ t: "Bloqueos por resolver", d: "Bloqueos temporales que se resuelven en " + PARAM.BLOQUEO + " días hábiles.", ico: "alerta", cta: "Ver bloqueos", v: "casos", pre: conFiltro("bloqueo"), n: n(bloqueoPendiente), aviso: true, nl: "bloqueos pendientes" });
-  if (p === "fiscalia" || p === "delegado") A.push({ t: "Reclamos ante la Agencia", d: "Reclamos notificados por la Agencia: CONAF responde en " + PARAM.RECLAMO_RESP + " días corridos, prorrogables (art. 41 d).", ico: "balanza", cta: "Ver reclamos", v: "casos", pre: conFiltro("reclamos"), n: n(reclamoPendiente), aviso: true, nl: "reclamos por responder", principal: p === "delegado" });
-  if (p === "delegado") {
+  if (p === "fiscalia") A.push({ t: "Reclamos ante la Agencia", d: "Reclamos notificados por la Agencia: CONAF responde en " + PARAM.RECLAMO_RESP + " días corridos, prorrogables (art. 41 d).", ico: "balanza", cta: "Ver reclamos", v: "casos", pre: conFiltro("reclamos"), n: n(reclamoPendiente), aviso: true, nl: "reclamos por responder"});
+  if (p === "encargado") {
     A.push({ t: "Plazos vencidos", d: "Casos abiertos con el plazo legal vencido: el titular puede reclamar ante la Agencia.", ico: "alerta", cta: "Ver vencidos", v: "casos", pre: conFiltro("vencidos"), n: n(c => abierto(c) && diasLegal(c) < 0), aviso: true, nl: "vencidos" });
-    A.push({ t: "Bloqueos pendientes", d: "Bloqueos temporales sin resolver: se responden en " + PARAM.BLOQUEO + " días hábiles.", ico: "candado", cta: "Ver bloqueos", v: "casos", pre: conFiltro("bloqueo"), n: n(bloqueoPendiente), aviso: true });
   }
-  if (p === "admin" || p === "delegado") {
+  if (p === "encargado") {
     A.push({ t: "Casos sin responsable", d: "Casos detenidos porque la etapa no tiene responsable en su sede o ámbito.", ico: "alerta", cta: "Ver casos", v: "casos", pre: conFiltro("sin"), n: sinR, aviso: true, principal: true, nl: "casos sin responsable" });
   }
-  if (p === "admin") {
+  if (p === "encargado") {
     A.push({ t: "Responsables por etapa y sede", d: "Quién recibe, revisa, deriva, firma y responde en Oficina Central y en cada región.", ico: "equipo", cta: "Configurar", v: "responsables", n: celdasPorDefinir(), nl: "por definir" });
     A.push({ t: "Plazos internos y feriados", d: "Plazos por etapa (vacíos hasta que se definan), plazos legales y feriados.", ico: "reloj", cta: "Ver parámetros", v: "parametros" });
   }
-  A.push({ t: ["admin", "delegado"].includes(p) ? "Todos los casos" : "Casos de mi alcance", d: "Lista con filtros por estado, vía, derecho y sede.", ico: "doc", cta: "Ver casos", v: "casos", pre: conFiltro("todos"), n: venc || null, aviso: true, nl: "vencidos" });
+  A.push({ t: p === "encargado" ? "Todos los casos" : "Casos de mi alcance", d: "Lista con filtros por estado, vía, derecho y sede.", ico: "doc", cta: "Ver casos", v: "casos", pre: conFiltro("todos"), n: venc || null, aviso: true, nl: "vencidos" });
   A.push({ t: "Calendario de vencimientos", d: "Vencimientos legales, bloqueos y plazos de antecedentes, día a día.", ico: "calendario", cta: "Abrir calendario", v: "calendario" });
   if (!["gerencia", "director"].includes(p)) A.push({ t: "Reportes", d: "Cifras del canal y planilla Excel mensual o anual, sin datos de los titulares.", ico: "grafico", cta: "Ver reportes", v: "reportes" });
-  if (p === "admin" || p === "delegado") A.push({ t: "Bitácora", d: "Registro de acciones sobre los casos y la configuración.", ico: "lista", cta: "Ver bitácora", v: "bitacora" });
-  const amplio = ["admin", "delegado"].includes(p);
+  if (p === "encargado") A.push({ t: "Bitácora", d: "Registro de acciones sobre los casos y la configuración.", ico: "lista", cta: "Ver bitácora", v: "bitacora" });
+  const amplio = p === "encargado";
   const urg = (amplio ? CASOS.filter(c => abierto(c) || reclamoPendiente(c)) : t).slice().sort((a, b) => urgencia(a) - urgencia(b)).slice(0, 4);
   return heroHTML(u.cargo, PERFILES[p].n, textos[p]) +
     `<h2 class="sec-tit">${ico("flecha")}¿Qué necesitas hacer?</h2>` + accesosHTML(A) +
@@ -59,14 +56,13 @@ function enlazarCasos() { $$("[data-caso]").forEach(b => b.onclick = e => { e.st
 
 /* ---------- Casos ---------- */
 function vCasos() {
-  const base = misCasos(), adm = ["admin", "delegado"].includes(SESION.perfil);
-  const G = [["tareas", "Mis tareas", base.filter(c => tareaDe(c, SESION)).length], ["todos", "Todos", base.length], ["abiertos", "Abiertos", base.filter(abierto).length], ["bloqueo", "Bloqueo pendiente", base.filter(bloqueoPendiente).length], ["antecedentes", "Requieren antecedentes", base.filter(esperaAntecedentes).length], ["sin", "Sin responsable", base.filter(sinResponsable).length], ["vencidos", "Vencidos", base.filter(c => abierto(c) && diasLegal(c) < 0).length], ["reclamos", "Reclamos ante la Agencia", base.filter(c => !!c.reclamo).length], ["cerrados", "Cerrados", base.filter(c => !abierto(c)).length]].filter(g => !(adm && g[0] === "tareas") && (g[2] > 0 || ["tareas", "todos", FILTRO.g].includes(g[0])));
-  if (adm && FILTRO.g === "tareas") FILTRO.g = "todos";
+  const base = misCasos();
+  const G = [["tareas", "Mis tareas", base.filter(c => tareaDe(c, SESION)).length], ["todos", "Todos", base.length], ["abiertos", "Abiertos", base.filter(abierto).length], ["bloqueo", "Bloqueo pendiente", base.filter(bloqueoPendiente).length], ["antecedentes", "Requieren antecedentes", base.filter(esperaAntecedentes).length], ["sin", "Sin responsable", base.filter(sinResponsable).length], ["vencidos", "Vencidos", base.filter(c => abierto(c) && diasLegal(c) < 0).length], ["reclamos", "Reclamos ante la Agencia", base.filter(c => !!c.reclamo).length], ["cerrados", "Cerrados", base.filter(c => !abierto(c)).length]].filter(g => (g[2] > 0 || ["tareas", "todos", FILTRO.g].includes(g[0])));
   const fg = { tareas: c => tareaDe(c, SESION), todos: () => true, abiertos: abierto, bloqueo: bloqueoPendiente, antecedentes: esperaAntecedentes, sin: sinResponsable, vencidos: c => abierto(c) && diasLegal(c) < 0, reclamos: c => !!c.reclamo, cerrados: c => !abierto(c) }[FILTRO.g];
   const q = FILTRO.q.toLowerCase();
   const L = base.filter(fg).filter(c => (!FILTRO.via || c.via === FILTRO.via) && (!FILTRO.der || c.derechos.includes(FILTRO.der)) && (!FILTRO.sede || c.sede === FILTRO.sede) && (!q || (c.num + " " + c.detalle).toLowerCase().includes(q))).sort((a, b) => urgencia(a) - urgencia(b));
   const sedes = [...new Set(base.map(c => c.sede))];
-  return volverHTML() + cab(adm ? "Todos los casos" : "Casos", "Ordenados por urgencia: primero los bloqueos pendientes y luego el plazo legal. El RUN se muestra enmascarado.", "") +
+  return volverHTML() + cab("Casos", "Ordenados por urgencia: primero los bloqueos pendientes y luego el plazo legal. El RUN se muestra enmascarado.", "") +
     filtrosHTML(G, FILTRO.g, "data-g") +
     `<div class="barra-herr" style="margin-top:var(--e-3)"><input type="search" id="c-q" placeholder="Buscar por número o detalle" value="${esc(FILTRO.q)}" aria-label="Buscar casos">
     <div class="acciones"><select id="c-via" aria-label="Vía"><option value="">Todas las vías</option>${Object.entries(VIAS).map(([k, v]) => `<option value="${k}" ${FILTRO.via === k ? "selected" : ""}>${v}</option>`).join("")}</select>
@@ -93,7 +89,7 @@ function abrirCaso(num) {
   const c = CASOS.find(x => x.num === num); if (!c) return;
   const u = SESION, e = ETAPA[c.etapa], vi = venceInterno(c);
   const avisos = [];
-  if (sinResponsable(c)) avisos.push(`<div class="regla bl"><span class="ico">!</span><div><b>Sin responsable en «${e.n}»</b><span>${c.etapa === "analisis" && !c.ambito ? "El caso no tiene ámbito asignado." : `${esc(c.sede)} no tiene responsable para esta etapa${c.etapa === "analisis" ? " en el ámbito " + esc(AMB(c.ambito).n) : ""}.`} El caso no avanza hasta que Administración lo asigne.${u.perfil === "admin" ? ` <button class="boton secundario chico" type="button" data-ir-cfg>Asignar responsables</button>` : ""}</span></div></div>`);
+  if (sinResponsable(c)) avisos.push(`<div class="regla bl"><span class="ico">!</span><div><b>Sin responsable en «${e.n}»</b><span>${c.etapa === "analisis" && !c.ambito ? "El caso no tiene ámbito asignado." : `${esc(c.sede)} no tiene responsable para esta etapa${c.etapa === "analisis" ? " en el ámbito " + esc(AMB(c.ambito).n) : ""}.`} El caso no avanza hasta que el Encargado OIRS lo asigne.${u.perfil === "encargado" ? ` <button class="boton secundario chico" type="button" data-ir-cfg>Asignar responsables</button>` : ""}</span></div></div>`);
   if (c.derechos.includes("portabilidad")) avisos.push(`<div class="regla av"><span class="ico">?</span><div><b>Portabilidad: procedencia por confirmar</b><span>Los arts. 21 y 23 de la Ley N° 21.719, que regulan los derechos ante órganos públicos, no mencionan la portabilidad (art. 9°). Consultar a Fiscalía antes de resolver.</span></div></div>`);
   if (reclamoPendiente(c)) avisos.push(`<div class="regla bl"><span class="ico">⚖</span><div><b>Reclamo ante la Agencia por responder</b><span>${esc(c.reclamo.folio)} · notificado el ${fF(c.reclamo.notif)} · responder a más tardar el ${fF(venceReclamo(c))} (art. 41 d).</span></div></div>`);
   if (c.bloq && c.bloq.agencia) avisos.push(`<div class="regla inf"><span class="ico">i</span><div><b>Rechazo del bloqueo comunicado a la Agencia</b><span>${fF(c.bloq.agencia)} (art. 11).</span></div></div>`);
@@ -116,7 +112,6 @@ function abrirCaso(num) {
       ${c.firma ? `<dt>Firma</dt><dd>${esc(c.firma.doc)} · ${fF(c.firma.f)}${c.firma.por ? " · " + esc(nomU(c.firma.por)) : ""}</dd>` : ""}
       ${c.cierre && c.cierre.cesion ? `<dt>Destinatarios</dt><dd>${esc(c.cierre.cesion)}</dd>` : ""}
       ${c.reclamo ? `<dt>Reclamo</dt><dd>${esc(c.reclamo.folio)} · notificado ${fF(c.reclamo.notif)} · ${c.reclamo.resp ? "respondido el " + fF(c.reclamo.resp.f) : "responder hasta " + fF(venceReclamo(c))}</dd>` : ""}
-      ${c.obs.length ? `<dt>Observaciones del delegado</dt><dd>${c.obs.map(o => fF(o.f) + " · " + esc(o.txt)).join("<br>")}</dd>` : ""}
       ${c.cierre ? `<dt>Cierre</dt><dd>${esc(c.cierre.res)} · ${fF(c.cierre.f)}${c.cierre.causal ? " · " + esc(c.cierre.causal) : ""}</dd>` : ""}</dl></div>
     <div class="seccion"><h3>Plazos</h3><dl class="ficha">
       <dt>Legal</dt><dd>${abierto(c) ? semaforo(c) + ` <span class="num">vence ${fF(venceLegal(c))}</span>${c.prorroga ? ` · prorrogado el ${fF(c.prorroga)}` : ""}` : "Cerrado"}</dd>
@@ -147,7 +142,6 @@ function accionesHTML(c) {
     if (reclamoPendiente(c)) A.push(`<div class="grupo-acc">Reclamo ante la Agencia (art. 41)</div><p class="peq">${esc(c.reclamo.folio)} · notificado el ${fF(c.reclamo.notif)}. CONAF responde a más tardar el <b>${fF(venceReclamo(c))}</b>, con todos los antecedentes${c.reclamo.prorroga ? " (prorrogado)" : ""}.</p><div class="campo"><label for="a-rec">Respuesta a la Agencia *</label><textarea id="a-rec" rows="2"></textarea></div><div class="acciones"><button class="boton" type="button" data-a="rec-resp">Registrar la respuesta enviada</button>${!c.reclamo.prorroga ? `<button class="boton secundario" type="button" data-a="rec-pror">Prorrogar ${PARAM.RECLAMO_RESP} días</button>` : ""}</div>`);
     else if (!c.reclamo && ((!abierto(c) && c.cierre.res !== "Acogida") || (abierto(c) && diasLegal(c) < 0))) A.push(`<div class="grupo-acc">Reclamo ante la Agencia (art. 41)</div><p class="peq">El titular puede reclamar dentro de 30 días hábiles${abierto(c) ? " desde que venció el plazo sin respuesta" : " desde la respuesta negativa"}.</p><div class="campos"><div class="campo"><label for="a-rnot">Fecha de notificación</label><input type="date" id="a-rnot" max="${HOY}" value="${HOY}"></div><div class="campo"><label for="a-rfol">Folio de la Agencia *</label><input type="text" id="a-rfol"></div></div><div class="acciones"><button class="boton secundario" type="button" data-a="rec-nuevo">Registrar reclamo notificado</button></div>`);
   }
-  if (u.perfil === "delegado") A.push(`<div class="grupo-acc">Observación del delegado (art. 50)</div><div class="campo"><label for="a-dpo">Observación *</label><textarea id="a-dpo" rows="2" placeholder="Queda en la bitácora del caso y la ven quienes lo tramitan."></textarea></div><div class="acciones"><button class="boton secundario" type="button" data-a="dpo">Agregar observación</button></div>`);
   return A.length ? `<section class="panel acc-caso"><header><h2>Acciones</h2><span class="sub">${esc(PERFILES[u.perfil].n)}</span></header><div class="cuerpo grid">${A.join("")}</div></section>` : "";
 }
 function enlazarAcciones(c) {
@@ -173,7 +167,6 @@ function enlazarAcciones(c) {
     "rec-resp": () => { if (!req("a-rec", "Escriba la respuesta enviada a la Agencia")) return; c.reclamo.resp = { f: HOY, txt: val("a-rec") }; anota(c, "Respuesta al reclamo enviada a la Agencia"); hecho("Respuesta a la Agencia registrada"); },
     "rec-pror": () => { c.reclamo.prorroga = HOY; anota(c, "Se prorroga la respuesta al reclamo (art. 41 d) · vence " + fF(venceReclamo(c))); hecho("Plazo del reclamo prorrogado"); },
     "rec-nuevo": () => { if (!req("a-rfol", "Indique el folio de la Agencia")) return; c.reclamo = { notif: val("a-rnot") || HOY, folio: val("a-rfol"), resp: null }; anota(c, "La Agencia notificó un reclamo del titular (art. 41) · responder hasta " + fF(venceReclamo(c))); hecho("Reclamo registrado"); },
-    "dpo": () => { if (!req("a-dpo", "Escriba la observación")) return; c.obs.push({ f: HOY, txt: val("a-dpo") }); anota(c, "Observación del delegado: " + val("a-dpo")); hecho("Observación agregada"); },
     "prorrogar": () => { c.prorroga = HOY; anota(c, "Prórroga registrada y comunicada al titular · nuevo vencimiento " + fF(venceLegal(c))); hecho("Prórroga registrada"); }
   };
   $$("#capa [data-a]").forEach(b => b.onclick = () => act[b.dataset.a]());

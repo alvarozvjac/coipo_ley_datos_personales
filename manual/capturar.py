@@ -102,14 +102,8 @@ with sync_playwright() as p:
     foto(pg, "40-inicio-director")
     caso(pg, "DP-2026-000104", "41-caso-firma")
 
-    # Delegado
-    entrar(pg, "Delegado")
-    foto(pg, "50-inicio-delegado")
-    caso(pg, "DP-2026-000104", "51-caso-delegado")
-
-    # Administración
-    entrar(pg, "Administración")
-    foto(pg, "60-inicio-admin")
+    # Encargado OIRS, en la parte de administración del canal (antes perfil «Administración del canal»)
+    entrar(pg, "Encargado OIRS")
     pg.evaluate("ir('responsables')")
     foto(pg, "61-responsables")
     pg.evaluate("editarCelda('Dirección Regional Valparaíso', 'recibe')")

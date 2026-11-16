@@ -47,12 +47,12 @@ with sync_playwright() as p:
     # 1. Una sola cuenta por función y sin los perfiles retirados
     pg.goto(URL)
     etiquetas = pg.locator("#l-interno .l-usuario b").all_inner_texts()
-    for perfil in ["Encargado OIRS", "Unidad Jurídica", "Director o directora", "Área que trata los datos",
-                   "Delegado de protección de datos", "Administración del canal"]:
+    for perfil in ["Encargado OIRS", "Unidad Jurídica", "Director o directora", "Área que trata los datos"]:
         n = etiquetas.count(perfil)
         ok(n == 1, f"ingreso: «{perfil}» aparece {n} vez (debe ser 1)")
     for retirado in ["Responsable de datos", "Encargado OIRS regional", "Unidad jurídica regional", "Firmante",
-                     "Dueño de tratamiento", "Seguridad de la información"]:
+                     "Dueño de tratamiento", "Seguridad de la información",
+                     "Delegado de protección de datos", "Administración del canal"]:
         ok(retirado not in etiquetas, f"ingreso: ya no existe «{retirado}»")
     ok(pg.evaluate("new Set(USUARIOS.filter(u => u.perfil !== 'solicitante').map(u => u.perfil)).size === "
                    "USUARIOS.filter(u => u.perfil !== 'solicitante').length"),

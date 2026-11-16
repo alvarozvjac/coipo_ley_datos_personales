@@ -1,4 +1,4 @@
-/* CON012 · Administración del canal: responsables por etapa y sede, parámetros y bitácora. */
+/* CON012 · Encargado OIRS (antes «Administración del canal»): responsables por etapa y sede, parámetros y bitácora. */
 "use strict";
 
 const celdasPorDefinir = () => SEDES.reduce((n, s) => n + COLS.filter(([k]) => !RESP[s][k]).length, 0) + AMBITOS.filter(a => !a.resp).length;

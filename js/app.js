@@ -17,7 +17,7 @@ function pintarLogin() {
   $$("#login [data-u]").forEach(b => b.onclick = () => entrar(b.dataset.u));
 }
 function entrar(id) {
-  SESION = U[id]; document.body.classList.remove("sin-sesion"); $("#login").hidden = true;
+  SESION = U[id]; SESION.cu = false; document.body.classList.remove("sin-sesion"); $("#login").hidden = true;   // cada ingreso pide Clave Única de nuevo al elegir un trámite
   tostada(SESION.perfil === "solicitante" ? "Sitio público de conaf.cl (simulado)" : "Sesión de prueba: " + PERFILES[SESION.perfil].n + " · " + SESION.cargo);
   ir("inicio");
 }

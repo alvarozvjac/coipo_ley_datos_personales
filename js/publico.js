@@ -18,7 +18,7 @@ const ITEMS_14TER = [ // art. 14 ter de la Ley N° 21.719, letras a) a l)
 ];
 function vPagina() {
   return cab("Protección de datos personales", "Información que CONAF publica sobre el tratamiento de sus datos y cómo ejercer sus derechos.", "Art. 14 ter, letras a) a l) · propuesta") +
-    `<div class="acciones" style="margin-bottom:var(--e-5)"><button class="boton grande" type="button" data-ir="solicitud">${ico("plus")}Presentar una solicitud</button><button class="boton secundario grande" type="button" data-ir="mis">${ico("buscar")}Consultar mis solicitudes</button></div>
+    `<div class="acciones" style="margin-bottom:var(--e-5)"><button class="boton grande" type="button" onclick="irConClaveUnica('solicitud')">${ico("plus")}Presentar una solicitud</button><button class="boton secundario grande" type="button" onclick="irConClaveUnica('mis')">${ico("buscar")}Consultar mis solicitudes</button></div>
     <ol class="items-14ter">${ITEMS_14TER.map(([l, t, d, e]) => `<li><span class="n num">${l}</span><div><h3>${t}</h3><p>${d}</p></div><div class="e">${e}</div></li>`).join("")}</ol>
     <p class="nota" style="margin-top:var(--e-4)">¿No tiene Clave Única? Puede presentar su solicitud con el formulario físico en la Oficina de Partes de Oficina Central o de cualquier dirección regional de CONAF.</p>`;
 }
@@ -153,6 +153,9 @@ function lineaPublica(c) {
   const i = PUB.findIndex(p => p[1].includes(c.etapa));
   return `<div class="flujo" aria-label="Avance de la solicitud">${PUB.map((p, k) => `<span class="${k < i ? "hecho" : k === i ? "actual" : ""}">${p[0]}</span>`).join("")}</div>`;
 }
+/* La Clave Única se pide sólo al elegir un trámite; después se continúa con ese trámite. */
+function irConClaveUnica(v) { if (SESION.cu) return ir(v); pedirClaveUnica(() => ir(v)); }
+
 function vMis() {
   if (!SESION.cu) return volverHTML("Volver a Datos Personales") + cab("Mis solicitudes", "Consulte el estado de las solicitudes que presentó.", "") +
     `<section class="panel"><div class="cuerpo"><p>Para ver sus solicitudes, identifíquese con su Clave Única.</p><div class="acciones" style="margin-top:var(--e-3)"><button class="boton" type="button" id="mis-cu">${ico("candado")}Ingresar con Clave Única</button></div></div></section>`;

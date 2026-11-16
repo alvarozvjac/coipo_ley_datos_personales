@@ -48,7 +48,6 @@ with sync_playwright() as p:
     entrar(pg, "Persona solicitante")
     foto(pg, "02-pagina")
     pg.get_by_role("button", name="Presentar una solicitud").click()
-    pg.get_by_role("button", name="Ingresar con Clave Única").click()
     foto(pg, "03-clave-unica", ".cajon")
     pg.locator("#cu-ok").click()
     foto(pg, "04-paso1")

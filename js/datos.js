@@ -71,7 +71,7 @@ const PERFILES = {
   fiscalia: { n: "Unidad Jurídica", ico: "balanza", d: "Admisibilidad, bloqueo temporal, revisión jurídica (V°B°) y reclamos ante la Agencia, en todas las sedes." },
   director: { n: "Director o directora", ico: "firma", d: "Revisa y firma las respuestas de todas las sedes. No deriva." },
   gerencia: { n: "Área que trata los datos", ico: "equipo", d: "Analiza los casos de su ámbito y propone la respuesta." },
-  delegado: { n: "Delegado de protección de datos", ico: "escudo", d: "Supervisa el cumplimiento, ve todos los casos y deja observaciones (art. 50)." },
+  delegado: { n: "Delegado de protección de datos", ico: "escudo", d: "Supervisa el cumplimiento, ve todos los casos y deja observaciones. Su designación es voluntaria (art. 50)." },
   admin: { n: "Administración del canal", ico: "config", d: "Responsables por etapa y sede, plazos internos, feriados y bitácora." }
 };
 const USUARIOS = [

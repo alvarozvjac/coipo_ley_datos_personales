@@ -8,7 +8,7 @@ const ITEMS_14TER = [ // art. 14 ter de la Ley N° 21.719, letras a) a l)
   ["c", "Domicilio y medios para presentar solicitudes", "Formulario web con Clave Única y formulario físico en las Oficinas de Partes de Oficina Central y de las direcciones regionales. Domicilio postal y correo electrónico por publicar.", chip("Vías confirmadas · 28-10-2026", "c-disp", "✓")],
   ["d", "Datos que trata CONAF", "Categorías de datos, universo de personas, destinatarios, finalidades y base de legitimidad de cada tratamiento. Sale de la matriz de datos personales.", porDefinir("Por completar")],
   ["e", "Política y medidas de seguridad", "La política y las medidas para proteger las bases de datos personales.", porDefinir("Por aprobar")],
-  ["f", "Sus derechos ante CONAF", "Acceso, rectificación, supresión y oposición, y bloqueo temporal, en los términos del art. 23 para los órganos públicos.", chip("Ley vigente desde 01-12-2026", "c-res", "■")],
+  ["f", "Sus derechos ante CONAF", "Acceso, rectificación, supresión y oposición, y bloqueo temporal, en los términos del art. 23 para los órganos públicos; su aplicación a CONAF está por confirmar.", chip("Ley vigente desde 01-12-2026", "c-res", "■")],
   ["g", "Reclamo ante la Agencia", "Si CONAF rechaza su solicitud o no responde a tiempo, puede reclamar ante la Agencia de Protección de Datos Personales dentro de 30 días hábiles.", chip("Art. 11 y 41", "c-res", "■")],
   ["h", "Transferencias internacionales", "Si CONAF transfiere datos a otro país u organización internacional y con qué garantías.", porDefinir("Por confirmar")],
   ["i", "Período de conservación", "Por cuánto tiempo se conservan los datos.", porDefinir("Por confirmar")],
@@ -89,7 +89,7 @@ function paso4() {
     <section class="panel"><header><h2>Plazos que se activan</h2>${chip("Art. 11 · Ley N° 21.719", "c-disp", "✓")}</header><div class="cuerpo"><ul class="plazos">
     <li>Acuse de recibo inmediato con número de caso.</li><li>Respuesta a más tardar el <b>${fF(venc)}</b> (${PARAM.RESPUESTA} días corridos, prorrogables una vez).</li>
     ${SOL.der.bloqueo ? `<li>Bloqueo temporal: se resuelve en ${PARAM.BLOQUEO} días hábiles, a más tardar el <b>${fF(sumaHabiles(HOY, PARAM.BLOQUEO))}</b>.</li>` : ""}
-    <li>Si CONAF le pide antecedentes, tendrá ${PARAM.ANTECEDENTES} días hábiles para aportarlos ${chip("propuesta", "c-pend", "?")}.</li><li>La solicitud se dirige a la Directora Ejecutiva, jefa superior del servicio (art. 23 inc. 3°).</li></ul></div></section>
+    <li>Si CONAF le pide antecedentes, tendrá ${PARAM.ANTECEDENTES} días hábiles para aportarlos ${chip("propuesta", "c-pend", "?")}.</li><li>La solicitud se dirige a la Directora Ejecutiva, jefa superior del servicio (art. 23 inc. 3°); la aplicación de esta norma a CONAF está por confirmar.</li></ul></div></section>
     <label class="opcion decl"><input type="checkbox" id="s-decl" ${SOL.decl ? "checked" : ""}><span>Declaro que los antecedentes son verdaderos y que CONAF podrá verificar mi identidad y, si corresponde, la representación invocada. *</span></label>`;
 }
 function leerPaso() {

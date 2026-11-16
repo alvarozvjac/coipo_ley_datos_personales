@@ -45,7 +45,7 @@ La fábrica cambió su tipografía el 14-11-2026 (pila de Apple e Inter fuera de
 | Director o directora | Revisa y firma las respuestas de todas las sedes; no deriva |
 | Unidad Jurídica | Admisibilidad, bloqueo temporal (2 días hábiles; el rechazo se comunica a la Agencia), revisión jurídica (V°B°) y **reclamos ante la Agencia** (art. 41) |
 | Área que trata los datos | Análisis y propuesta de respuesta de sus ámbitos |
-| Delegado de protección de datos | Supervisión: vencidos, bloqueos, reclamos, casos sin responsable, bitácora y observaciones (art. 50) |
+| Delegado de protección de datos | Supervisión: vencidos, bloqueos, reclamos, casos sin responsable, bitácora y observaciones. Designación voluntaria (art. 50) |
 | Administración del canal | Responsables por etapa y sede, asignación de las solicitudes web, plazos internos y feriados |
 
 **Manual de usuario:** [`manual/manual-usuario.pdf`](manual/manual-usuario.pdf), con un capítulo
@@ -58,6 +58,7 @@ por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py`
 - Correos de las oficinas regionales: se omiten en la maqueta; por confirmar si se muestran.
 - Quién firma y si la firma se tramita en Cero Papel; a qué sede van las solicitudes web; plazos internos.
 - Procedencia de la portabilidad ante órganos públicos (los arts. 21 y 23 no la mencionan).
+- Aplicación del Título IV a CONAF (arts. 20 a 23). CONAF es institución autónoma del Estado según la Ley N° 18.348; su aplicación sigue pendiente de confirmación de Fiscalía, y el SERNAFOR (Ley N° 21.744) sería servicio público descentralizado al entrar en funcionamiento.
 - Plazo para aportar antecedentes: la ley no lo fija (la maqueta propone 5 días hábiles).
 - Canal disponible desde el 01-12-2026 mientras no exista la integración con Clave Única.
 - Contenidos del art. 14 ter; ámbitos de datos (de ejemplo hasta cargar la matriz); origen del catálogo de comunas, que trae nombres mal escritos.

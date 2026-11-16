@@ -39,7 +39,7 @@ function sedeDe(c) { return c.sede; }
 function responsable(c) {
   if (!abierto(c)) return null;
   const e = ETAPA[c.etapa];
-  if (e.col === "ambito") return c.ambito && AMB(c.ambito) ? AMB(c.ambito).resp : null;
+  if (e.col === "ambito") return c.ambito ? RESP[sedeDe(c)].ambito : null;   // el Área de la sede analiza sus ámbitos
   return RESP[sedeDe(c)][e.col];
 }
 const sinResponsable = c => abierto(c) && !responsable(c);
@@ -56,7 +56,7 @@ function visibleParaUsuario(c, u) {
   const r = RESP[c.sede];
   if (u.perfil === "encargado") return ["recibe", "deriva", "responde"].some(k => r[k] === u.id);   // ve y administra su sede
   if (u.perfil === "fiscalia") return r.admisibilidad === u.id || r.revision === u.id || r.reclamos === u.id;
-  if (u.perfil === "gerencia") return c.etapa === "analisis" && AMBITOS.some(a => a.resp === u.id && a.k === c.ambito);   // sólo mientras le toca
+  if (u.perfil === "gerencia") return c.etapa === "analisis" && r.ambito === u.id;   // sólo mientras le toca
   if (u.perfil === "director") return c.etapa === "firma" && r.firma === u.id;   // sólo mientras le toca
   return false;
 }

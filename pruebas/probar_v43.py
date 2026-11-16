@@ -59,9 +59,9 @@ with sync_playwright() as p:
                      "Dueño de tratamiento", "Seguridad de la información",
                      "Delegado de protección de datos", "Administración del canal"]:
         ok(retirado not in etiquetas, f"ingreso: ya no existe «{retirado}»")
-    ok(pg.evaluate("SEDES.every(s => ['encargado', 'fiscalia', 'director'].every(p => "
+    ok(pg.evaluate("SEDES.every(s => ['encargado', 'fiscalia', 'director', 'gerencia'].every(p => "
                    "USUARIOS.filter(u => u.perfil === p && u.sede === s).length === 1))"),
-       "datos: cada sede tiene su Encargado, Unidad Jurídica y Director (una cuenta cada uno)")
+       "datos: cada sede tiene su Encargado, Unidad Jurídica, Director y Área (una cuenta cada uno)")
 
     # 2. Sin nombres ficticios en el ingreso ni en la sesión
     texto_ingreso = pg.locator("#l-interno").inner_text()
@@ -101,8 +101,8 @@ with sync_playwright() as p:
 
     # 6. Área que trata los datos: una persona con sus ámbitos
     entrar(pg, "Área que trata los datos")
-    ok(ev(pg, "AMBITOS.filter(a => a.resp === 'u5').map(a => a.k)") == ["personal", "asp"],
-       "Área: responsable de los ámbitos personal y ASP")
+    ok(ev(pg, "SEDES.every(s => { const u = USUARIOS.find(x => x.id === RESP[s].ambito); return u.perfil === 'gerencia' && u.sede === s; })") is True,
+       "Área: cada sede tiene su Área que trata los datos (analiza sus ámbitos)")
 
     # 8. Visibilidad y trazabilidad por perfil
     entrar(pg, "Director o directora", "Dirección Regional Biobío")

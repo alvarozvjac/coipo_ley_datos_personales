@@ -58,7 +58,7 @@ const ETAPAS = [
   { k: "respuesta", n: "Respuesta y cierre", col: "responde", hace: "Envía la respuesta escrita, guarda el respaldo y comunica a los cesionarios (art. 11)." }
 ];
 const ETAPA = Object.fromEntries(ETAPAS.map(e => [e.k, e]));
-const COLS = [["recibe", "Recibe y registra", "encargado"], ["admisibilidad", "Admisibilidad y bloqueo", "fiscalia"], ["deriva", "Deriva", "encargado"], ["revision", "Revisión jurídica", "fiscalia"], ["firma", "Firma", "director"], ["responde", "Responde y cierra", "encargado"], ["reclamos", "Reclamos ante la Agencia", "fiscalia"]];
+const COLS = [["recibe", "Recibe y registra", "encargado"], ["admisibilidad", "Admisibilidad y bloqueo", "fiscalia"], ["deriva", "Deriva", "encargado"], ["ambito", "Análisis y propuesta", "gerencia"], ["revision", "Revisión jurídica", "fiscalia"], ["firma", "Firma", "director"], ["responde", "Responde y cierra", "encargado"], ["reclamos", "Reclamos ante la Agencia", "fiscalia"]];
 /* Una cuenta por función y sede: Oficina Central y cada dirección regional tienen su propio Encargado, Unidad Jurídica y Director (cuentas de prueba). */
 const PERFIL_EN = (s, k) => COLS.find(c => c[0] === k)[2];
 const RECEPTOR = ["encargado"];   // perfiles que reciben y registran
@@ -69,32 +69,32 @@ const PERFILES = {
   encargado: { n: "Encargado de Gestión", ico: "oficina", d: "Recibe y registra las solicitudes de su sede (incluida la Oficina de Partes), verifica identidad, deriva, responde y prorroga. Asigna los responsables por etapa y sede, define plazos internos y feriados, y lleva la bitácora." },
   fiscalia: { n: "Unidad Jurídica", ico: "balanza", d: "Admisibilidad, bloqueo temporal, revisión jurídica (V°B°), reclamos ante la Agencia y reporte de vulneraciones (art. 14 sexies), en su sede." },
   director: { n: "Director o directora", ico: "firma", d: "Revisa y firma las respuestas de su sede. No deriva." },
-  gerencia: { n: "Área que trata los datos", ico: "equipo", d: "Analiza los casos de su ámbito y propone la respuesta." }
+  gerencia: { n: "Área que trata los datos", ico: "equipo", d: "Analiza los casos de sus ámbitos en su sede y propone la respuesta. Sólo ve los casos en su etapa de análisis." }
 };
 const USUARIOS_CANAL = [
-  { id: "u1", perfil: "solicitante", nom: "Carolina Andrea Muñoz Pérez", run: runFicticio(16482337), cargo: "Titular de los datos" },
-  { id: "u5", perfil: "gerencia", nom: "Natalia Herrera Torres", cargo: "Ámbitos: Personal y ex funcionarios · Áreas Silvestres Protegidas" }
+  { id: "u1", perfil: "solicitante", nom: "Carolina Andrea Muñoz Pérez", run: runFicticio(16482337), cargo: "Titular de los datos" }
 ];
-/* Un Encargado, una Unidad Jurídica y un Director por sede (Oficina Central y cada región). Cuentas de prueba, sin nombres de personas. */
+/* Un Encargado, una Unidad Jurídica, un Director y un Área que trata los datos por sede (Oficina Central y cada región). Cuentas de prueba, sin nombres de personas. */
 const EQUIPO_SEDE = SEDES.flatMap((s, i) => [
   { id: "enc" + i, perfil: "encargado", sede: s, cargo: s },
   { id: "fis" + i, perfil: "fiscalia", sede: s, cargo: s },
-  { id: "dir" + i, perfil: "director", sede: s, cargo: s }
+  { id: "dir" + i, perfil: "director", sede: s, cargo: s },
+  { id: "ger" + i, perfil: "gerencia", sede: s, cargo: s }
 ]);
 const USUARIOS = USUARIOS_CANAL.concat(EQUIPO_SEDE);
 const U = Object.fromEntries(USUARIOS.map(u => [u.id, u]));
 const nomU = id => U[id] ? PERFILES[U[id].perfil].n : "—";   // los usuarios de prueba se nombran por su perfil
 
 /* Responsables por sede y etapa: cada sede tiene su equipo (cuentas de prueba). Los ámbitos siguen a nivel nacional. */
-const RESP = Object.fromEntries(SEDES.map((s, i) => [s, { recibe: "enc" + i, admisibilidad: "fis" + i, deriva: "enc" + i, revision: "fis" + i, firma: "dir" + i, responde: "enc" + i, reclamos: "fis" + i, prueba: true }]));
+const RESP = Object.fromEntries(SEDES.map((s, i) => [s, { recibe: "enc" + i, admisibilidad: "fis" + i, deriva: "enc" + i, revision: "fis" + i, firma: "dir" + i, responde: "enc" + i, reclamos: "fis" + i, ambito: "ger" + i, prueba: true }]));
 
 /* Ámbitos de EJEMPLO hasta cargar la matriz de datos personales (compartida por el delegado el 28-10-2026). */
 const AMBITOS = [
-  { k: "personal", n: "Personal y ex funcionarios", resp: "u5" },
-  { k: "asp", n: "Áreas Silvestres Protegidas", resp: "u5" },
-  { k: "fiscalizacion", n: "Fiscalización forestal", resp: null },
-  { k: "programas", n: "Programas y beneficios", resp: null },
-  { k: "tramites", n: "Trámites forestales", resp: null }
+  { k: "personal", n: "Personal y ex funcionarios" },
+  { k: "asp", n: "Áreas Silvestres Protegidas" },
+  { k: "fiscalizacion", n: "Fiscalización forestal" },
+  { k: "programas", n: "Programas y beneficios" },
+  { k: "tramites", n: "Trámites forestales" }
 ];
 const AMB = k => AMBITOS.find(a => a.k === k);
 

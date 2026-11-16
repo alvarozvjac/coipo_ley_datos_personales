@@ -26,13 +26,13 @@ Cambios de perfiles en curso (rama `perfiles-fusion-delegado`, sin publicar):
 
 Ajustes tras la revisión de la maqueta 4.2:
 
-- **Una cuenta por función y sede.** Encargado de Gestión, Unidad Jurídica y Director tienen una cuenta por sede (Oficina Central y 16 direcciones regionales); el ingreso pide elegir la sede. Cada perfil ve sólo lo que le corresponde: el Encargado y la Unidad Jurídica ven la trazabilidad de su sede; el Director y el Área ven sus casos sólo cuando les toca, sin bitácora. Se eliminan los perfiles duplicados Encargado de Gestión regional, Unidad jurídica regional y Firmante.
+- **Una cuenta por función y sede.** Encargado de Gestión, Unidad Jurídica, Director y Área que trata los datos tienen una cuenta por sede (Oficina Central y 16 direcciones regionales); el ingreso pide elegir la sede. Cada perfil ve sólo lo que le corresponde: el Encargado y la Unidad Jurídica ven la trazabilidad de su sede; el Director y el Área ven sus casos sólo cuando les toca, sin bitácora. Se eliminan los perfiles duplicados Encargado de Gestión regional, Unidad jurídica regional y Firmante.
 - **Encargado de Gestión.** Recibe y registra (incluida la Oficina de Partes), verifica identidad, deriva y responde en su sede.
 - **Unidad Jurídica.** Una cuenta por sede para admisibilidad, revisión jurídica (V°B°) y reclamos ante la Agencia, con la trazabilidad completa de su sede.
 - **Director o directora.** Revisa y firma en su sede; no deriva; sin bitácora. Representa a la Directora Ejecutiva en Oficina Central y a los directores regionales.
 - **Ingreso sin nombres ficticios.** Cada usuario de prueba se identifica por su perfil y su cargo, también en el encabezado, la tostada y la bitácora.
 - **Oficinas regionales.** Cada región tiene dirección y teléfono, que se muestran al elegir el retiro presencial. Los correos no se muestran: la maqueta no usa correos `@conaf.cl`.
-- **Área que trata los datos.** Una sola persona de prueba, responsable de los ámbitos personal y ASP.
+- **Área que trata los datos.** Una cuenta por sede, que analiza los ámbitos de datos de su sede y ve sus casos sólo en la etapa de análisis, sin bitácora.
 - **Cumplimiento interno (Línea 2) retirado de esta versión.** Queda en el historial de la rama, pendiente de la reunión con la contraparte.
 - **Pruebas:** `pruebas/probar_v43.py` (32 comprobaciones) cubre estos cambios, incluida la visibilidad por perfil.
 
@@ -50,7 +50,7 @@ La fábrica cambió su tipografía el 14-11-2026 (pila de Apple e Inter fuera de
 | Encargado de Gestión | Registro (incluido el formulario físico de Oficina de Partes), verificación de identidad, derivación, prórroga, respuesta y comunicación a cesionarios (art. 6°), en su sede; **además** responsables por etapa y sede, plazos internos, feriados y bitácora de su sede (antes «Administración del canal») |
 | Director o directora | Revisa y firma las respuestas de su sede, sólo cuando le toca; no deriva; sin bitácora |
 | Unidad Jurídica | Trazabilidad completa de su sede. Admisibilidad, bloqueo temporal (2 días hábiles; el rechazo se comunica a la Agencia), revisión jurídica (V°B°), **reclamos ante la Agencia** (art. 41) y **reporte de vulneraciones** (art. 14 sexies; plazo y medio pendientes de Fiscalía) |
-| Área que trata los datos | Análisis y propuesta de respuesta de sus ámbitos |
+| Área que trata los datos | En su sede, análisis y propuesta de respuesta de los ámbitos de datos; sólo ve los casos en su etapa de análisis, sin bitácora |
 
 **Manual de usuario:** [`manual/manual-usuario.pdf`](manual/manual-usuario.pdf), con un capítulo
 por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py` y

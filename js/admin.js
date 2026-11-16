@@ -1,7 +1,7 @@
 /* CON012 · Encargado de Gestión (antes «Administración del canal»): responsables por etapa y sede, parámetros y bitácora. */
 "use strict";
 
-const celdasPorDefinir = () => SEDES.reduce((n, s) => n + COLS.filter(([k]) => !RESP[s][k]).length, 0) + AMBITOS.filter(a => !a.resp).length;
+const celdasPorDefinir = () => SEDES.reduce((n, s) => n + COLS.filter(([k]) => !RESP[s][k]).length, 0);
 const perfilDeCol = k => COLS.find(c => c[0] === k)[2];
 let RESP_PRUEBA = null; // respaldo para «Restaurar asignaciones de prueba»
 
@@ -13,13 +13,12 @@ function vResponsables() {
     <div class="contadores"><div class="contador"><b>${completas}</b><span>sedes con todas<br>las etapas cubiertas</span></div><div class="contador ${celdasPorDefinir() ? "alerta" : ""}"><b>${celdasPorDefinir()}</b><span>asignaciones<br>por definir</span></div><div class="contador ${sinR ? "alerta" : ""}"><b>${sinR}</b><span>casos abiertos<br>sin responsable</span></div></div>
     <section class="panel" style="margin-bottom:var(--e-4)"><header><div><h2>Por sede</h2><span class="sub">Toque una celda para asignar. Cada columna admite usuarios del perfil que hace esa etapa.</span></div><div class="acciones"><button class="boton secundario chico" type="button" id="vaciar">Dejar todo por definir</button>${RESP_PRUEBA ? `<button class="boton secundario chico" type="button" id="restaurar">Restaurar la asignación de prueba</button>` : ""}</div></header>
     <div class="tabla-env"><table class="t-resp"><thead><tr><th>Sede</th>${COLS.map(([, t]) => `<th>${t}</th>`).join("")}</tr></thead><tbody>${SEDES.map(s => `<tr><th scope="row">${esc(corta(s))}${RESP[s].prueba ? ` ${chip("prueba", "c-excl", "◆")}` : ""}</th>${COLS.map(([k]) => celda(s, k)).join("")}</tr>`).join("")}</tbody></table></div></section>
-    <section class="panel"><header><div><h2>Por ámbito de datos · análisis y propuesta</h2><span class="sub">Ámbitos de ejemplo: se reemplazan por los tratamientos de la matriz de datos personales.</span></div></header>
-    <div class="tabla-env"><table><thead><tr><th>Ámbito</th><th>Responsable del análisis</th><th>Casos abiertos</th></tr></thead><tbody>${AMBITOS.map(a => `<tr><td>${esc(a.n)} ${chip("ejemplo", "c-excl", "◆")}</td><td><select data-amb="${a.k}" aria-label="Responsable de ${esc(a.n)}"><option value="">Por definir</option>${USUARIOS.filter(u => u.perfil === "gerencia").map(u => `<option value="${u.id}" ${a.resp === u.id ? "selected" : ""}>${esc(PERFILES[u.perfil].n)}</option>`).join("")}</select></td><td class="d">${CASOS.filter(c => abierto(c) && c.ambito === a.k).length}</td></tr>`).join("")}</tbody></table></div></section>`;
+    <section class="panel"><header><div><h2>Ámbitos de datos</h2><span class="sub">El análisis de cada ámbito lo atiende el Área que trata los datos de cada sede. Ámbitos de ejemplo: se reemplazan por los tratamientos de la matriz de datos personales.</span></div></header>
+    <div class="tabla-env"><table><thead><tr><th>Ámbito</th><th>Casos abiertos</th></tr></thead><tbody>${AMBITOS.map(a => `<tr><td>${esc(a.n)} ${chip("ejemplo", "c-excl", "◆")}</td><td class="d">${CASOS.filter(c => abierto(c) && c.ambito === a.k).length}</td></tr>`).join("")}</tbody></table></div></section>`;
 }
 POST.responsables = () => {
-  $$("[data-amb]").forEach(s => s.onchange = () => { AMB(s.dataset.amb).resp = s.value || null; anotaGlobal("Responsable del ámbito " + AMB(s.dataset.amb).n + ": " + (s.value ? nomU(s.value) : "por definir")); tostada("Asignación guardada"); render(); });
-  $("#vaciar").onclick = () => { RESP_PRUEBA = JSON.stringify({ RESP, amb: AMBITOS.map(a => a.resp) }); SEDES.forEach(s => { COLS.forEach(([k]) => RESP[s][k] = null); RESP[s].prueba = false; }); AMBITOS.forEach(a => a.resp = null); anotaGlobal("Todas las asignaciones quedan por definir"); tostada("Todas las asignaciones quedan por definir"); render(); };
-  if ($("#restaurar")) $("#restaurar").onclick = () => { const o = JSON.parse(RESP_PRUEBA); SEDES.forEach(s => Object.assign(RESP[s], o.RESP[s])); AMBITOS.forEach((a, i) => a.resp = o.amb[i]); RESP_PRUEBA = null; anotaGlobal("Se restaura la asignación de prueba"); render(); };
+  $("#vaciar").onclick = () => { RESP_PRUEBA = JSON.stringify({ RESP }); SEDES.forEach(s => { COLS.forEach(([k]) => RESP[s][k] = null); RESP[s].prueba = false; }); anotaGlobal("Todas las asignaciones quedan por definir"); tostada("Todas las asignaciones quedan por definir"); render(); };
+  if ($("#restaurar")) $("#restaurar").onclick = () => { const o = JSON.parse(RESP_PRUEBA); SEDES.forEach(s => Object.assign(RESP[s], o.RESP[s])); RESP_PRUEBA = null; anotaGlobal("Se restaura la asignación de prueba"); render(); };
   $$(".celda-resp").forEach(b => b.onclick = () => editarCelda(b.dataset.s, b.dataset.k));
 };
 function editarCelda(s, k) {

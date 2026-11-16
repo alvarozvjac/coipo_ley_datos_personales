@@ -104,6 +104,28 @@ with sync_playwright() as p:
     ok(ev(pg, "AMBITOS.filter(a => a.resp === 'u5').map(a => a.k)") == ["personal", "asp"],
        "Área: responsable de los ámbitos personal y ASP")
 
+    # 8. Visibilidad y trazabilidad por perfil
+    entrar(pg, "Director o directora", "Dirección Regional Biobío")
+    ev(pg, 'ir("casos")')
+    ok(ev(pg, "CASOS.filter(c => visibleParaUsuario(c, SESION)).every(c => c.etapa === 'firma')") is True,
+       "Director: sólo ve los casos cuando les toca firmar (etapa firma)")
+    ev(pg, "abrirCaso('DP-2026-000112')")
+    ok("Bitácora del caso" not in pg.evaluate("document.body.innerText"),
+       "Director: el detalle del caso no muestra la bitácora")
+    entrar(pg, "Encargado de Gestión", "Dirección Regional Biobío")
+    ev(pg, "abrirCaso('DP-2026-000112')")
+    ok("Bitácora del caso" in pg.evaluate("document.body.innerText"),
+       "Encargado: el detalle del caso sí muestra la bitácora de su sede")
+    entrar(pg, "Unidad Jurídica", "Dirección Regional Biobío")
+    ev(pg, "abrirCaso('DP-2026-000112')")
+    ok("Bitácora del caso" in pg.evaluate("document.body.innerText"),
+       "Unidad Jurídica: ve la trazabilidad completa de su sede")
+    ok(ev(pg, "typeof vBitacora === 'function' && SESION.perfil === 'fiscalia'") is True,
+       "Unidad Jurídica: tiene acceso a la bitácora global")
+    entrar(pg, "Director o directora", "Oficina Central")
+    ok(ev(pg, "CASOS.filter(c => visibleParaUsuario(c, SESION)).every(c => c.sede === 'Oficina Central')") is True,
+       "Director de Oficina Central: sólo ve casos de su sede")
+
     # 7. Sin errores de script y sin correos institucionales en pantalla
     ok(not errores, f"sin errores de script ({errores[:2]})")
     ok("@conaf.cl" not in pg.evaluate("document.body.innerText"), "sin correos @conaf.cl en pantalla")

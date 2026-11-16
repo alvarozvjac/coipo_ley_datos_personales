@@ -23,11 +23,16 @@ def foto(pg, nombre, sel=None):
         pg.screenshot(path=destino, type="jpeg", quality=82)
 
 
-def entrar(pg, texto):
+def entrar(pg, texto, sede="Oficina Central"):
     pg.goto(URL)
     pg.wait_for_selector("#login:not([hidden])")
     pg.evaluate("window.tostada = () => {}")  # sin avisos flotantes en las capturas
-    pg.locator("#login .l-usuario", has_text=texto).first.click()
+    tarjeta = pg.locator("#login .l-sede", has_text=texto)
+    if tarjeta.count():  # perfiles con una cuenta por sede: se elige la sede
+        tarjeta.first.locator("select").select_option(label=sede)
+        tarjeta.first.locator("[data-entrar]").click()
+    else:
+        pg.locator("#login .l-usuario", has_text=texto).first.click()
     pg.wait_for_selector("#vista .hero, #vista .items-14ter")
 
 
@@ -62,6 +67,7 @@ with sync_playwright() as p:
     foto(pg, "05-paso2")
     pg.get_by_role("button", name="Continuar →").click()
     pg.fill("#s-mail", "persona@ejemplo.cl")
+    pg.locator("#s-reg").select_option(index=1)  # región del domicilio (define la dirección regional)
     pg.evaluate("document.activeElement.blur(); scrollTo(0, 0)")
     foto(pg, "06-paso3")
     pg.get_by_role("button", name="Continuar →").click()

@@ -26,15 +26,15 @@ Cambios de perfiles en curso (rama `perfiles-fusion-delegado`, sin publicar):
 
 Ajustes tras la revisión de la maqueta 4.2:
 
-- **Una cuenta por función, en todas las sedes.** Oficina Central y las regiones comparten los mismos perfiles; la sede es un dato del caso, no del perfil. Se eliminan los perfiles duplicados Encargado de Gestión regional, Unidad jurídica regional y Firmante.
-- **Encargado de Gestión.** Recibe y registra (incluida la Oficina de Partes), verifica identidad, deriva y responde en todas las sedes.
-- **Unidad Jurídica.** Una sola cuenta para admisibilidad, revisión jurídica (V°B°) y reclamos ante la Agencia, en todas las sedes.
-- **Director o directora.** Revisa y firma en todas las sedes; no deriva. Representa a la Directora Ejecutiva en Oficina Central y a los directores regionales.
+- **Una cuenta por función y sede.** Encargado de Gestión, Unidad Jurídica y Director tienen una cuenta por sede (Oficina Central y 16 direcciones regionales); el ingreso pide elegir la sede. Cada perfil ve sólo lo que le corresponde: el Encargado y la Unidad Jurídica ven la trazabilidad de su sede; el Director y el Área ven sus casos sólo cuando les toca, sin bitácora. Se eliminan los perfiles duplicados Encargado de Gestión regional, Unidad jurídica regional y Firmante.
+- **Encargado de Gestión.** Recibe y registra (incluida la Oficina de Partes), verifica identidad, deriva y responde en su sede.
+- **Unidad Jurídica.** Una cuenta por sede para admisibilidad, revisión jurídica (V°B°) y reclamos ante la Agencia, con la trazabilidad completa de su sede.
+- **Director o directora.** Revisa y firma en su sede; no deriva; sin bitácora. Representa a la Directora Ejecutiva en Oficina Central y a los directores regionales.
 - **Ingreso sin nombres ficticios.** Cada usuario de prueba se identifica por su perfil y su cargo, también en el encabezado, la tostada y la bitácora.
 - **Oficinas regionales.** Cada región tiene dirección y teléfono, que se muestran al elegir el retiro presencial. Los correos no se muestran: la maqueta no usa correos `@conaf.cl`.
 - **Área que trata los datos.** Una sola persona de prueba, responsable de los ámbitos personal y ASP.
 - **Cumplimiento interno (Línea 2) retirado de esta versión.** Queda en el historial de la rama, pendiente de la reunión con la contraparte.
-- **Pruebas:** `pruebas/probar_v43.py` (25 comprobaciones) cubre estos cambios.
+- **Pruebas:** `pruebas/probar_v43.py` (32 comprobaciones) cubre estos cambios, incluida la visibilidad por perfil.
 
 ## Base de estilos
 
@@ -47,9 +47,9 @@ La fábrica cambió su tipografía el 14-11-2026 (pila de Apple e Inter fuera de
 | Perfil | Qué hace |
 |---|---|
 | Persona solicitante | Página del art. 14 ter, solicitud en 4 pasos con Clave Única simulada, acuse y **Mis solicitudes** (estado y envío de antecedentes) |
-| Encargado de Gestión | Registro (incluido el formulario físico de Oficina de Partes), verificación de identidad, derivación, prórroga, respuesta y comunicación a cesionarios (art. 6°), en todas las sedes; **además** responsables por etapa y sede, asignación de las solicitudes web, plazos internos, feriados y bitácora (antes «Administración del canal») |
-| Director o directora | Revisa y firma las respuestas de todas las sedes; no deriva |
-| Unidad Jurídica | Admisibilidad, bloqueo temporal (2 días hábiles; el rechazo se comunica a la Agencia), revisión jurídica (V°B°), **reclamos ante la Agencia** (art. 41) y **reporte de vulneraciones** (art. 14 sexies; plazo y medio pendientes de Fiscalía) |
+| Encargado de Gestión | Registro (incluido el formulario físico de Oficina de Partes), verificación de identidad, derivación, prórroga, respuesta y comunicación a cesionarios (art. 6°), en su sede; **además** responsables por etapa y sede, plazos internos, feriados y bitácora de su sede (antes «Administración del canal») |
+| Director o directora | Revisa y firma las respuestas de su sede, sólo cuando le toca; no deriva; sin bitácora |
+| Unidad Jurídica | Trazabilidad completa de su sede. Admisibilidad, bloqueo temporal (2 días hábiles; el rechazo se comunica a la Agencia), revisión jurídica (V°B°), **reclamos ante la Agencia** (art. 41) y **reporte de vulneraciones** (art. 14 sexies; plazo y medio pendientes de Fiscalía) |
 | Área que trata los datos | Análisis y propuesta de respuesta de sus ámbitos |
 
 **Manual de usuario:** [`manual/manual-usuario.pdf`](manual/manual-usuario.pdf), con un capítulo
@@ -58,7 +58,7 @@ por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py`
 
 ### Lo que no está decidido (pendiente de la contraparte)
 
-- Asignación real de personas por sede: la maqueta usa una cuenta por función para todas las sedes; por confirmar si cada región tendrá su propia persona en esas funciones.
+- Personas reales por sede: la maqueta tiene una cuenta de prueba por sede y función; por confirmar quién ocupa cada una.
 - Correos de las oficinas regionales: se omiten en la maqueta; por confirmar si se muestran.
 - Quién firma y si la firma se tramita en Cero Papel; a qué sede van las solicitudes web; plazos internos.
 - Procedencia de la portabilidad ante órganos públicos (los arts. 21 y 23 no la mencionan).
@@ -70,7 +70,7 @@ por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py`
 ## Pruebas
 
 ```bash
-python -X utf8 pruebas/probar_v43.py          # 25 comprobaciones de la v4.3: una cuenta por función y sin nombres ficticios
+python -X utf8 pruebas/probar_v43.py          # 32 comprobaciones: cuentas por sede, visibilidad por perfil y sin nombres ficticios
 python -X utf8 pruebas/probar_v4.py           # 57 comprobaciones del canal, escritorio y teléfono
 ```
 

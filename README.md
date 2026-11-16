@@ -17,7 +17,7 @@ Información y Análisis (UIA), línea de Gobernanza de Datos.
 
 **Vista celular:** en computador, el botón flotante «Vista celular», abajo a la izquierda muestra la maqueta dentro de un marco de teléfono de 390 × 844 px, para presentarla sin abrir las herramientas del navegador. Se cierra con «Cerrar» o Esc. En un teléfono real el botón no aparece.
 
-## Versión 4.3 (en revisión, sin aprobar)
+## Versión 4.3 (publicada en `main`)
 
 Ajustes tras la revisión de la maqueta 4.2:
 

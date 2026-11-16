@@ -7,7 +7,7 @@ Información y Análisis (UIA), línea de Gobernanza de Datos.
 
 **Versiones:**
 
-- **Publicada (v4.3, rama `main`):** [abrir la maqueta publicada](https://alvarozvjac.github.io/coipo_ley_datos_personales/)
+- **Publicada (v4.4, rama `main`):** [abrir la maqueta publicada](https://alvarozvjac.github.io/coipo_ley_datos_personales/)
 
 > Demostración no operacional. Personas, RUN, casos y responsables son ficticios; los RUN
 > tienen dígito verificador inválido a propósito. Fecha simulada: lunes 11-01-2027. Nada se
@@ -16,7 +16,7 @@ Información y Análisis (UIA), línea de Gobernanza de Datos.
 
 **Vista celular:** en computador, el botón flotante «Vista celular», abajo a la izquierda muestra la maqueta dentro de un marco de teléfono de 390 × 844 px, para presentarla sin abrir las herramientas del navegador. Se cierra con «Cerrar» o Esc. En un teléfono real el botón no aparece.
 
-## Versión 4.3 (publicada en `main`)
+## Versión 4.4 (publicada en `main`)
 
 Cambios de perfiles en curso (rama `perfiles-fusion-delegado`, sin publicar):
 
@@ -54,7 +54,7 @@ La fábrica cambió su tipografía el 14-11-2026 (pila de Apple e Inter fuera de
 
 **Manual de usuario:** [`manual/manual-usuario.pdf`](manual/manual-usuario.pdf), con un capítulo
 por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py` y
-`manual/imprimir.py`. Describe la v4.3.
+`manual/imprimir.py`. Describe la v4.4.
 
 ### Lo que no está decidido (pendiente de la contraparte)
 

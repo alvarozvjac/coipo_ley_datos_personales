@@ -58,7 +58,7 @@ por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py`
 - Correos de las oficinas regionales: se omiten en la maqueta; por confirmar si se muestran.
 - Quién firma y si la firma se tramita en Cero Papel; a qué sede van las solicitudes web; plazos internos.
 - Procedencia de la portabilidad ante órganos públicos (los arts. 21 y 23 no la mencionan).
-- Aplicación del Título IV a CONAF (arts. 20 a 23). CONAF es institución autónoma del Estado según la Ley N° 18.348; su aplicación sigue pendiente de confirmación de Fiscalía, y el SERNAFOR (Ley N° 21.744) sería servicio público descentralizado al entrar en funcionamiento.
+- La maqueta asume que el Título IV (arts. 20 a 23) se aplica a CONAF, institución autónoma del Estado según la Ley N° 18.348. Fiscalía debe validar ese supuesto (pregunta A1). El SERNAFOR (Ley N° 21.744) es servicio público descentralizado y quedaría sujeto al Título IV al entrar en funcionamiento.
 - Plazo para aportar antecedentes: la ley no lo fija (la maqueta propone 5 días hábiles).
 - Canal disponible desde el 01-12-2026 mientras no exista la integración con Clave Única.
 - Contenidos del art. 14 ter; ámbitos de datos (de ejemplo hasta cargar la matriz); origen del catálogo de comunas, que trae nombres mal escritos.

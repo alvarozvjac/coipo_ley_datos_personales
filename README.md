@@ -31,18 +31,11 @@ Ajustes tras la revisión de la maqueta 4.2:
 - **Cumplimiento interno (Línea 2) retirado de esta versión.** Queda en el historial de la rama, pendiente de la reunión con la contraparte.
 - **Pruebas:** `pruebas/probar_v43.py` (25 comprobaciones) cubre estos cambios.
 
-## Versión 4.2 (borrador, sin aprobar)
+## Base de estilos
 
-Nace del **estándar de interfaz de la fábrica**, no de una maqueta anterior: las hojas de
-`css/semilla/` son copia sin editar de `semilla/ESQUELETO/frontend/src` de
-`Sud-Austral/coipo_master_produccion` (commit `0853a0e`), los tokens y el banner de la
-Secretaría de Asuntos Institucionales se generaron con `semilla/sembrar.py`, y las fuentes
-(Instrument Sans, Fraunces y JetBrains Mono) están autoalojadas en `fuentes/`. Lo propio va en
-`css/con012.css`, sólo con tokens. Detalle en `css/semilla/LEEME.md`.
+Las hojas de `css/semilla/` son copia sin editar de `semilla/ESQUELETO/frontend/src` de `Sud-Austral/coipo_master_produccion` en el commit `0853a0e`. Los tokens y el banner de la Secretaría de Asuntos Institucionales se generaron con `semilla/sembrar.py`. Lo propio va en `css/con012.css`, sólo con tokens. Detalle en `css/semilla/LEEME.md`.
 
-El marco normativo es la **Ley N° 21.719** (texto de la BCN en los antecedentes del proyecto):
-plazos del art. 11 y 41, derechos ante órganos públicos de los arts. 21 y 23, y las doce letras
-del art. 14 ter.
+La fábrica cambió su tipografía el 14-11-2026 (pila de Apple e Inter fuera de Apple). Esa decisión rige hacia adelante; esta maqueta conserva Instrument Sans, Fraunces y JetBrains Mono, autoalojadas en `fuentes/`.
 
 ### Perfiles
 

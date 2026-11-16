@@ -26,13 +26,11 @@ def foto(pg, nombre, sel=None):
 def entrar(pg, texto, sede="Oficina Central"):
     pg.goto(URL)
     pg.wait_for_selector("#login:not([hidden])")
-    pg.evaluate("window.tostada = () => {}")  # sin avisos flotantes en las capturas
-    tarjeta = pg.locator("#login .l-sede", has_text=texto)
-    if tarjeta.count():  # perfiles con una cuenta por sede: se elige la sede
-        tarjeta.first.locator("select").select_option(label=sede)
-        tarjeta.first.locator("[data-entrar]").click()
-    else:
+    if texto == "Persona solicitante":
         pg.locator("#login .l-usuario", has_text=texto).first.click()
+    else:  # el ingreso sólo entra a Oficina Central; la cuenta de cada sede se abre por su id
+        uid = pg.evaluate("([t, s]) => { const u = USUARIOS.find(x => PERFILES[x.perfil].n.includes(t) && x.sede === s); return u ? u.id : null; }", [texto, sede])
+        pg.evaluate("id => entrar(id)", uid)
     pg.wait_for_selector("#vista .hero, #vista .items-14ter")
 
 

@@ -26,7 +26,7 @@ Cambios de perfiles en curso (rama `perfiles-fusion-delegado`, sin publicar):
 
 Ajustes tras la revisión de la maqueta 4.2:
 
-- **Una cuenta por función y sede.** Encargado de Gestión, Unidad Jurídica, Director y Área que trata los datos tienen una cuenta por sede (Oficina Central y 16 direcciones regionales); el ingreso pide elegir la sede. Cada perfil ve sólo lo que le corresponde: el Encargado y la Unidad Jurídica ven la trazabilidad de su sede; el Director y el Área ven sus casos sólo cuando les toca, sin bitácora. Se eliminan los perfiles duplicados Encargado de Gestión regional, Unidad jurídica regional y Firmante.
+- **Una cuenta por función y sede.** Encargado de Gestión, Unidad Jurídica, Director y Área que trata los datos tienen una cuenta por sede (Oficina Central y 16 direcciones regionales); el ingreso entra a Oficina Central y las cuentas de cada región se usan en las pruebas. Cada perfil ve sólo lo que le corresponde: el Encargado y la Unidad Jurídica ven la trazabilidad de su sede; el Director y el Área ven sus casos sólo cuando les toca, sin bitácora. Se eliminan los perfiles duplicados Encargado de Gestión regional, Unidad jurídica regional y Firmante.
 - **Encargado de Gestión.** Recibe y registra (incluida la Oficina de Partes), verifica identidad, deriva y responde en su sede.
 - **Unidad Jurídica.** Una cuenta por sede para admisibilidad, revisión jurídica (V°B°) y reclamos ante la Agencia, con la trazabilidad completa de su sede.
 - **Director o directora.** Revisa y firma en su sede; no deriva; sin bitácora. Representa a la Directora Ejecutiva en Oficina Central y a los directores regionales.

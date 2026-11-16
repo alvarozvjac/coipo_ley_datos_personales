@@ -12,12 +12,12 @@ const grupo = () => !SESION ? null : ["solicitante", "encargado", "fiscalia"].in
 
 function pintarLogin() {
   const li = u => `<li><button type="button" class="l-usuario" data-u="${u.id}">${ico(PERFILES[u.perfil].ico)}<span><b>${esc(PERFILES[u.perfil].n)}</b><br><span class="peq tenue">${esc(u.cargo)}</span></span>${ico("flecha", "ico fin")}</button></li>`;
-  // Los perfiles con una cuenta por sede se eligen con su selector de sede.
-  const porSede = perfil => `<li><div class="l-usuario l-sede">${ico(PERFILES[perfil].ico)}<span><b>${esc(PERFILES[perfil].n)}</b><br><label class="peq tenue" for="ls-${perfil}">Sede</label><select id="ls-${perfil}" class="l-select">${USUARIOS.filter(u => u.perfil === perfil).map(u => `<option value="${u.id}">${esc(u.cargo)}</option>`).join("")}</select></span><button type="button" class="boton" data-entrar="${perfil}">Ingresar</button></div></li>`;
+  // Los perfiles con una cuenta por sede ingresan a Oficina Central; las regiones no se eligen en el ingreso.
+  const porSede = perfil => { const u = USUARIOS.find(x => x.perfil === perfil && x.sede === "Oficina Central"); return `<li><div class="l-usuario l-sede">${ico(PERFILES[perfil].ico)}<span><b>${esc(PERFILES[perfil].n)}</b><br><span class="peq tenue">${esc(u.cargo)}</span></span><button type="button" class="boton" data-entrar="${u.id}">Ingresar</button></div></li>`; };
   $("#l-externo").innerHTML = USUARIOS.filter(u => u.perfil === "solicitante").map(li).join("");
   $("#l-interno").innerHTML = ["encargado", "fiscalia", "director", "gerencia"].map(porSede).join("");
   $$("#login [data-u]").forEach(b => b.onclick = () => entrar(b.dataset.u));
-  $$("#login [data-entrar]").forEach(b => b.onclick = () => entrar($("#ls-" + b.dataset.entrar).value));
+  $$("#login [data-entrar]").forEach(b => b.onclick = () => entrar(b.dataset.entrar));
 }
 function entrar(id) {
   SESION = U[id]; SESION.cu = false; document.body.classList.remove("sin-sesion"); $("#login").hidden = true;   // cada ingreso pide Clave Única de nuevo al elegir un trámite

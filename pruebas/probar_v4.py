@@ -31,12 +31,11 @@ def ok(cond, txt):
 def entrar(pg, perfil_txt, sede="Oficina Central"):
     pg.goto(URL)
     pg.wait_for_selector("#login:not([hidden])")
-    tarjeta = pg.locator("#login .l-sede", has_text=perfil_txt)
-    if tarjeta.count():   # perfiles con una cuenta por sede: se elige la sede antes de ingresar
-        tarjeta.first.locator("select").select_option(label=sede)
-        tarjeta.first.locator("[data-entrar]").click()
-    else:
+    if perfil_txt == "Persona solicitante":
         pg.locator("#login .l-usuario", has_text=perfil_txt).first.click()
+    else:  # el ingreso sólo entra a Oficina Central; la cuenta de cada sede se abre por su id
+        uid = pg.evaluate("([t, s]) => { const u = USUARIOS.find(x => PERFILES[x.perfil].n.includes(t) && x.sede === s); return u ? u.id : null; }", [perfil_txt, sede])
+        pg.evaluate("id => entrar(id)", uid)
     pg.wait_for_selector("#vista .hero, #vista .items-14ter")
 
 

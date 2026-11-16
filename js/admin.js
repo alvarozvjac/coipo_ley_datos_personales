@@ -49,7 +49,10 @@ POST.parametros = () => {
 
 /* ---------- Bitácora ---------- */
 function vBitacora() {
-  const filas = BIT.concat(CASOS.flatMap(c => c.bit.filter(b => b.u === "Sistema" || b.u === "Recepción").map(b => ({ f: b.f, u: b.u, caso: c.num, a: b.a })))).sort((a, b) => b.f.localeCompare(a.f));
+  const sedes = sedesDeEquipo(SESION), enSede = num => sedes.includes((CASOS.find(c => c.num === num) || {}).sede);
+  const filas = BIT.filter(b => b.caso ? enSede(b.caso) : SESION.perfil === "encargado")   // la configuración sólo la ve el Encargado
+    .concat(CASOS.filter(c => sedes.includes(c.sede)).flatMap(c => c.bit.filter(b => b.u === "Sistema" || b.u === "Recepción").map(b => ({ f: b.f, u: b.u, caso: c.num, a: b.a }))))
+    .sort((a, b) => b.f.localeCompare(a.f));
   return volverHTML() + cab("Bitácora", "Acciones sobre los casos y la configuración. En la versión institucional es inalterable y registra cada lectura del RUN completo y de los adjuntos.", "") +
     `<section class="panel"><div class="tabla-env"><table><thead><tr><th>Fecha</th><th>Usuario</th><th>Caso</th><th>Acción</th></tr></thead><tbody>${filas.slice(0, 120).map(b => `<tr><td class="num">${fF(b.f)}</td><td class="peq">${esc(b.u)}</td><td class="mono peq">${esc(b.caso)}</td><td>${esc(b.a)}</td></tr>`).join("")}</tbody></table></div></section>`;
 }

@@ -50,12 +50,14 @@ function quienTxt(c) {
   if (c.etapa === "analisis" && !c.ambito) return porDefinir("Sin ámbito");
   return chip("Sin responsable", "c-malo", "!");
 }
+/* Sedes en que el usuario tiene algún responsable asignado. */
+const sedesDeEquipo = u => SEDES.filter(s => Object.entries(RESP[s]).some(([k, v]) => k !== "prueba" && v === u.id));
 function visibleParaUsuario(c, u) {
   const r = RESP[c.sede];
   if (u.perfil === "encargado") return ["recibe", "deriva", "responde"].some(k => r[k] === u.id);   // ve y administra su sede
   if (u.perfil === "fiscalia") return r.admisibilidad === u.id || r.revision === u.id || r.reclamos === u.id;
-  if (u.perfil === "gerencia") return AMBITOS.some(a => a.resp === u.id && a.k === c.ambito);
-  if (u.perfil === "director") return r.firma === u.id;
+  if (u.perfil === "gerencia") return c.etapa === "analisis" && AMBITOS.some(a => a.resp === u.id && a.k === c.ambito);   // sólo mientras le toca
+  if (u.perfil === "director") return c.etapa === "firma" && r.firma === u.id;   // sólo mientras le toca
   return false;
 }
 /* Reclamos ante la Agencia (art. 41): CONAF responde en 30 días corridos desde la notificación, prorrogables. */

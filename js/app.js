@@ -6,7 +6,7 @@ const VISTAS = {
   encargado: { inicio: () => vInicioInterno(), casos: () => vCasos(), registrar: () => vRegistrar(), calendario: () => vCalendario(), reportes: () => vReportes(), responsables: () => vResponsables(), parametros: () => vParametros(), bitacora: () => vBitacora() },
   solicitante: { inicio: () => vPagina(), pagina: () => vPagina(), solicitud: () => vSolicitud(), acuse: () => vAcuse(), mis: () => vMis() },
   interno: { inicio: () => vInicioInterno(), casos: () => vCasos(), registrar: () => vRegistrar(), calendario: () => vCalendario() },
-  fiscalia: { inicio: () => vInicioInterno(), casos: () => vCasos(), calendario: () => vCalendario() },
+  fiscalia: { inicio: () => vInicioInterno(), casos: () => vCasos(), calendario: () => vCalendario(), bitacora: () => vBitacora() },
 };
 const grupo = () => !SESION ? null : ["solicitante", "encargado", "fiscalia"].includes(SESION.perfil) ? SESION.perfil : "interno";
 

@@ -35,7 +35,7 @@ function vInicioInterno() {
   A.push({ t: p === "encargado" ? "Todos los casos" : "Casos de mi alcance", d: "Lista con filtros por estado, vía, derecho y sede.", ico: "doc", cta: "Ver casos", v: "casos", pre: conFiltro("todos"), n: venc || null, aviso: true, nl: "vencidos" });
   A.push({ t: "Calendario de vencimientos", d: "Vencimientos legales, bloqueos y plazos de antecedentes, día a día.", ico: "calendario", cta: "Abrir calendario", v: "calendario" });
   if (p === "encargado") A.push({ t: "Reportes", d: "Cifras del canal y planilla Excel mensual o anual, sin datos de los titulares.", ico: "grafico", cta: "Ver reportes", v: "reportes" });
-  if (p === "encargado") A.push({ t: "Bitácora", d: "Registro de acciones sobre los casos y la configuración.", ico: "lista", cta: "Ver bitácora", v: "bitacora" });
+  if (p === "encargado" || p === "fiscalia") A.push({ t: "Bitácora", d: "Registro de acciones sobre los casos y la configuración.", ico: "lista", cta: "Ver bitácora", v: "bitacora" });
   const amplio = p === "encargado";
   const urg = (amplio ? mis.filter(c => abierto(c) || reclamoPendiente(c)) : t).slice().sort((a, b) => urgencia(a) - urgencia(b)).slice(0, 4);
   return heroHTML(u.cargo, PERFILES[p].n, textos[p]) +
@@ -87,7 +87,7 @@ function lineaEtapas(c) {
 }
 function abrirCaso(num) {
   const c = CASOS.find(x => x.num === num); if (!c) return;
-  const u = SESION, e = ETAPA[c.etapa], vi = venceInterno(c);
+  const u = SESION, e = ETAPA[c.etapa], vi = venceInterno(c), acotado = ["director", "gerencia"].includes(u.perfil);
   const avisos = [];
   if (sinResponsable(c)) avisos.push(`<div class="regla bl"><span class="ico">!</span><div><b>Sin responsable en «${e.n}»</b><span>${c.etapa === "analisis" && !c.ambito ? "El caso no tiene ámbito asignado." : `${esc(c.sede)} no tiene responsable para esta etapa${c.etapa === "analisis" ? " en el ámbito " + esc(AMB(c.ambito).n) : ""}.`} El caso no avanza hasta que el Encargado de Gestión lo asigne.${u.perfil === "encargado" ? ` <button class="boton secundario chico" type="button" data-ir-cfg>Asignar responsables</button>` : ""}</span></div></div>`);
   if (c.derechos.includes("portabilidad")) avisos.push(`<div class="regla av"><span class="ico">?</span><div><b>Portabilidad: procedencia por confirmar</b><span>Los arts. 21 y 23 de la Ley N° 21.719, que regulan los derechos ante órganos públicos, no mencionan la portabilidad (art. 9°). Consultar a Fiscalía antes de resolver.</span></div></div>`);
@@ -98,7 +98,7 @@ function abrirCaso(num) {
   if (c.ant && c.ant.rec) avisos.push(`<div class="regla inf"><span class="ico">i</span><div><b>Antecedentes aportados el ${fF(c.ant.rec)}</b><span>${esc(c.ant.resp || "Recibidos por la vía física.")}</span></div></div>`);
   if (abierto(c) && diasLegal(c) < 0) avisos.push(`<div class="regla bl"><span class="ico">✕</span><div><b>Plazo legal vencido el ${fF(venceLegal(c))}</b><span>El titular puede reclamar ante la Agencia.</span></div></div>`);
   const verRun = c._runVisto;
-  const cuerpo = `${lineaEtapas(c)}${avisos.length ? `<div class="revision">${avisos.join("")}</div>` : ""}
+  const cuerpo = `${acotado ? `<div class="flujo" aria-label="Etapa del caso"><span class="actual">${e.n}</span></div>` : lineaEtapas(c)}${avisos.length ? `<div class="revision">${avisos.join("")}</div>` : ""}
     ${accionesHTML(c)}
     <div class="seccion"><h3>Solicitud</h3><dl class="ficha">
       <dt>Ingreso</dt><dd class="num">${fLarga(c.ingreso)} · ${VIAS[c.via]}${c.folio ? ` · número de registro <span class="mono">${esc(c.folio)}</span>` : ""}</dd>
@@ -117,7 +117,7 @@ function abrirCaso(num) {
       <dt>Legal</dt><dd>${abierto(c) ? semaforo(c) + ` <span class="num">vence ${fF(venceLegal(c))}</span>${c.prorroga ? ` · prorrogado el ${fF(c.prorroga)}` : ""}` : "Cerrado"}</dd>
       <dt>Interno</dt><dd>${abierto(c) ? (vi ? `${esc(e.n)}: vence ${fF(vi)} (${PARAM.interno[c.etapa]} días hábiles)` : `<span class="tenue">Sin plazo interno definido para «${esc(e.n)}»</span>`) : "—"}</dd>
       <dt>Responsable</dt><dd>${quienTxt(c)}</dd></dl></div>
-    <div class="seccion"><h3>Bitácora del caso</h3><div class="tabla-env"><table><tbody>${c.bit.slice().reverse().map(b => `<tr><td class="num">${fF(b.f)}</td><td class="peq">${esc(b.u)}</td><td>${esc(b.a)}</td></tr>`).join("")}</tbody></table></div></div>`;
+    ${acotado ? "" : `<div class="seccion"><h3>Bitácora del caso</h3><div class="tabla-env"><table><tbody>${c.bit.slice().reverse().map(b => `<tr><td class="num">${fF(b.f)}</td><td class="peq">${esc(b.u)}</td><td>${esc(b.a)}</td></tr>`).join("")}</tbody></table></div></div>`}`;
   cajon(c.num, chipEstado(c), cuerpo, render);
   enlazarAcciones(c);
   if ($("#ver-run")) $("#ver-run").onclick = () => { c._runVisto = true; anota(c, "Lectura del RUN completo"); abrirCaso(num); };

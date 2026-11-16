@@ -32,6 +32,7 @@ Ajustes tras la revisión de la maqueta 4.2:
 - **Director o directora.** Revisa y firma en su sede; no deriva; sin bitácora. Representa a la Directora Ejecutiva en Oficina Central y a los directores regionales.
 - **Ingreso sin nombres ficticios.** Cada usuario de prueba se identifica por su perfil y su cargo, también en el encabezado, la tostada y la bitácora.
 - **Oficinas regionales.** Cada región tiene dirección y teléfono, que se muestran al elegir el retiro presencial. Los correos no se muestran: la maqueta no usa correos `@conaf.cl`.
+- **Demostración guiada en el ingreso.** Dos recorridos de un caso de ejemplo, uno en una dirección regional y otro en Oficina Central, con un paso por cada perfil. Diagramas de flujo por perfil en el manual (anexos D y E).
 - **Área que trata los datos.** Una cuenta por sede, que analiza los ámbitos de datos de su sede y ve sus casos sólo en la etapa de análisis, sin bitácora.
 - **Cumplimiento interno (Línea 2) retirado de esta versión.** Queda en el historial de la rama, pendiente de la reunión con la contraparte.
 - **Pruebas:** `pruebas/probar_v43.py` (32 comprobaciones) cubre estos cambios, incluida la visibilidad por perfil.

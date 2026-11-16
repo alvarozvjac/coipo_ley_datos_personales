@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 470" role="img" aria-label="Flujo de la Unidad Jurídica">
+<title>Flujo de la Unidad Jurídica</title>
+<defs><marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3b4a42"/></marker></defs>
+<style>.tx{font:12px sans-serif;fill:#1d2a23} .et{font:italic 11px sans-serif;fill:#3b4a42} .leyenda{font:11px sans-serif;fill:#3b4a42}</style>
+<rect width="780" height="470" fill="#ffffff"/>
+<path d="M 190.0 52.0 L 215.0 52.0" fill="none" stroke="#3b4a42" stroke-width="1.4"  marker-end="url(#f)"/>
+<path d="M 385.0 52.0 L 410.0 52.0" fill="none" stroke="#3b4a42" stroke-width="1.4"  marker-end="url(#f)"/>
+<path d="M 580.0 52.0 L 605.0 52.0" fill="none" stroke="#3b4a42" stroke-width="1.4"  marker-end="url(#f)"/>
+<text x="592.5" y="47.0" class="et" text-anchor="middle">sí</text>
+<path d="M 495.0 84.0 L 495.0 128.0" fill="none" stroke="#3b4a42" stroke-width="1.4"  marker-end="url(#f)"/>
+<text x="500.0" y="106.0" class="et" text-anchor="start">no</text>
+<path d="M 690.0 84.0 L 690.0 128.0" fill="none" stroke="#3b4a42" stroke-width="1.4"  marker-end="url(#f)"/>
+<path d="M 690.0 192.0 L 690.0 236.0" fill="none" stroke="#3b4a42" stroke-width="1.4"  marker-end="url(#f)"/>
+<path d="M 605.0 268.0 L 580.0 268.0" fill="none" stroke="#3b4a42" stroke-width="1.4"  marker-end="url(#f)"/>
+<path d="M 410.0 268.0 L 385.0 268.0" fill="none" stroke="#3b4a42" stroke-width="1.4"  marker-end="url(#f)"/>
+<text x="397.5" y="263.0" class="et" text-anchor="middle">no</text>
+<path d="M 495.0 300.0 L 495.0 344.0" fill="none" stroke="#3b4a42" stroke-width="1.4"  marker-end="url(#f)"/>
+<text x="500.0" y="322.0" class="et" text-anchor="start">sí</text>
+<rect x="20" y="20" width="170" height="64" rx="6" fill="#ffffff" stroke="#5b6b62" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="105.0" y="49.5" class="tx" text-anchor="middle">Recibe la solicitud con</text>
+<text x="105.0" y="63.5" class="tx" text-anchor="middle">identidad verificada</text>
+<rect x="215" y="20" width="170" height="64" rx="6" fill="#eef5f0" stroke="#2e6b43" stroke-width="1.4" />
+<text x="300.0" y="42.5" class="tx" text-anchor="middle">Resuelve el bloqueo</text>
+<text x="300.0" y="56.5" class="tx" text-anchor="middle">temporal (2 días</text>
+<text x="300.0" y="70.5" class="tx" text-anchor="middle">hábiles), si lo hay</text>
+<polygon points="495.0,20 580,52.0 495.0,84 410,52.0" fill="#fff6e0" stroke="#9a6a00" stroke-width="1.4"/>
+<text x="495.0" y="49.5" class="tx" text-anchor="middle">¿Procede? (art.</text>
+<text x="495.0" y="63.5" class="tx" text-anchor="middle">23 inc. 2°)</text>
+<rect x="605" y="20" width="170" height="64" rx="6" fill="#eef5f0" stroke="#2e6b43" stroke-width="1.4" />
+<text x="690.0" y="56.5" class="tx" text-anchor="middle">Declara admisible</text>
+<rect x="410" y="128" width="170" height="64" rx="18" fill="#e4e9e6" stroke="#4a5a50" stroke-width="1.4" />
+<text x="495.0" y="150.5" class="tx" text-anchor="middle">No procede: causal y</text>
+<text x="495.0" y="164.5" class="tx" text-anchor="middle">fundamento; se informa el</text>
+<text x="495.0" y="178.5" class="tx" text-anchor="middle">derecho</text>
+<rect x="605" y="128" width="170" height="64" rx="6" fill="#ffffff" stroke="#5b6b62" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="690.0" y="157.5" class="tx" text-anchor="middle">El Encargado deriva al</text>
+<text x="690.0" y="171.5" class="tx" text-anchor="middle">Área</text>
+<rect x="605" y="236" width="170" height="64" rx="6" fill="#ffffff" stroke="#5b6b62" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="690.0" y="265.5" class="tx" text-anchor="middle">El Área propone la</text>
+<text x="690.0" y="279.5" class="tx" text-anchor="middle">respuesta</text>
+<polygon points="495.0,236 580,268.0 495.0,300 410,268.0" fill="#fff6e0" stroke="#9a6a00" stroke-width="1.4"/>
+<text x="495.0" y="265.5" class="tx" text-anchor="middle">¿Conforme con el</text>
+<text x="495.0" y="279.5" class="tx" text-anchor="middle">fundamento?</text>
+<rect x="215" y="236" width="170" height="64" rx="6" fill="#eef5f0" stroke="#2e6b43" stroke-width="1.4" />
+<text x="300.0" y="265.5" class="tx" text-anchor="middle">Devuelve con</text>
+<text x="300.0" y="279.5" class="tx" text-anchor="middle">observaciones al Área</text>
+<rect x="410" y="344" width="170" height="64" rx="6" fill="#ffffff" stroke="#5b6b62" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="495.0" y="373.5" class="tx" text-anchor="middle">Pasa a firma: el Director</text>
+<text x="495.0" y="387.5" class="tx" text-anchor="middle">firma</text>
+<rect x="20" y="344" width="170" height="64" rx="6" fill="#ffffff" stroke="#8a958f" stroke-width="1.4" stroke-dasharray="3 3"/>
+<text x="105.0" y="366.5" class="tx" text-anchor="middle">Reclamo ante la Agencia:</text>
+<text x="105.0" y="380.5" class="tx" text-anchor="middle">responde en 30 días</text>
+<text x="105.0" y="394.5" class="tx" text-anchor="middle">corridos</text>
+<rect x="20" y="439" width="18" height="12" rx="3" fill="#eef5f0" stroke="#2e6b43" />
+<text x="44" y="449" class="leyenda">Paso de este perfil</text>
+<rect x="198.8" y="439" width="18" height="12" rx="3" fill="#ffffff" stroke="#5b6b62" stroke-dasharray="6 4"/>
+<text x="222.8" y="449" class="leyenda">Paso de otro perfil</text>
+<polygon points="386.6,439 395.6,448 386.6,457 377.6,448" fill="#fff6e0" stroke="#9a6a00"/>
+<text x="401.6" y="449" class="leyenda">Decisión</text>
+<rect x="477.20000000000005" y="439" width="18" height="12" rx="3" fill="#e4e9e6" stroke="#4a5a50" />
+<text x="501.20000000000005" y="449" class="leyenda">Cierre del caso</text>
+<text x="20" y="466" class="leyenda">Si faltan antecedentes, se piden antes de decidir; si no llegan, se deniega (acción del Encargado y la Unidad Jurídica).</text>
+</svg>

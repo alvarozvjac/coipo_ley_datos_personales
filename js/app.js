@@ -18,6 +18,28 @@ function pintarLogin() {
   $("#l-interno").innerHTML = ["encargado", "fiscalia", "director", "gerencia"].map(porSede).join("");
   $$("#login [data-u]").forEach(b => b.onclick = () => entrar(b.dataset.u));
   $$("#login [data-entrar]").forEach(b => b.onclick = () => entrar($("#ls-" + b.dataset.entrar).value));
+  $("#demo-reg").onclick = () => demo("Dirección Regional Biobío");
+  $("#demo-of").onclick = () => demo("Oficina Central");
+}
+/* Demostración guiada: recorre un caso de ejemplo de una sede por sus perfiles, uno por paso. */
+function demo(sede) {
+  const i = SEDES.indexOf(sede);
+  const caso = etapas => { const c = CASOS.find(x => x.sede === sede && etapas.includes(x.etapa)); return c ? c.num : null; };
+  const pasos = [
+    { t: "Persona solicitante", d: "Presenta la solicitud en el sitio público. La región del domicilio define la sede que la recibe.", u: "u1" },
+    { t: "Encargado de Gestión", d: "Recibe, verifica identidad y deriva el caso al Área que trata los datos.", u: "enc" + i, e: ["recepcion", "derivacion"] },
+    { t: "Unidad Jurídica", d: "Resuelve la admisibilidad y revisa jurídicamente la propuesta de respuesta.", u: "fis" + i, e: ["admisibilidad", "revision"] },
+    { t: "Área que trata los datos", d: "Analiza los datos del caso y propone la respuesta.", u: "ger" + i, e: ["analisis"] },
+    { t: "Director o directora", d: "Revisa y firma la respuesta de la sede.", u: "dir" + i, e: ["firma"] },
+    { t: "Encargado de Gestión", d: "Envía la respuesta firmada y cierra el caso.", u: "enc" + i, e: ["respuesta"] }
+  ];
+  const lista = pasos.map((p, k) => `<li style="display:flex;justify-content:space-between;align-items:center;gap:var(--e-3);flex-wrap:wrap"><div><b>${k + 1}. ${esc(p.t)}</b><br><span class="peq">${esc(p.d)}</span></div><button type="button" class="boton secundario chico" data-demo="${k}">Ir a este paso</button></li>`).join("");
+  cajon("Demostración · " + corta(sede), "Cada paso ingresa con su perfil y abre el caso de ejemplo de esa etapa, si existe en la sede.", `<ol style="list-style:none;padding:0;margin:0;display:grid;gap:var(--e-3)">${lista}</ol>`);
+  $$("[data-demo]").forEach(b => b.onclick = () => {
+    const p = pasos[+b.dataset.demo], num = p.e && caso(p.e);
+    entrar(p.u); cerrarCapa();
+    if (num) abrirCaso(num);
+  });
 }
 function entrar(id) {
   SESION = U[id]; SESION.cu = false; document.body.classList.remove("sin-sesion"); $("#login").hidden = true;   // cada ingreso pide Clave Única de nuevo al elegir un trámite

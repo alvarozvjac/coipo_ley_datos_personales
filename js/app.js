@@ -4,7 +4,7 @@
 let SESION = null, vista = "inicio";
 const VISTAS = {
   encargado: { inicio: () => vInicioInterno(), casos: () => vCasos(), registrar: () => vRegistrar(), calendario: () => vCalendario(), reportes: () => vReportes(), responsables: () => vResponsables(), parametros: () => vParametros(), bitacora: () => vBitacora() },
-  solicitante: { inicio: () => vPagina(), pagina: () => vPagina(), solicitud: () => vSolicitud(), acuse: () => vAcuse(), mis: () => vMis() },
+  solicitante: { inicio: () => vPagina(), pagina: () => vPagina(), informacion: () => vInfoPublica(), solicitud: () => vSolicitud(), acuse: () => vAcuse(), mis: () => vMis() },
   interno: { inicio: () => vInicioInterno(), casos: () => vCasos(), registrar: () => vRegistrar(), calendario: () => vCalendario(), reportes: () => vReportes() },
   fiscalia: { inicio: () => vInicioInterno(), casos: () => vCasos(), calendario: () => vCalendario(), reportes: () => vReportes() },
 };
@@ -17,7 +17,7 @@ function pintarLogin() {
   $$("#login [data-u]").forEach(b => b.onclick = () => entrar(b.dataset.u));
 }
 function entrar(id) {
-  SESION = U[id]; document.body.classList.remove("sin-sesion"); $("#login").hidden = true;
+  SESION = U[id]; SESION.cu = false; document.body.classList.remove("sin-sesion"); $("#login").hidden = true;   // cada ingreso exige Clave Única de nuevo
   tostada(SESION.perfil === "solicitante" ? "Sitio público de conaf.cl (simulado)" : "Sesión de prueba: " + PERFILES[SESION.perfil].n + " · " + SESION.cargo);
   ir("inicio");
 }

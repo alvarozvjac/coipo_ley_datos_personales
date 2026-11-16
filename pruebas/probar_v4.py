@@ -120,7 +120,7 @@ with sync_playwright() as p:
         pg.locator("#r-scan").check()
         pg.get_by_role("button", name="Registrar y acusar recibo").click()
         txt = pg.locator("#capa").inner_text()
-        ok("07-02-2027" in txt and "Requiere antecedentes" in txt, f"{nombre}: el plazo corre desde el timbre y pide la cédula")
+        ok("07-02-2027" in txt and "Requiere antecedentes" in txt, f"{nombre}: el plazo corre desde la recepción en CONAF y pide la cédula")
         pg.locator("#cerrar").click()
 
         # --- Fiscalía: bloqueo

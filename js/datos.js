@@ -110,7 +110,7 @@ const DERECHOS = [
 const DER = Object.fromEntries(DERECHOS.map(d => [d.k, d.n]));
 const VIAS = { web: "Formulario web", fisica: "Formulario físico · Oficina de Partes" };
 const MEDIOS = { correo: "Correo electrónico", carta: "Carta al domicilio", retiro: "Retiro en Oficina de Partes" };
-const CALIDAD = { titular: "Titular", representante: "Representante o mandatario", heredero: "Heredero de titular fallecido" };
+const CALIDAD = { titular: "Titular de los datos", representante: "Representante del titular (poder notarial)", heredero: "Heredero del titular fallecido" };
 
 /* ---------- Casos ficticios (fecha simulada: lunes 11-01-2027) ---------- */
 const NOMBRES = ["Javiera Soto Rivas", "Felipe Araya Morales", "Rosa Contreras León", "Tomás Sepúlveda Vera", "Elena Díaz Bravo", "Héctor Pinto Lagos", "Sofía Torres Garrido", "Diego Fuentes Lara", "Patricia Vidal Cáceres", "Luis Molina Reyes", "Francisca Navarro Gómez", "Jorge Espinoza Toro", "Camila Ortiz Vargas", "Matías Castro Peña"];

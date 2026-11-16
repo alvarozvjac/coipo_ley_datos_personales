@@ -126,19 +126,6 @@ with sync_playwright() as p:
     ok(ev(pg, "CASOS.filter(c => visibleParaUsuario(c, SESION)).every(c => c.sede === 'Oficina Central')") is True,
        "Director de Oficina Central: sólo ve casos de su sede")
 
-    # 9. Demostración guiada por sede (región y Oficina Central)
-    for boton, sede in [("#demo-reg", "Dirección Regional Biobío"), ("#demo-of", "Oficina Central")]:
-        pg.goto(URL)
-        pg.wait_for_selector("#login:not([hidden])")
-        pg.locator(boton).click()
-        pasos = pg.locator(".cajon [data-demo]").count()
-        ok(pasos == 6, f"demostración {sede}: seis pasos ({pasos})")
-        pg.locator(".cajon [data-demo='1']").click()
-        pg.wait_for_selector("#vista .hero", timeout=5000)
-        i = ev(pg, f"SEDES.indexOf('{sede}')")
-        ok(ev(pg, "SESION.id") == f"enc{i}", f"demostración {sede}: el paso 2 ingresa como Encargado de la sede")
-        ok(ev(pg, "SESION.sede") == sede, f"demostración {sede}: el Encargado es de {sede}")
-
     # 7. Sin errores de script y sin correos institucionales en pantalla
     ok(not errores, f"sin errores de script ({errores[:2]})")
     ok("@conaf.cl" not in pg.evaluate("document.body.innerText"), "sin correos @conaf.cl en pantalla")

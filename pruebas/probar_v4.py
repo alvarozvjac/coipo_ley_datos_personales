@@ -28,10 +28,15 @@ def ok(cond, txt):
         print("FALLA", txt)
 
 
-def entrar(pg, perfil_txt):
+def entrar(pg, perfil_txt, sede="Oficina Central"):
     pg.goto(URL)
     pg.wait_for_selector("#login:not([hidden])")
-    pg.locator("#login .l-usuario", has_text=perfil_txt).first.click()
+    tarjeta = pg.locator("#login .l-sede", has_text=perfil_txt)
+    if tarjeta.count():   # perfiles con una cuenta por sede: se elige la sede antes de ingresar
+        tarjeta.first.locator("select").select_option(label=sede)
+        tarjeta.first.locator("[data-entrar]").click()
+    else:
+        pg.locator("#login .l-usuario", has_text=perfil_txt).first.click()
     pg.wait_for_selector("#vista .hero, #vista .items-14ter")
 
 
@@ -84,6 +89,9 @@ with sync_playwright() as p:
         pg.fill("#s-fb", "Hay un error en mis datos que me perjudica.")
         pg.get_by_role("button", name="Continuar →").click()
         pg.screenshot(path=str(SAL / f"{nombre}-03-paso3.png"))
+        pg.locator("input[name=medio][value=correo]").check()
+        pg.get_by_role("button", name="Continuar →").click()
+        ok("Seleccione la región" in pg.locator("#faltan").inner_text(), f"{nombre}: el correo exige la región del domicilio")
         pg.locator("input[name=medio][value=retiro]").check()
         pg.fill("#s-mail", "persona@ejemplo.cl")
         pg.select_option("#s-ret", "Dirección Regional Biobío")
@@ -92,6 +100,8 @@ with sync_playwright() as p:
         pg.get_by_role("button", name="Enviar solicitud").click()
         num = pg.locator(".acuse-num").inner_text()
         ok(re.match(r"DP-2027-\d{6}", num) is not None, f"{nombre}: acuse con número {num}")
+        ok(pg.evaluate("CASOS[CASOS.length - 1].sede") == "Dirección Regional Biobío",
+           f"{nombre}: la solicitud retirada en Biobío queda en la sede de Biobío")
         ok("10-02-2027" in pg.locator("#vista").inner_text(), f"{nombre}: respuesta a más tardar el 10-02-2027")
         pg.screenshot(path=str(SAL / f"{nombre}-04-acuse.png"))
         pg.get_by_role("button", name="Ver mis solicitudes").click()
@@ -160,22 +170,20 @@ with sync_playwright() as p:
         ok("Firmada · por enviar" in pg.locator("#capa").inner_text(), f"{nombre}: el firmante firma y el caso pasa a envío")
         pg.locator("#cerrar").click()
 
-        # --- Encargado de Gestión (incluye la antigua Administración del canal): responsables por sede
-        entrar(pg, "Encargado de Gestión")
+        # --- Encargado de Gestión: cada sede tiene su equipo; el Encargado de Valparaíso ve sólo los casos de su sede
+        entrar(pg, "Encargado de Gestión", "Dirección Regional Valparaíso")
         pg.screenshot(path=str(SAL / f"{nombre}-08-inicio-encargado.png"))
-        tarjeta(pg, "Casos sin responsable")
-        n0 = pg.locator("[data-caso]:visible").count()
-        ok(n0 >= 2, f"{nombre}: hay {n0} casos sin responsable (Valparaíso, Los Lagos)")
+        tarjeta(pg, "Todos los casos")
+        filas = pg.locator("[data-caso]:visible").all_inner_texts()
+        ok(all("Valparaíso" in f for f in filas), f"{nombre}: el Encargado de Valparaíso ve sólo casos de su sede ({len(filas)})")
         pg.get_by_role("button", name="Volver al inicio").click()
         tarjeta(pg, "Responsables por etapa y sede")
         pg.screenshot(path=str(SAL / f"{nombre}-09-responsables.png"))
         ok(pg.evaluate("document.documentElement.scrollWidth") <= op["viewport"]["width"], f"{nombre}: la tabla de responsables no desborda la página")
         pg.locator(".celda-resp[data-s='Dirección Regional Valparaíso'][data-k='recibe']").click()
-        pg.select_option("#e-u", "u2")  # v4.3: el Encargado de Gestión recibe en todas las sedes
+        pg.select_option("#e-u", "enc6")  # Encargado de Valparaíso (cuenta propia de la sede)
         pg.locator("#e-ok").click()
-        pg.get_by_role("button", name="Volver al inicio").click()
-        tarjeta(pg, "Casos sin responsable")
-        ok(pg.locator("[data-caso]:visible").count() < n0, f"{nombre}: al asignar, salen de «sin responsable»")
+        ok(pg.locator("#e-ok").count() == 0, f"{nombre}: al asignar el responsable, se cierra el editor")
         pg.get_by_role("button", name="Volver al inicio").click()
         tarjeta(pg, "Plazos internos")
         pg.fill("[data-int='admisibilidad']", "2")

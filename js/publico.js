@@ -68,12 +68,13 @@ function paso2() {
 }
 function paso3() {
   const ops = SEDES.map(s => `<option ${SOL.retiro === s ? "selected" : ""}>${s}</option>`).join("");
+  const regiones = `<option value="">Seleccione</option>${TERRITORIO.map(r => `<option ${SOL.region === r.r ? "selected" : ""}>${r.r}</option>`).join("")}`;
   return `<fieldset><legend>¿Cómo quiere recibir la respuesta?</legend><div class="lista-opciones">
     ${radio("medio", "correo", SOL.medio, MEDIOS.correo, "")}${radio("medio", "carta", SOL.medio, MEDIOS.carta, "")}${radio("medio", "retiro", SOL.medio, MEDIOS.retiro, "Oficina Central o una dirección regional.")}</div></fieldset>
     <fieldset><legend>Datos de contacto</legend><div class="campos">
     <div class="campo ancho"><label for="s-mail">Correo electrónico *</label><input type="text" id="s-mail" inputmode="email" autocomplete="email" value="${esc(SOL.correo)}" placeholder="nombre@ejemplo.cl"><span class="ayuda">Aquí llega el acuse de recibo con el número de caso.</span></div>
-    ${SOL.medio === "carta" ? `<div class="campo"><label for="s-reg">Región *</label><select id="s-reg"><option value="">Seleccione</option>${TERRITORIO.map(r => `<option ${SOL.region === r.r ? "selected" : ""}>${r.r}</option>`).join("")}</select></div>
-      <div class="campo"><label for="s-prov">Provincia *</label><select id="s-prov" ${SOL.region ? "" : "disabled"}><option value="">${SOL.region ? "Seleccione" : "Seleccione región primero"}</option>${SOL.region ? TERRITORIO.find(r => r.r === SOL.region).p.map(p => `<option ${SOL.prov === p[0] ? "selected" : ""}>${p[0]}</option>`).join("") : ""}</select></div>
+    ${SOL.medio !== "retiro" ? `<div class="campo"><label for="s-reg">Región *</label><select id="s-reg">${regiones}</select><span class="ayuda">Su región define la dirección regional que atiende la solicitud.</span></div>` : ""}
+    ${SOL.medio === "carta" ? `<div class="campo"><label for="s-prov">Provincia *</label><select id="s-prov" ${SOL.region ? "" : "disabled"}><option value="">${SOL.region ? "Seleccione" : "Seleccione región primero"}</option>${SOL.region ? TERRITORIO.find(r => r.r === SOL.region).p.map(p => `<option ${SOL.prov === p[0] ? "selected" : ""}>${p[0]}</option>`).join("") : ""}</select></div>
       <div class="campo"><label for="s-com">Comuna *</label><select id="s-com" ${SOL.prov ? "" : "disabled"}><option value="">${SOL.prov ? "Seleccione" : "Seleccione provincia primero"}</option>${SOL.prov ? TERRITORIO.find(r => r.r === SOL.region).p.find(p => p[0] === SOL.prov)[1].map(c => `<option ${SOL.comuna === c ? "selected" : ""}>${c}</option>`).join("") : ""}</select></div>
       <div class="campo"><label for="s-dom">Domicilio *</label><input type="text" id="s-dom" value="${esc(SOL.dom)}" autocomplete="street-address"></div>` : ""}
     ${SOL.medio === "retiro" ? `<div class="campo ancho"><label for="s-ret">Oficina de Partes donde retirará la respuesta *</label><select id="s-ret">${ops}</select>${oficinaDe(SOL.retiro) ? `<span class="ayuda">${esc(oficinaDe(SOL.retiro).d)}${oficinaDe(SOL.retiro).t ? " · Tel. " + esc(oficinaDe(SOL.retiro).t) : ""}${oficinaDe(SOL.retiro).c ? " · " + esc(oficinaDe(SOL.retiro).c) : ""}</span>` : ""}</div>` : ""}</div></fieldset>`;
@@ -103,7 +104,7 @@ function validarPaso() {
   const e = [];
   if (SOL.paso === 1) { if (!SESION.cu) e.push("Identifíquese con Clave Única."); if (SOL.calidad !== "titular") { if (!SOL.otro.run || !SOL.otro.nom) e.push("Indique el RUN y el nombre del titular."); if (!SOL.poder) e.push(SOL.calidad === "representante" ? "Adjunte el poder notarial." : "Adjunte el documento que acredita la calidad de heredero."); } }
   if (SOL.paso === 2) { if (!Object.keys(SOL.der).length) e.push("Marque al menos un derecho."); if (!SOL.detalle) e.push("Describa qué información pide y dónde cree que consta."); if (SOL.der.bloqueo && !SOL.fundBloq) e.push("Indique el fundamento del bloqueo temporal."); if (SOL.der.bloqueo && Object.keys(SOL.der).length === 1) e.push("El bloqueo temporal acompaña a otra solicitud (rectificación, supresión u oposición)."); }
-  if (SOL.paso === 3) { if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(SOL.correo)) e.push("Ingrese un correo electrónico válido."); if (SOL.medio === "carta" && (!SOL.region || !SOL.prov || !SOL.comuna || !SOL.dom)) e.push("Complete región, provincia, comuna y domicilio."); }
+  if (SOL.paso === 3) { if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(SOL.correo)) e.push("Ingrese un correo electrónico válido."); if (SOL.medio !== "retiro" && !SOL.region) e.push("Seleccione la región."); if (SOL.medio === "carta" && (!SOL.region || !SOL.prov || !SOL.comuna || !SOL.dom)) e.push("Complete región, provincia, comuna y domicilio."); }
   if (SOL.paso === 4 && !SOL.decl) e.push("Marque la declaración para enviar.");
   return e;
 }
@@ -128,7 +129,7 @@ POST.solicitud = () => {
 let ULTIMO = null;
 function enviarSolicitud() {
   const ders = Object.keys(SOL.der);
-  const c = nuevoCaso({ num: nuevoNumero(), ingreso: HOY, desde: HOY, via: "web", sede: sedeParaWeb(SOL.medio === "carta" ? SOL.region : ""), calidad: SOL.calidad, derechos: ders, detalle: SOL.detalle, medio: SOL.medio, retiro: SOL.retiro, correo: SOL.correo,
+  const c = nuevoCaso({ num: nuevoNumero(), ingreso: HOY, desde: HOY, via: "web", sede: SOL.medio === "retiro" ? SOL.retiro : "Dirección Regional " + SOL.region, calidad: SOL.calidad, derechos: ders, detalle: SOL.detalle, medio: SOL.medio, retiro: SOL.retiro, correo: SOL.correo,
     tit: SOL.calidad === "titular" ? { nom: SESION.nom, run: SESION.run } : { nom: SOL.otro.nom, run: SOL.otro.run }, rep: SOL.calidad === "titular" ? null : { nom: SESION.nom, run: SESION.run }, bloq: SOL.der.bloqueo ? { pide: HOY, res: null, fund: SOL.fundBloq } : null, identidad: true });
   c.bit.push({ f: HOY, u: "Sistema", a: "Ingreso por formulario web con Clave Única (simulada) · acuse enviado a " + c.correo });
   CASOS.push(c); BIT.unshift({ f: HOY, u: "Sistema", caso: c.num, a: "Ingreso por formulario web" });

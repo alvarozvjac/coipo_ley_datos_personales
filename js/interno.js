@@ -10,10 +10,10 @@ const conFiltro = g => () => { FILTRO = { g, q: "", via: "", der: "", sede: "" }
 function vInicioInterno() {
   const u = SESION, p = u.perfil, mis = misCasos(), t = misTareas();
   const n = f => mis.filter(f).length;
-  const sinR = CASOS.filter(sinResponsable).length, venc = mis.filter(c => abierto(c) && diasLegal(c) < 0).length;
+  const sinR = mis.filter(sinResponsable).length, venc = mis.filter(c => abierto(c) && diasLegal(c) < 0).length;
   const textos = {
-    encargado: "Solicitudes por registrar, verificar, derivar y responder en todas las sedes. Además, responsables por etapa y sede, plazos internos, feriados y bitácora.",
-    director: "Propuestas de respuesta por revisar y firmar en todas las sedes.",
+    encargado: "Solicitudes de su sede por registrar, verificar, derivar y responder. Además, responsables por etapa y sede, plazos internos, feriados y bitácora.",
+    director: "Propuestas de respuesta de su sede por revisar y firmar.",
     fiscalia: "Admisibilidad, bloqueos temporales, revisión jurídica (V°B°), reclamos ante la Agencia y reporte de vulneraciones (art. 14 sexies).",
     gerencia: "Casos derivados a su ámbito para localizar los datos y proponer la respuesta.",
   };
@@ -37,7 +37,7 @@ function vInicioInterno() {
   if (p === "encargado") A.push({ t: "Reportes", d: "Cifras del canal y planilla Excel mensual o anual, sin datos de los titulares.", ico: "grafico", cta: "Ver reportes", v: "reportes" });
   if (p === "encargado") A.push({ t: "Bitácora", d: "Registro de acciones sobre los casos y la configuración.", ico: "lista", cta: "Ver bitácora", v: "bitacora" });
   const amplio = p === "encargado";
-  const urg = (amplio ? CASOS.filter(c => abierto(c) || reclamoPendiente(c)) : t).slice().sort((a, b) => urgencia(a) - urgencia(b)).slice(0, 4);
+  const urg = (amplio ? mis.filter(c => abierto(c) || reclamoPendiente(c)) : t).slice().sort((a, b) => urgencia(a) - urgencia(b)).slice(0, 4);
   return heroHTML(u.cargo, PERFILES[p].n, textos[p]) +
     `<h2 class="sec-tit">${ico("flecha")}¿Qué necesitas hacer?</h2>` + accesosHTML(A) +
     `<section class="panel"><header><h2>${amplio ? "Lo más urgente del canal" : "Lo más urgente para usted"}</h2></header><div class="cuerpo">${urg.length ? urg.map(filaTarea).join("") : `<p class="vacio-chico">No tiene casos pendientes.</p>`}</div></section>`;

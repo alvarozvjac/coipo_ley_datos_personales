@@ -52,7 +52,7 @@ function quienTxt(c) {
 }
 function visibleParaUsuario(c, u) {
   const r = RESP[c.sede];
-  if (u.perfil === "encargado") return true;   // ve y administra todo el canal
+  if (u.perfil === "encargado") return ["recibe", "deriva", "responde"].some(k => r[k] === u.id);   // ve y administra su sede
   if (u.perfil === "fiscalia") return r.admisibilidad === u.id || r.revision === u.id || r.reclamos === u.id;
   if (u.perfil === "gerencia") return AMBITOS.some(a => a.resp === u.id && a.k === c.ambito);
   if (u.perfil === "director") return r.firma === u.id;
@@ -72,4 +72,3 @@ function tareaDe(c, u) { // ¿le toca actuar a este usuario?
 function anota(c, a) { c.bit.push({ f: HOY, u: SESION ? nomU(SESION.id) : "Sistema", a }); BIT.unshift({ f: HOY, u: SESION ? nomU(SESION.id) : "Sistema", caso: c.num, a }); }
 function pasar(c, etapa, a) { c.etapa = etapa; c.desde = HOY; anota(c, a); }
 function nuevoNumero() { const n = correlativo["2027"]++; return "DP-2027-" + String(n).padStart(6, "0"); }
-function sedeParaWeb(region) { return PARAM.sedeWeb === "region" && region ? "Dirección Regional " + region : "Oficina Central"; }

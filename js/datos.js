@@ -21,7 +21,6 @@ const PARAM = {
   ],
   RESPUESTA: 30, PRORROGA: 30, BLOQUEO: 2, ANTECEDENTES: 5, RECLAMO_RESP: 30,
   interno: { recepcion: null, admisibilidad: null, derivacion: null, analisis: null, revision: null, firma: null, respuesta: null },
-  sedeWeb: "pendiente",
   feriados: [{ f: "2026-12-08", n: "Inmaculada Concepción" }, { f: "2026-12-25", n: "Navidad" }, { f: "2027-01-01", n: "Año Nuevo" }]
 };
 
@@ -60,33 +59,34 @@ const ETAPAS = [
 ];
 const ETAPA = Object.fromEntries(ETAPAS.map(e => [e.k, e]));
 const COLS = [["recibe", "Recibe y registra", "encargado"], ["admisibilidad", "Admisibilidad y bloqueo", "fiscalia"], ["deriva", "Deriva", "encargado"], ["revision", "Revisión jurídica", "fiscalia"], ["firma", "Firma", "director"], ["responde", "Responde y cierra", "encargado"], ["reclamos", "Reclamos ante la Agencia", "fiscalia"]];
-/* Una cuenta por función, en todas las sedes: la sede es un dato del caso, no del perfil. */
+/* Una cuenta por función y sede: Oficina Central y cada dirección regional tienen su propio Encargado, Unidad Jurídica y Director (cuentas de prueba). */
 const PERFIL_EN = (s, k) => COLS.find(c => c[0] === k)[2];
 const RECEPTOR = ["encargado"];   // perfiles que reciben y registran
 
 /* ---------- Perfiles: derivados de las funciones del canal ---------- */
 const PERFILES = {
   solicitante: { n: "Persona solicitante", ico: "user", d: "Titular, representante o heredero. Presenta solicitudes y consulta su estado." },
-  encargado: { n: "Encargado de Gestión", ico: "oficina", d: "Recibe y registra las solicitudes de todas las sedes (incluida la Oficina de Partes), verifica identidad, deriva, responde y prorroga. Asigna los responsables por etapa y sede, define plazos internos y feriados, y lleva la bitácora." },
-  fiscalia: { n: "Unidad Jurídica", ico: "balanza", d: "Admisibilidad, bloqueo temporal, revisión jurídica (V°B°), reclamos ante la Agencia y reporte de vulneraciones (art. 14 sexies), en todas las sedes." },
-  director: { n: "Director o directora", ico: "firma", d: "Revisa y firma las respuestas de todas las sedes. No deriva." },
+  encargado: { n: "Encargado de Gestión", ico: "oficina", d: "Recibe y registra las solicitudes de su sede (incluida la Oficina de Partes), verifica identidad, deriva, responde y prorroga. Asigna los responsables por etapa y sede, define plazos internos y feriados, y lleva la bitácora." },
+  fiscalia: { n: "Unidad Jurídica", ico: "balanza", d: "Admisibilidad, bloqueo temporal, revisión jurídica (V°B°), reclamos ante la Agencia y reporte de vulneraciones (art. 14 sexies), en su sede." },
+  director: { n: "Director o directora", ico: "firma", d: "Revisa y firma las respuestas de su sede. No deriva." },
   gerencia: { n: "Área que trata los datos", ico: "equipo", d: "Analiza los casos de su ámbito y propone la respuesta." }
 };
-const USUARIOS = [
+const USUARIOS_CANAL = [
   { id: "u1", perfil: "solicitante", nom: "Carolina Andrea Muñoz Pérez", run: runFicticio(16482337), cargo: "Titular de los datos" },
-  { id: "u2", perfil: "encargado", nom: "Paula Rojas Soto", cargo: "Todas las sedes" },
-  { id: "u4", perfil: "fiscalia", nom: "Andrés Contreras Silva", cargo: "Todas las sedes" },
-  { id: "u12", perfil: "director", nom: "Carmen Lillo Varas", cargo: "Oficina Central y regiones" },
   { id: "u5", perfil: "gerencia", nom: "Natalia Herrera Torres", cargo: "Ámbitos: Personal y ex funcionarios · Áreas Silvestres Protegidas" }
 ];
+/* Un Encargado, una Unidad Jurídica y un Director por sede (Oficina Central y cada región). Cuentas de prueba, sin nombres de personas. */
+const EQUIPO_SEDE = SEDES.flatMap((s, i) => [
+  { id: "enc" + i, perfil: "encargado", sede: s, cargo: s },
+  { id: "fis" + i, perfil: "fiscalia", sede: s, cargo: s },
+  { id: "dir" + i, perfil: "director", sede: s, cargo: s }
+]);
+const USUARIOS = USUARIOS_CANAL.concat(EQUIPO_SEDE);
 const U = Object.fromEntries(USUARIOS.map(u => [u.id, u]));
 const nomU = id => U[id] ? PERFILES[U[id].perfil].n : "—";   // los usuarios de prueba se nombran por su perfil
 
-/* Responsables por sede y etapa: POR DEFINIR (pendiente de la contraparte, correo del 28-10-2026).
-   Oficina Central y Biobío llevan una asignación DE PRUEBA para poder recorrer la maqueta. */
-const RESP = Object.fromEntries(SEDES.map(s => [s, { recibe: null, admisibilidad: null, deriva: null, revision: null, firma: null, responde: null, reclamos: null, prueba: false }]));
-Object.assign(RESP["Oficina Central"], { recibe: "u2", admisibilidad: "u4", deriva: "u2", revision: "u4", firma: "u12", responde: "u2", reclamos: "u4", prueba: true });
-Object.assign(RESP["Dirección Regional Biobío"], { recibe: "u2", admisibilidad: "u4", deriva: "u2", revision: "u4", firma: "u12", responde: "u2", reclamos: "u4", prueba: true });
+/* Responsables por sede y etapa: cada sede tiene su equipo (cuentas de prueba). Los ámbitos siguen a nivel nacional. */
+const RESP = Object.fromEntries(SEDES.map((s, i) => [s, { recibe: "enc" + i, admisibilidad: "fis" + i, deriva: "enc" + i, revision: "fis" + i, firma: "dir" + i, responde: "enc" + i, reclamos: "fis" + i, prueba: true }]));
 
 /* Ámbitos de EJEMPLO hasta cargar la matriz de datos personales (compartida por el delegado el 28-10-2026). */
 const AMBITOS = [

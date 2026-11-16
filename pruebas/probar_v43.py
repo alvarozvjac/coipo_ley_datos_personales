@@ -26,9 +26,14 @@ def ok(cond, msg):
         print("FALLA", msg)
 
 
-def entrar(pg, perfil):
+def entrar(pg, perfil, sede="Oficina Central"):
     pg.goto(URL)
-    pg.locator("#login .l-usuario", has_text=perfil).first.click()
+    tarjeta = pg.locator("#login .l-sede", has_text=perfil)
+    if tarjeta.count():
+        tarjeta.first.locator("select").select_option(label=sede)
+        tarjeta.first.locator("[data-entrar]").click()
+    else:
+        pg.locator("#login .l-usuario", has_text=perfil).first.click()
     pg.wait_for_selector("#vista .hero", timeout=5000)
 
 
@@ -54,9 +59,9 @@ with sync_playwright() as p:
                      "Dueño de tratamiento", "Seguridad de la información",
                      "Delegado de protección de datos", "Administración del canal"]:
         ok(retirado not in etiquetas, f"ingreso: ya no existe «{retirado}»")
-    ok(pg.evaluate("new Set(USUARIOS.filter(u => u.perfil !== 'solicitante').map(u => u.perfil)).size === "
-                   "USUARIOS.filter(u => u.perfil !== 'solicitante').length"),
-       "datos: cada perfil tiene una sola cuenta")
+    ok(pg.evaluate("SEDES.every(s => ['encargado', 'fiscalia', 'director'].every(p => "
+                   "USUARIOS.filter(u => u.perfil === p && u.sede === s).length === 1))"),
+       "datos: cada sede tiene su Encargado, Unidad Jurídica y Director (una cuenta cada uno)")
 
     # 2. Sin nombres ficticios en el ingreso ni en la sesión
     texto_ingreso = pg.locator("#l-interno").inner_text()
@@ -69,22 +74,29 @@ with sync_playwright() as p:
     ev(pg, 'ir("casos")')
     pg.wait_for_selector("#c-q", timeout=5000)
     sedes = ev(pg, "[...new Set(misCasos().map(c => c.sede))]")
-    ok("Oficina Central" in sedes and "Dirección Regional Biobío" in sedes,
-       f"Encargado: ve casos de varias sedes ({len(sedes)})")
+    ok(sedes == ["Oficina Central"] or sedes == [], f"Encargado de Oficina Central: ve sólo casos de su sede ({sedes})")
+    entrar(pg, "Encargado de Gestión", "Dirección Regional Biobío")
+    ev(pg, 'ir("casos")')
+    pg.wait_for_selector("#c-q", timeout=5000)
+    sedes = ev(pg, "[...new Set(misCasos().map(c => c.sede))]")
+    ok(sedes == ["Dirección Regional Biobío"], f"Encargado de Biobío: ve sólo casos de su sede ({sedes})")
+    ev(pg, 'ir("casos")')
     ok(pg.locator("#vista-sede").count() == 0, "Encargado: ya no hay selector «Sede que consulta»")
     ok(ev(pg, "RECEPTOR.includes(SESION.perfil)") is True, "Encargado: se reconoce como perfil receptor")
 
     # 4. Director o directora: firma en todas las sedes y no deriva
-    entrar(pg, "Director o directora")
+    entrar(pg, "Director o directora", "Dirección Regional Biobío")
     firma = ev(pg, "misTareas().filter(c => c.etapa === 'firma').map(c => c.num)")
-    ok("DP-2026-000112" in firma, f"Director: tiene a firmar el caso DP-2026-000112 ({firma})")
-    ok(ev(pg, "SEDES.every(s => RESP[s].deriva !== 'u12')") is True, "Director: no deriva en ninguna sede")
-    ok(ev(pg, "SEDES.every(s => RESP[s].firma === 'u12' || !RESP[s].prueba)") is True,
-       "Director: es quien firma en las sedes con asignación de prueba")
+    ok("DP-2026-000112" in firma, f"Director de Biobío: tiene a firmar el caso DP-2026-000112 ({firma})")
+    ok(ev(pg, "SEDES.every(s => USUARIOS.find(u => u.id === RESP[s].deriva).perfil === 'encargado')") is True,
+       "Director: no deriva; deriva el Encargado de cada sede")
+    ok(ev(pg, "SEDES.every(s => USUARIOS.find(u => u.id === RESP[s].firma).sede === s)") is True,
+       "Director: firma en cada sede el director de esa sede")
 
     # 5. Unidad Jurídica: una sola cuenta con la revisión de todas las sedes
     entrar(pg, "Unidad Jurídica")
-    ok(ev(pg, "RESP['Dirección Regional Biobío'].revision === 'u4' && RESP['Oficina Central'].revision === 'u4'") is True,
+    ok(ev(pg, "USUARIOS.find(u => u.id === RESP['Dirección Regional Biobío'].revision).sede === 'Dirección Regional Biobío' && "
+              "USUARIOS.find(u => u.id === RESP['Oficina Central'].revision).sede === 'Oficina Central'") is True,
        "Fiscalía: hace la revisión (V°B°) en Oficina Central y en Biobío")
 
     # 6. Área que trata los datos: una persona con sus ámbitos

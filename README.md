@@ -18,6 +18,12 @@ Información y Análisis (UIA), línea de Gobernanza de Datos.
 
 ## Versión 4.3 (publicada en `main`)
 
+Cambios de perfiles en curso (rama `perfiles-fusion-delegado`, sin publicar):
+
+- **Delegado de protección de datos retirado de la maqueta.** Su designación es voluntaria (art. 50) y CONAF aún no decide si lo hará. La pregunta va a Fiscalía (F1).
+- **Administración del canal fundida en el Encargado OIRS.** El Encargado asigna responsables, plazos internos y feriados, y revisa la bitácora. Pregunta a Fiscalía sobre la separación de funciones (F4).
+- **Reporte de vulneraciones (art. 14 sexies) en la Unidad Jurídica.** Plazo y medio pendientes (F2). El rol de Informática en las medidas de seguridad también va a Fiscalía (F3).
+
 Ajustes tras la revisión de la maqueta 4.2:
 
 - **Una cuenta por función, en todas las sedes.** Oficina Central y las regiones comparten los mismos perfiles; la sede es un dato del caso, no del perfil. Se eliminan los perfiles duplicados Encargado OIRS regional, Unidad jurídica regional y Firmante.
@@ -41,12 +47,10 @@ La fábrica cambió su tipografía el 14-11-2026 (pila de Apple e Inter fuera de
 | Perfil | Qué hace |
 |---|---|
 | Persona solicitante | Página del art. 14 ter, solicitud en 4 pasos con Clave Única simulada, acuse y **Mis solicitudes** (estado y envío de antecedentes) |
-| Encargado OIRS | Registro (incluido el formulario físico de Oficina de Partes), verificación de identidad, derivación, prórroga, respuesta y comunicación a cesionarios (art. 6°), en todas las sedes |
+| Encargado OIRS | Registro (incluido el formulario físico de Oficina de Partes), verificación de identidad, derivación, prórroga, respuesta y comunicación a cesionarios (art. 6°), en todas las sedes; **además** responsables por etapa y sede, asignación de las solicitudes web, plazos internos, feriados y bitácora (antes «Administración del canal») |
 | Director o directora | Revisa y firma las respuestas de todas las sedes; no deriva |
-| Unidad Jurídica | Admisibilidad, bloqueo temporal (2 días hábiles; el rechazo se comunica a la Agencia), revisión jurídica (V°B°) y **reclamos ante la Agencia** (art. 41) |
+| Unidad Jurídica | Admisibilidad, bloqueo temporal (2 días hábiles; el rechazo se comunica a la Agencia), revisión jurídica (V°B°), **reclamos ante la Agencia** (art. 41) y **reporte de vulneraciones** (art. 14 sexies; plazo y medio pendientes de Fiscalía) |
 | Área que trata los datos | Análisis y propuesta de respuesta de sus ámbitos |
-| Delegado de protección de datos | Supervisión: vencidos, bloqueos, reclamos, casos sin responsable, bitácora y observaciones. Designación voluntaria (art. 50) |
-| Administración del canal | Responsables por etapa y sede, asignación de las solicitudes web, plazos internos y feriados |
 
 **Manual de usuario:** [`manual/manual-usuario.pdf`](manual/manual-usuario.pdf), con un capítulo
 por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py` y

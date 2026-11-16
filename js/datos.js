@@ -67,21 +67,17 @@ const RECEPTOR = ["encargado"];   // perfiles que reciben y registran
 /* ---------- Perfiles: derivados de las funciones del canal ---------- */
 const PERFILES = {
   solicitante: { n: "Persona solicitante", ico: "user", d: "Titular, representante o heredero. Presenta solicitudes y consulta su estado." },
-  encargado: { n: "Encargado OIRS", ico: "oficina", d: "Recibe y registra las solicitudes de todas las sedes (incluida la Oficina de Partes), verifica identidad, deriva, responde y prorroga." },
-  fiscalia: { n: "Unidad Jurídica", ico: "balanza", d: "Admisibilidad, bloqueo temporal, revisión jurídica (V°B°) y reclamos ante la Agencia, en todas las sedes." },
+  encargado: { n: "Encargado OIRS", ico: "oficina", d: "Recibe y registra las solicitudes de todas las sedes (incluida la Oficina de Partes), verifica identidad, deriva, responde y prorroga. Asigna los responsables por etapa y sede, define plazos internos y feriados, y lleva la bitácora." },
+  fiscalia: { n: "Unidad Jurídica", ico: "balanza", d: "Admisibilidad, bloqueo temporal, revisión jurídica (V°B°), reclamos ante la Agencia y reporte de vulneraciones (art. 14 sexies), en todas las sedes." },
   director: { n: "Director o directora", ico: "firma", d: "Revisa y firma las respuestas de todas las sedes. No deriva." },
-  gerencia: { n: "Área que trata los datos", ico: "equipo", d: "Analiza los casos de su ámbito y propone la respuesta." },
-  delegado: { n: "Delegado de protección de datos", ico: "escudo", d: "Supervisa el cumplimiento, ve todos los casos y deja observaciones. Su designación es voluntaria (art. 50)." },
-  admin: { n: "Administración del canal", ico: "config", d: "Responsables por etapa y sede, plazos internos, feriados y bitácora." }
+  gerencia: { n: "Área que trata los datos", ico: "equipo", d: "Analiza los casos de su ámbito y propone la respuesta." }
 };
 const USUARIOS = [
   { id: "u1", perfil: "solicitante", nom: "Carolina Andrea Muñoz Pérez", run: runFicticio(16482337), cargo: "Titular de los datos" },
   { id: "u2", perfil: "encargado", nom: "Paula Rojas Soto", cargo: "Todas las sedes" },
   { id: "u4", perfil: "fiscalia", nom: "Andrés Contreras Silva", cargo: "Todas las sedes" },
   { id: "u12", perfil: "director", nom: "Carmen Lillo Varas", cargo: "Oficina Central y regiones" },
-  { id: "u5", perfil: "gerencia", nom: "Natalia Herrera Torres", cargo: "Ámbitos: Personal y ex funcionarios · Áreas Silvestres Protegidas" },
-  { id: "u8", perfil: "delegado", nom: "Sergio Bravo Ulloa", cargo: "Usuario de prueba" },
-  { id: "u6", perfil: "admin", nom: "Valeria Soto Araya", cargo: "Usuario de prueba" }
+  { id: "u5", perfil: "gerencia", nom: "Natalia Herrera Torres", cargo: "Ámbitos: Personal y ex funcionarios · Áreas Silvestres Protegidas" }
 ];
 const U = Object.fromEntries(USUARIOS.map(u => [u.id, u]));
 const nomU = id => U[id] ? PERFILES[U[id].perfil].n : "—";   // los usuarios de prueba se nombran por su perfil
@@ -119,7 +115,7 @@ const CALIDAD = { titular: "Titular", representante: "Representante o mandatario
 /* ---------- Casos ficticios (fecha simulada: lunes 11-01-2027) ---------- */
 const NOMBRES = ["Javiera Soto Rivas", "Felipe Araya Morales", "Rosa Contreras León", "Tomás Sepúlveda Vera", "Elena Díaz Bravo", "Héctor Pinto Lagos", "Sofía Torres Garrido", "Diego Fuentes Lara", "Patricia Vidal Cáceres", "Luis Molina Reyes", "Francisca Navarro Gómez", "Jorge Espinoza Toro", "Camila Ortiz Vargas", "Matías Castro Peña"];
 function nuevoCaso(o) {
-  return Object.assign({ via: "web", sede: "Oficina Central", calidad: "titular", derechos: ["acceso"], detalle: "", medio: "correo", correo: "correo@ejemplo.cl", etapa: "recepcion", desde: o.ingreso, identidad: false, ambito: null, prorroga: null, ant: null, bloq: null, decision: null, propuesta: "", firma: null, cierre: null, reclamo: null, obs: [], bit: [] }, o);
+  return Object.assign({ via: "web", sede: "Oficina Central", calidad: "titular", derechos: ["acceso"], detalle: "", medio: "correo", correo: "correo@ejemplo.cl", etapa: "recepcion", desde: o.ingreso, identidad: false, ambito: null, prorroga: null, ant: null, bloq: null, decision: null, propuesta: "", firma: null, cierre: null, reclamo: null, bit: [] }, o);
 }
 let n0 = 0;
 const T = (num, ingreso, o) => { const i = n0++; return nuevoCaso(Object.assign({ num, ingreso, tit: { nom: NOMBRES[i % NOMBRES.length], run: runFicticio(9100000 + i * 731177) } }, o)); };

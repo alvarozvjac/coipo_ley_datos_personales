@@ -53,7 +53,7 @@
       <dt>Solicitante</dt><dd>Unidad de Participación Ciudadana y Transparencia</dd>
       <dt>Elaborado por</dt><dd>Unidad de Información y Análisis (UIA), línea Gobernanza de Datos</dd>
       <dt>Fecha</dt><dd>03-11-2026</dd>
-      <dt>Perfiles</dt><dd>Persona solicitante · Encargado OIRS · Unidad Jurídica · Director o directora · Área que trata los datos · Delegado de protección de datos · Administración del canal</dd>
+      <dt>Perfiles</dt><dd>Persona solicitante · Encargado OIRS · Unidad Jurídica · Director o directora · Área que trata los datos</dd>
     </dl>
   </div>
   <p class="aviso"><b>Maqueta no operacional.</b> Este manual describe una maqueta para validar el flujo y el alcance con la contraparte. Las personas, los RUN, los casos y los responsables que aparecen son ficticios, y nada se envía a un servidor. Lo que todavía no se define aparece en la maqueta como «Por definir».</p>
@@ -69,8 +69,6 @@
   <li>Unidad Jurídica</li>
   <li>Área que trata los datos</li>
   <li>Director o directora</li>
-  <li>Delegado de protección de datos</li>
-  <li>Administración del canal</li>
   <li>Calendario y reportes</li>
   <li>Anexo A · Estados y etapas del caso</li>
   <li>Anexo B · Plazos</li>
@@ -100,12 +98,10 @@
 <table>
   <tr><th>Perfil</th><th>Cuenta de prueba</th><th>Alcance en la maqueta</th></tr>
   <tr><td>Persona solicitante</td><td>Sin nombre en pantalla</td><td>Sitio público y sus propias solicitudes</td></tr>
-  <tr><td>Encargado OIRS</td><td>Una sola cuenta</td><td>Todas las sedes: recibe, registra, deriva y responde</td></tr>
-  <tr><td>Unidad Jurídica</td><td>Una sola cuenta</td><td>Todas las sedes: admisibilidad, revisión jurídica (V°B°) y reclamos</td></tr>
+  <tr><td>Encargado OIRS</td><td>Una sola cuenta</td><td>Todas las sedes: recibe, registra, deriva y responde; asigna responsables, plazos internos y feriados, y revisa la bitácora</td></tr>
+  <tr><td>Unidad Jurídica</td><td>Una sola cuenta</td><td>Todas las sedes: admisibilidad, revisión jurídica (V°B°), reclamos y reporte de vulneraciones (art. 14 sexies)</td></tr>
   <tr><td>Director o directora</td><td>Una sola cuenta</td><td>Todas las sedes: revisa y firma; no deriva</td></tr>
   <tr><td>Área que trata los datos</td><td>Una sola cuenta</td><td>Ámbitos personal y ex funcionarios · Áreas Silvestres Protegidas</td></tr>
-  <tr><td>Delegado de protección de datos</td><td>Una sola cuenta</td><td>Todo el canal, en lectura y observaciones</td></tr>
-  <tr><td>Administración del canal</td><td>Una sola cuenta</td><td>Configuración y todo el canal en lectura</td></tr>
 </table>
 <p class="nota">Cada perfil tiene una sola cuenta de prueba, que atiende todas las sedes; la sede es un dato del caso. En la maqueta los usuarios aparecen por su perfil, sin nombre de persona. Pendiente: si cada región tendrá su propia persona en esas funciones. Las asignaciones de Oficina Central y Biobío son de prueba; las demás sedes no tienen responsables y sus casos aparecen como «Sin responsable».</p>
 
@@ -168,55 +164,53 @@
 <figure class="medio"><img src="img/13-caso-derivacion.jpg" alt=""><figcaption>Figura 15. Derivación al área que trata los datos.</figcaption></figure>
 <figure class="medio"><img src="img/14-caso-respuesta.jpg" alt=""><figcaption>Figura 16. Envío de la respuesta firmada y cierre.</figcaption></figure>
 
+<p>Además de recibir y responder, este perfil administra la configuración del canal: asigna los responsables por etapa y sede, define a qué sede van las solicitudes web, configura los plazos internos y los feriados, y revisa la bitácora. Quién administra la plataforma técnicamente sigue pendiente (Anexo C).</p>
+<h3>5.5 Responsables por etapa y sede</h3>
+<p>La tabla tiene una fila por sede (Oficina Central y las 16 direcciones regionales) y una columna por etapa: recibe y registra, admisibilidad y bloqueo, deriva, revisión jurídica, firma, responde y cierra, y reclamos ante la Agencia. Toque una celda para asignar a un usuario del perfil que hace esa etapa. Un caso cuya etapa no tiene responsable queda detenido y aparece en «Casos sin responsable». Más abajo se asigna el responsable de cada ámbito de datos.</p>
+<figure><img src="img/61-responsables.jpg" alt=""><figcaption>Figura 17. Responsables por etapa y sede.</figcaption></figure>
+<figure class="medio"><img src="img/62-editar-celda.jpg" alt=""><figcaption>Figura 18. Asignación de un responsable.</figcaption></figure>
+<h3>5.6 Plazos internos y feriados</h3>
+<p>Los plazos internos por etapa quedan vacíos hasta que la contraparte los defina; mientras tanto el canal controla sólo los plazos legales, que no se editan. Los feriados se descuentan de los días hábiles.</p>
+<figure><img src="img/63-parametros.jpg" alt=""><figcaption>Figura 19. Plazos internos, plazos legales y feriados.</figcaption></figure>
+<h3>5.7 Bitácora del canal</h3>
+<p>Registra las acciones sobre los casos y la configuración del canal.</p>
+<figure><img src="img/64-bitacora.jpg" alt=""><figcaption>Figura 20. Bitácora del canal.</figcaption></figure>
+
 <h2>6. Unidad Jurídica</h2>
 <div class="ficha-perfil"><p><b>Quién es:</b> la Unidad Jurídica, en una sola cuenta para todas las sedes. Según la reunión del 08-09-2026, Fiscalía resuelve en primera instancia si la solicitud procede.</p><p><b>Qué hace:</b> resuelve la admisibilidad y el bloqueo temporal, da el visto bueno jurídico (V°B°) a la propuesta de respuesta y responde los reclamos que notifique la Agencia.</p></div>
-<figure><img src="img/20-inicio-fiscalia.jpg" alt=""><figcaption>Figura 17. Inicio de la Unidad Jurídica.</figcaption></figure>
+<figure><img src="img/20-inicio-fiscalia.jpg" alt=""><figcaption>Figura 21. Inicio de la Unidad Jurídica.</figcaption></figure>
 <h3>6.1 Bloqueo temporal</h3>
 <p>Los bloqueos pendientes aparecen primero. Se resuelven en 2 días hábiles desde la recepción. Para rechazar, el fundamento es obligatorio, y la maqueta registra la comunicación electrónica del rechazo a la Agencia (art. 11).</p>
-<figure class="medio"><img src="img/21-caso-bloqueo.jpg" alt=""><figcaption>Figura 18. Resolución de un bloqueo temporal.</figcaption></figure>
+<figure class="medio"><img src="img/21-caso-bloqueo.jpg" alt=""><figcaption>Figura 22. Resolución de un bloqueo temporal.</figcaption></figure>
 <h3>6.2 Admisibilidad</h3>
 <p>Declare la solicitud admisible, pida antecedentes o indique que no procede con su causal y fundamento (por ejemplo, las del art. 23 inc. 2°). Si los antecedentes pedidos no llegaron a tiempo, puede denegar por esa razón.</p>
-<figure class="medio"><img src="img/22-caso-admisibilidad.jpg" alt=""><figcaption>Figura 19. Admisibilidad.</figcaption></figure>
+<figure class="medio"><img src="img/22-caso-admisibilidad.jpg" alt=""><figcaption>Figura 23. Admisibilidad.</figcaption></figure>
 <h3>6.3 Revisión jurídica</h3>
 <p>Revise la propuesta del área. Pulse «Conforme · pasa a firma» o devuélvala con observaciones, que son obligatorias.</p>
-<figure class="medio"><img src="img/23-caso-revision.jpg" alt=""><figcaption>Figura 20. Revisión jurídica de la propuesta.</figcaption></figure>
+<figure class="medio"><img src="img/23-caso-revision.jpg" alt=""><figcaption>Figura 24. Revisión jurídica de la propuesta.</figcaption></figure>
 <h3>6.4 Reclamos ante la Agencia</h3>
 <p>Cuando la Agencia notifica un reclamo, regístrelo con su fecha y folio. CONAF responde en 30 días corridos desde la notificación, prorrogables una vez por el mismo plazo (art. 41 d). Registre la respuesta enviada para cerrar el reclamo.</p>
-<figure class="medio"><img src="img/24-caso-reclamo.jpg" alt=""><figcaption>Figura 21. Reclamo ante la Agencia por responder.</figcaption></figure>
+<figure class="medio"><img src="img/24-caso-reclamo.jpg" alt=""><figcaption>Figura 25. Reclamo ante la Agencia por responder.</figcaption></figure>
+
+<h3>6.5 Reporte de vulneraciones (art. 14 sexies)</h3>
+<p>La Unidad Jurídica prepara el reporte de vulneraciones de las medidas de seguridad. El plazo y el medio de envío a la Agencia quedan pendientes de la validación de Fiscalía (pregunta F2). La maqueta no simula ese reporte.</p>
 
 <h2>7. Área que trata los datos</h2>
 <div class="ficha-perfil"><p><b>Quién es:</b> un analista por cada ámbito de datos de CONAF. Los ámbitos saldrán de la matriz de datos personales.</p><p><b>Qué hace:</b> localiza los datos, decide (acoge, acoge parcialmente o rechaza), redacta la propuesta de respuesta y la envía a revisión jurídica. Puede pedir prórroga al responsable de datos.</p></div>
-<figure><img src="img/30-inicio-area.jpg" alt=""><figcaption>Figura 22. Inicio del área que trata los datos.</figcaption></figure>
-<figure class="medio"><img src="img/31-caso-analisis.jpg" alt=""><figcaption>Figura 23. Análisis y propuesta de respuesta.</figcaption></figure>
+<figure><img src="img/30-inicio-area.jpg" alt=""><figcaption>Figura 26. Inicio del área que trata los datos.</figcaption></figure>
+<figure class="medio"><img src="img/31-caso-analisis.jpg" alt=""><figcaption>Figura 27. Análisis y propuesta de respuesta.</figcaption></figure>
 
 <h2>8. Director o directora</h2>
 <div class="ficha-perfil"><p><b>Quién es:</b> la Directora Ejecutiva en Oficina Central y los directores regionales, en una sola cuenta que firma las respuestas de todas las sedes. La ley dirige la solicitud al jefe superior del servicio (art. 23 inc. 3°). Si la firma se tramita en la plataforma o en Cero Papel, está por definir.</p><p><b>Qué hace:</b> revisa la respuesta y la firma. No deriva ni registra solicitudes.</p></div>
-<figure><img src="img/40-inicio-director.jpg" alt=""><figcaption>Figura 24. Inicio del director: respuestas por firmar.</figcaption></figure>
+<figure><img src="img/40-inicio-director.jpg" alt=""><figcaption>Figura 28. Inicio del director: respuestas por firmar.</figcaption></figure>
 <p>En una denegación total o parcial, la maqueta recuerda que la respuesta debe indicar la causa, los antecedentes y el plazo de 30 días hábiles para reclamar ante la Agencia (art. 11 inc. 4°). Escriba el número del documento y pulse «Firmar la respuesta».</p>
-<figure class="medio"><img src="img/41-caso-firma.jpg" alt=""><figcaption>Figura 25. Firma de la respuesta.</figcaption></figure>
+<figure class="medio"><img src="img/41-caso-firma.jpg" alt=""><figcaption>Figura 29. Firma de la respuesta.</figcaption></figure>
 
-<h2>9. Delegado de protección de datos</h2>
-<div class="ficha-perfil"><p><b>Quién es:</b> el delegado, si CONAF lo designa; la designación es voluntaria (art. 50).</p><p><b>Qué hace:</b> supervisa el cumplimiento: ve todos los casos, los plazos vencidos, los bloqueos pendientes, los reclamos ante la Agencia y los casos sin responsable; revisa la bitácora y los reportes, y deja observaciones en cualquier caso. No resuelve los casos.</p></div>
-<figure><img src="img/50-inicio-delegado.jpg" alt=""><figcaption>Figura 26. Inicio del delegado de protección de datos.</figcaption></figure>
-<figure class="medio"><img src="img/51-caso-delegado.jpg" alt=""><figcaption>Figura 27. Observación del delegado en un caso.</figcaption></figure>
-
-<h2>10. Administración del canal</h2>
-<div class="ficha-perfil"><p><b>Quién es:</b> quien administre la plataforma; si será la UIA o el Departamento de Informática está por definir.</p><p><b>Qué hace:</b> asigna los responsables por etapa y sede, define a qué sede van las solicitudes web, configura los plazos internos y los feriados, y revisa la bitácora.</p></div>
-<figure><img src="img/60-inicio-admin.jpg" alt=""><figcaption>Figura 28. Inicio de Administración.</figcaption></figure>
-<h3>10.1 Responsables por etapa y sede</h3>
-<p>La tabla tiene una fila por sede (Oficina Central y las 16 direcciones regionales) y una columna por etapa: recibe y registra, admisibilidad y bloqueo, deriva, revisión jurídica, firma, responde y cierra, y reclamos ante la Agencia. Toque una celda para asignar a un usuario del perfil que hace esa etapa. Un caso cuya etapa no tiene responsable queda detenido y aparece en «Casos sin responsable». Más abajo se asigna el responsable de cada ámbito de datos.</p>
-<figure><img src="img/61-responsables.jpg" alt=""><figcaption>Figura 29. Responsables por etapa y sede.</figcaption></figure>
-<figure class="medio"><img src="img/62-editar-celda.jpg" alt=""><figcaption>Figura 30. Asignación de un responsable.</figcaption></figure>
-<h3>10.2 Plazos internos y feriados</h3>
-<p>Los plazos internos por etapa quedan vacíos hasta que la contraparte los defina; mientras tanto el canal controla sólo los plazos legales, que no se editan. Los feriados se descuentan de los días hábiles.</p>
-<figure><img src="img/63-parametros.jpg" alt=""><figcaption>Figura 31. Plazos internos, plazos legales y feriados.</figcaption></figure>
-<figure><img src="img/64-bitacora.jpg" alt=""><figcaption>Figura 32. Bitácora del canal.</figcaption></figure>
-
-<h2>11. Calendario y reportes</h2>
+<h2>9. Calendario y reportes</h2>
 <p>El calendario muestra, día a día, los vencimientos legales, los bloqueos, los plazos de antecedentes y, si se definen, los plazos internos. En el teléfono se muestra como agenda con sólo los días que tienen vencimientos.</p>
-<figure><img src="img/70-calendario.jpg" alt=""><figcaption>Figura 33. Calendario de vencimientos.</figcaption></figure>
+<figure><img src="img/70-calendario.jpg" alt=""><figcaption>Figura 30. Calendario de vencimientos.</figcaption></figure>
 <p>Los reportes muestran las cifras del período (ingresadas, cerradas, cerradas en plazo y abiertas vencidas) y su distribución por derecho, vía, sede y estado. «Descargar Excel» genera una planilla de los casos del período sin RUN ni nombres.</p>
-<figure><img src="img/71-reportes.jpg" alt=""><figcaption>Figura 34. Reportes del canal.</figcaption></figure>
+<figure><img src="img/71-reportes.jpg" alt=""><figcaption>Figura 31. Reportes del canal.</figcaption></figure>
 
 <h2>Anexo A · Estados y etapas del caso</h2>
 <table>
@@ -246,14 +240,14 @@
 <h2 class="sin-salto">Anexo C · Definiciones pendientes</h2>
 <table>
   <tr><th>Definición</th><th>A quién</th></tr>
-  <tr><td>Responsables por etapa en Oficina Central y en cada región, y flujos de cada una</td><td>Delegado, Unidad de Participación Ciudadana y Transparencia</td></tr>
+  <tr><td>Responsables por etapa en Oficina Central y en cada región, y flujos de cada una</td><td>Delegado (si CONAF lo designa), Unidad de Participación Ciudadana y Transparencia</td></tr>
   <tr><td>Si la firma se tramita en la plataforma o en Cero Papel</td><td>Informática</td></tr>
   <tr><td>Si cada región tendrá su propia persona en las funciones de una sola cuenta (Encargado OIRS, Fiscalía, Director)</td><td>Contraparte</td></tr>
   <tr><td>Procedencia de la portabilidad ante órganos públicos</td><td>Fiscalía</td></tr>
   <tr><td>Plazo para aportar antecedentes y su efecto en el plazo de respuesta</td><td>Fiscalía</td></tr>
-  <tr><td>Canal disponible desde el 01-12-2026 mientras no exista la integración con Clave Única</td><td>Delegado · Informática</td></tr>
-  <tr><td>Contenidos del art. 14 ter: política, representante legal, seguridad, conservación, fuente, transferencias, decisiones automatizadas</td><td>Delegado</td></tr>
-  <tr><td>Ámbitos de datos y su responsable, a partir de la matriz de datos personales</td><td>Delegado</td></tr>
+  <tr><td>Canal disponible desde el 01-12-2026 mientras no exista la integración con Clave Única</td><td>Delegado (si CONAF lo designa) · Informática</td></tr>
+  <tr><td>Contenidos del art. 14 ter: política, representante legal, seguridad, conservación, fuente, transferencias, decisiones automatizadas</td><td>Delegado (si CONAF lo designa)</td></tr>
+  <tr><td>Ámbitos de datos y su responsable, a partir de la matriz de datos personales</td><td>Delegado (si CONAF lo designa)</td></tr>
   <tr><td>Quién administra la plataforma</td><td>UIA · Informática</td></tr>
 </table>
 </body></html>

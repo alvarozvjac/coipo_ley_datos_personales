@@ -154,19 +154,9 @@ with sync_playwright() as p:
         ok("Firmada · por enviar" in pg.locator("#capa").inner_text(), f"{nombre}: el firmante firma y el caso pasa a envío")
         pg.locator("#cerrar").click()
 
-        # --- Delegado: observación
-        entrar(pg, "Delegado")
-        pg.screenshot(path=str(SAL / f"{nombre}-14-inicio-delegado.png"))
-        tarjeta(pg, "Plazos vencidos")
-        pg.locator("[data-caso]:visible").first.click()
-        pg.fill("#a-dpo", "Priorizar la respuesta: el plazo legal venció.")
-        pg.locator("[data-a='dpo']").click()
-        ok("Observación del delegado" in pg.locator("#capa").inner_text(), f"{nombre}: el delegado deja una observación")
-        pg.locator("#cerrar").click()
-
-        # --- Administración: responsables por sede
-        entrar(pg, "Administración")
-        pg.screenshot(path=str(SAL / f"{nombre}-08-inicio-admin.png"))
+        # --- Encargado OIRS (incluye la antigua Administración del canal): responsables por sede
+        entrar(pg, "Encargado OIRS")
+        pg.screenshot(path=str(SAL / f"{nombre}-08-inicio-encargado.png"))
         tarjeta(pg, "Casos sin responsable")
         n0 = pg.locator("[data-caso]:visible").count()
         ok(n0 >= 2, f"{nombre}: hay {n0} casos sin responsable (Valparaíso, Los Lagos)")

@@ -52,11 +52,10 @@ function quienTxt(c) {
 }
 function visibleParaUsuario(c, u) {
   const r = RESP[c.sede];
-  if (u.perfil === "admin" || u.perfil === "delegado") return true;
+  if (u.perfil === "encargado") return true;   // ve y administra todo el canal
   if (u.perfil === "fiscalia") return r.admisibilidad === u.id || r.revision === u.id || r.reclamos === u.id;
   if (u.perfil === "gerencia") return AMBITOS.some(a => a.resp === u.id && a.k === c.ambito);
   if (u.perfil === "director") return r.firma === u.id;
-  if (u.perfil === "encargado") return ["recibe", "deriva", "responde"].some(k => r[k] === u.id);
   return false;
 }
 /* Reclamos ante la Agencia (art. 41): CONAF responde en 30 días corridos desde la notificación, prorrogables. */

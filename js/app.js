@@ -13,7 +13,7 @@ const grupo = () => !SESION ? null : ["solicitante", "encargado", "fiscalia"].in
 function pintarLogin() {
   const li = u => `<li><button type="button" class="l-usuario" data-u="${u.id}">${ico(PERFILES[u.perfil].ico)}<span><b>${esc(PERFILES[u.perfil].n)}</b><br><span class="peq tenue">${esc(u.cargo)}</span></span>${ico("flecha", "ico fin")}</button></li>`;
   // Los perfiles con una cuenta por sede ingresan a Oficina Central; las regiones no se eligen en el ingreso.
-  const porSede = perfil => { const u = USUARIOS.find(x => x.perfil === perfil && x.sede === "Oficina Central"); return `<li><div class="l-usuario l-sede">${ico(PERFILES[perfil].ico)}<span><b>${esc(PERFILES[perfil].n)}</b><br><span class="peq tenue">${esc(u.cargo)}</span></span><button type="button" class="boton" data-entrar="${u.id}">Ingresar</button></div></li>`; };
+  const porSede = perfil => { const u = USUARIOS.find(x => x.perfil === perfil && x.sede === "Oficina Central"); return `<li><button type="button" class="l-usuario l-sede" data-entrar="${u.id}">${ico(PERFILES[perfil].ico)}<span><b>${esc(PERFILES[perfil].n)}</b><br><span class="peq tenue">${esc(u.cargo)}</span></span>${ico("flecha", "ico fin")}</button></li>`; };
   $("#l-externo").innerHTML = USUARIOS.filter(u => u.perfil === "solicitante").map(li).join("");
   $("#l-interno").innerHTML = ["encargado", "fiscalia", "director", "gerencia"].map(porSede).join("");
   $$("#login [data-u]").forEach(b => b.onclick = () => entrar(b.dataset.u));

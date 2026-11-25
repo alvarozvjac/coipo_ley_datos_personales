@@ -62,7 +62,7 @@ with sync_playwright() as p:
         ok(y < (300 if tel else 400), f"{nombre}: el contenido empieza en y={y:.0f}")
         ok(pg.evaluate("document.documentElement.scrollWidth") <= op["viewport"]["width"], f"{nombre}: sin scroll horizontal en la página")
         ok(pg.locator(".portada").count() == 0, f"{nombre}: el solicitante entra directo a la página, sin portada simulada")
-        ok(pg.locator(".items-14ter li").count() == 12, f"{nombre}: la página muestra las 12 letras del art. 14 ter")
+        ok(pg.locator(".items-14ter li").count() == 6, f"{nombre}: la página muestra las letras a) a f) del art. 14 ter")
         pg.screenshot(path=str(SAL / f"{nombre}-02-pagina.png"))
         # Consultar mis solicitudes: pide Clave Única al elegirlo y luego abre el trámite
         pg.get_by_role("button", name="Consultar mis solicitudes").click()
@@ -112,8 +112,8 @@ with sync_playwright() as p:
         ok(pg.locator("form[data-ant]").count() == 0, f"{nombre}: los antecedentes se envían")
         pg.screenshot(path=str(SAL / f"{nombre}-05-mis.png"))
 
-        # --- Recepción Oficina Central
-        entrar(pg, "Encargado de Gestión")
+        # --- Recepción Oficina Central (Unidad Jurídica, que asume las funciones del Encargado de Gestión)
+        entrar(pg, "Unidad Jurídica")
         pg.screenshot(path=str(SAL / f"{nombre}-06-inicio-recepcion.png"))
         tarjeta(pg, "Mis tareas")
         pg.locator("[data-caso='DP-2027-000004']:visible").first.click()
@@ -169,18 +169,18 @@ with sync_playwright() as p:
         ok("Firmada · por enviar" in pg.locator("#capa").inner_text(), f"{nombre}: el firmante firma y el caso pasa a envío")
         pg.locator("#cerrar").click()
 
-        # --- Encargado de Gestión: cada sede tiene su equipo; el Encargado de Valparaíso ve sólo los casos de su sede
-        entrar(pg, "Encargado de Gestión", "Dirección Regional Valparaíso")
+        # --- Unidad Jurídica: cada sede tiene su equipo; la de Valparaíso ve sólo los casos de su sede
+        entrar(pg, "Unidad Jurídica", "Dirección Regional Valparaíso")
         pg.screenshot(path=str(SAL / f"{nombre}-08-inicio-encargado.png"))
         tarjeta(pg, "Todos los casos")
         filas = pg.locator("[data-caso]:visible").all_inner_texts()
-        ok(all("Valparaíso" in f for f in filas), f"{nombre}: el Encargado de Valparaíso ve sólo casos de su sede ({len(filas)})")
+        ok(all("Valparaíso" in f for f in filas), f"{nombre}: la Unidad Jurídica de Valparaíso ve sólo casos de su sede ({len(filas)})")
         pg.get_by_role("button", name="Volver al inicio").click()
         tarjeta(pg, "Responsables por etapa y sede")
         pg.screenshot(path=str(SAL / f"{nombre}-09-responsables.png"))
         ok(pg.evaluate("document.documentElement.scrollWidth") <= op["viewport"]["width"], f"{nombre}: la tabla de responsables no desborda la página")
         pg.locator(".celda-resp[data-s='Dirección Regional Valparaíso'][data-k='recibe']").click()
-        pg.select_option("#e-u", "enc6")  # Encargado de Valparaíso (cuenta propia de la sede)
+        pg.select_option("#e-u", "fis6")  # Unidad Jurídica de Valparaíso (cuenta propia de la sede)
         pg.locator("#e-ok").click()
         ok(pg.locator("#e-ok").count() == 0, f"{nombre}: al asignar el responsable, se cierra el editor")
         pg.get_by_role("button", name="Volver al inicio").click()

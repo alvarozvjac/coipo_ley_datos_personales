@@ -2,22 +2,20 @@
 "use strict";
 
 /* ---------- Página «Protección de datos personales» (art. 14 ter) ---------- */
-const ITEMS_14TER = [ // art. 14 ter de la Ley N° 21.719, letras a) a l)
-  ["a", "Política de tratamiento de datos personales", "La política que adopta CONAF, con su fecha y versión.", porDefinir("Por aprobar")],
-  ["b", "Responsable, representante legal y encargado de prevención", "Corporación Nacional Forestal, su representante legal y, si existe, el encargado de prevención.", porDefinir("Por confirmar")],
-  ["c", "Domicilio y medios para presentar solicitudes", "Formulario web con Clave Única y formulario físico en las Oficinas de Partes de Oficina Central y de las direcciones regionales. Domicilio postal y correo electrónico por publicar.", chip("Vías confirmadas · 28-10-2026", "c-disp", "✓")],
-  ["d", "Datos que trata CONAF", "Categorías de datos, universo de personas, destinatarios, finalidades y base de legitimidad de cada tratamiento. Sale de la matriz de datos personales.", porDefinir("Por completar")],
-  ["e", "Política y medidas de seguridad", "La política y las medidas para proteger las bases de datos personales.", porDefinir("Por aprobar")],
-  ["f", "Sus derechos ante CONAF", "Acceso, rectificación, supresión y oposición, y bloqueo temporal, en los términos del art. 23, que se aplican a CONAF (validación pendiente de Fiscalía).", chip("Ley vigente desde 01-12-2026", "c-res", "■")],
-  ["g", "Reclamo ante la Agencia", "Si CONAF rechaza su solicitud o no responde a tiempo, puede reclamar ante la Agencia de Protección de Datos Personales dentro de 30 días hábiles.", chip("Art. 11 y 41", "c-res", "■")],
-  ["h", "Transferencias internacionales", "Si CONAF transfiere datos a otro país u organización internacional y con qué garantías.", porDefinir("Por confirmar")],
-  ["i", "Período de conservación", "Por cuánto tiempo se conservan los datos.", porDefinir("Por confirmar")],
-  ["j", "Fuente de los datos", "De dónde provienen los datos y si proceden de fuentes de acceso público.", porDefinir("Por confirmar")],
-  ["k", "Retiro del consentimiento", "Cuando un tratamiento se basa en el consentimiento, el derecho a retirarlo en cualquier momento.", porDefinir("Por confirmar si aplica")],
-  ["l", "Decisiones automatizadas", "Si existen decisiones automatizadas o perfiles, la lógica aplicada y sus consecuencias.", porDefinir("Por confirmar")]
+/* Letras a) a f) del art. 14 ter, según el correo de la Unidad de Participación Ciudadana y Transparencia del 19-11-2026;
+   el título de la letra c) es el que propuso la Secretaría de Asuntos Institucionales ese mismo día. Lo que antes eran las
+   letras h) a l) de esta página (transferencias internacionales, conservación, fuentes, decisiones automatizadas) va dentro
+   del Catálogo de Datos Personales de la letra d). La lectura de las letras de la ley la valida Fiscalía. */
+const ITEMS_14TER = [
+  ["a", "Política de tratamiento de datos personales", "La política de tratamiento de datos personales que adopta CONAF, con su fecha y versión.", porDefinir("Por aprobar")],
+  ["b", "Responsable de datos y representante legal", "La individualización del responsable de datos (Corporación Nacional Forestal) y de su representante legal, y la identificación del encargado de prevención, si existe.", porDefinir("Por confirmar")],
+  ["c", "Canales para presentación de solicitudes", "Formulario web con Clave Única y formulario físico en la Oficina de Partes de Oficina Central y de cada dirección regional. Domicilio postal, correo electrónico y formulario de contacto por publicar.", chip("Vías confirmadas · 28-10-2026", "c-disp", "✓")],
+  ["d", "Datos que trata CONAF", "El Catálogo de Datos Personales de CONAF: cada actividad de tratamiento con su responsable, las categorías de datos, las personas a quienes se refieren, la finalidad, la base de legitimidad, los destinatarios, el período de conservación y la fuente de los datos, además de las transferencias internacionales y las decisiones automatizadas, si las hay.", porDefinir("Catálogo recibido · por publicar")],
+  ["e", "Política y medidas de seguridad", "La política y las medidas de seguridad adoptadas para proteger las bases de datos personales que administra CONAF.", porDefinir("Por revisar con Informática")],
+  ["f", "Derecho a reclamar ante la Agencia", "Si CONAF rechaza su solicitud o no responde a tiempo, puede reclamar ante la Agencia de Protección de Datos Personales dentro de 30 días hábiles.", chip("Art. 11 y 41", "c-res", "■")]
 ];
 function vPagina() {
-  return cab("Protección de datos personales", "Información que CONAF publica sobre el tratamiento de sus datos y cómo ejercer sus derechos.", "Art. 14 ter, letras a) a l) · propuesta") +
+  return cab("Protección de datos personales", "Información que CONAF publica sobre el tratamiento de sus datos y cómo ejercer sus derechos.", "Art. 14 ter, letras a) a f) · propuesta") +
     `<div class="acciones" style="margin-bottom:var(--e-5)"><button class="boton grande" type="button" onclick="irConClaveUnica('solicitud')">${ico("plus")}Presentar una solicitud</button><button class="boton secundario grande" type="button" onclick="irConClaveUnica('mis')">${ico("buscar")}Consultar mis solicitudes</button></div>
     <ol class="items-14ter">${ITEMS_14TER.map(([l, t, d, e]) => `<li><span class="n num">${l}</span><div><h3>${t}</h3><p>${d}</p></div><div class="e">${e}</div></li>`).join("")}</ol>
     <p class="nota" style="margin-top:var(--e-4)">¿No tiene Clave Única? Puede presentar su solicitud con el formulario físico en la Oficina de Partes de Oficina Central o de cualquier dirección regional de CONAF.</p>`;

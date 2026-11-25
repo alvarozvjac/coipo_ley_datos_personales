@@ -51,11 +51,11 @@ function quienTxt(c) {
   return chip("Sin responsable", "c-malo", "!");
 }
 /* Sedes en que el usuario tiene algún responsable asignado. */
-const sedesDeEquipo = u => SEDES.filter(s => Object.entries(RESP[s]).some(([k, v]) => k !== "prueba" && v === u.id));
+const sedesDeEquipo = u => u.perfil === "delegado" ? SEDES : SEDES.filter(s => Object.entries(RESP[s]).some(([k, v]) => k !== "prueba" && v === u.id));
 function visibleParaUsuario(c, u) {
   const r = RESP[c.sede];
-  if (u.perfil === "encargado") return ["recibe", "deriva", "responde"].some(k => r[k] === u.id);   // ve y administra su sede
-  if (u.perfil === "fiscalia") return r.admisibilidad === u.id || r.revision === u.id || r.reclamos === u.id;
+  if (u.perfil === "delegado") return true;   // seguimiento nacional, sólo lectura
+  if (u.perfil === "fiscalia") return ["recibe", "admisibilidad", "deriva", "revision", "responde", "reclamos"].some(k => r[k] === u.id);   // gestiona su sede
   if (u.perfil === "gerencia") return c.etapa === "analisis" && r.ambito === u.id;   // sólo mientras le toca
   if (u.perfil === "director") return c.etapa === "firma" && r.firma === u.id;   // sólo mientras le toca
   return false;

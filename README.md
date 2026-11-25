@@ -38,7 +38,7 @@ Ajustes tras la revisión de la maqueta 4.2:
 
 ## Base de estilos
 
-Las hojas de `css/semilla/` son copia sin editar de `semilla/ESQUELETO/frontend/src` de `Sud-Austral/coipo_master_produccion` en el commit `0853a0e`. Los tokens y el banner de la Secretaría de Asuntos Institucionales se generaron con `semilla/sembrar.py`. Lo propio va en `css/con012.css`, sólo con tokens. Detalle en `css/semilla/LEEME.md`.
+Las hojas de `css/semilla/` son copia sin editar de `semilla/ESQUELETO/frontend/src` de `Sud-Austral/coipo_master_produccion`, alineadas el 25-11-2026 con el commit `fc1907b` salvo `tipografia.css`, que se queda en `0853a0e` a propósito. Los tokens y el banner de la Secretaría de Asuntos Institucionales se generaron con `semilla/sembrar.py`. Lo propio va en `css/con012.css`, sólo con tokens. Detalle en `css/semilla/LEEME.md`.
 
 La fábrica cambió su tipografía el 14-11-2026 (pila de Apple e Inter fuera de Apple). Esa decisión rige hacia adelante; esta maqueta conserva Instrument Sans, Fraunces y JetBrains Mono, autoalojadas en `fuentes/`.
 

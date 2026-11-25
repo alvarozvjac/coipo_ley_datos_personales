@@ -71,7 +71,7 @@ por perfil y capturas reales de la maqueta. Se regenera con `manual/capturar.py`
 
 ```bash
 python -X utf8 pruebas/probar_v43.py          # 32 comprobaciones: cuentas por sede, visibilidad por perfil y sin nombres ficticios
-python -X utf8 pruebas/probar_v4.py           # 57 comprobaciones del canal, escritorio y teléfono
+python -X utf8 pruebas/probar_v4.py           # 65 comprobaciones del canal, escritorio y teléfono
 ```
 
 Requiere `playwright` para Python con Chromium. Las capturas quedan en `pruebas/capturas/`

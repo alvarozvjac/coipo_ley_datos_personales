@@ -124,57 +124,52 @@ def generar():
     diagramas["solicitante"] = dibujar("Flujo de la persona solicitante", n, a,
                                         "Ley 21.719, art. 14 ter y 11. El plazo legal y el reclamo se informan en el acuse y en la respuesta.")
 
-    # 2. Encargado de Gestión
+    # 2. Unidad Jurídica (asume las funciones del Encargado de Gestión desde la reunión del 18-11-2026)
     n = {}
-    caja(n, "a1", 1, 0, "Recibe la solicitud: web o Oficina de Partes")
-    caja(n, "a2", 2, 0, "Verifica identidad y representación")
-    caja(n, "d1", 3, 0, "¿Identidad verificada?", "dec")
-    caja(n, "a3", 3, 1, "Pide acreditar la identidad al titular")
-    caja(n, "a4", 4, 0, "Pasa a admisibilidad")
-    caja(n, "x1", 4, 1, "Unidad Jurídica resuelve la admisibilidad", "ext")
-    caja(n, "a5", 4, 2, "Deriva al Área que trata los datos (ámbito)")
-    caja(n, "x2", 3, 2, "Área analiza y propone la respuesta", "ext")
-    caja(n, "x3", 2, 2, "Unidad Jurídica revisa; Director firma", "ext")
-    caja(n, "a6", 1, 2, "Recibe la respuesta firmada")
-    caja(n, "a7", 1, 3, "Responde y cierra: correo, carta o retiro")
-    caja(n, "e1", 2, 3, "Caso cerrado", "end")
-    a = [("a1", "r", "a2", "l", "", False), ("a2", "r", "d1", "l", "", False), ("d1", "b", "a3", "t", "no", False),
-         ("a3", "l", "a2", "b", "vuelve a verificar", True), ("d1", "r", "a4", "l", "sí", False),
-         ("a4", "b", "x1", "t", "", False), ("x1", "b", "a5", "t", "admisible", False),
-         ("a5", "l", "x2", "r", "", False), ("x2", "l", "x3", "r", "", False), ("x3", "l", "a6", "r", "", False),
-         ("a6", "b", "a7", "t", "", False), ("a7", "r", "e1", "l", "", False)]
-    diagramas["encargado"] = dibujar("Flujo del Encargado de Gestión", n, a,
-                                      "Los plazos internos y la prórroga los registra el Encargado (Administración del canal, en el mismo perfil).")
-
-    # 3. Unidad Jurídica
-    n = {}
-    caja(n, "b1", 1, 0, "Recibe la solicitud con identidad verificada", "ext")
-    caja(n, "b2", 2, 0, "Resuelve el bloqueo temporal (2 días hábiles), si lo hay")
+    caja(n, "j1", 1, 0, "Recibe la solicitud: web o Oficina de Partes")
+    caja(n, "j2", 2, 0, "Verifica identidad; resuelve el bloqueo (2 días hábiles), si lo hay")
     caja(n, "d1", 3, 0, "¿Procede? (art. 23 inc. 2°)", "dec")
-    caja(n, "b3", 4, 0, "Declara admisible")
-    caja(n, "b4", 3, 1, "No procede: causal y fundamento; se informa el derecho", "end")
-    caja(n, "b6", 4, 1, "El Encargado deriva al Área", "ext")
-    caja(n, "b7", 4, 2, "El Área propone la respuesta", "ext")
-    caja(n, "d2", 3, 2, "¿Conforme con el fundamento?", "dec")
-    caja(n, "b10", 2, 2, "Devuelve con observaciones al Área")
-    caja(n, "b9", 3, 3, "Pasa a firma: el Director firma", "ext")
-    caja(n, "b12", 1, 3, "Reclamo ante la Agencia: responde en 30 días corridos", "side")
-    a = [("b1", "r", "b2", "l", "", False), ("b2", "r", "d1", "l", "", False), ("d1", "r", "b3", "l", "sí", False),
-         ("d1", "b", "b4", "t", "no", False), ("b3", "b", "b6", "t", "", False), ("b6", "b", "b7", "t", "", False),
-         ("b7", "l", "d2", "r", "", False), ("d2", "l", "b10", "r", "no", False), ("d2", "b", "b9", "t", "sí", False)]
-    diagramas["fiscalia"] = dibujar("Flujo de la Unidad Jurídica", n, a,
-                                     "Si faltan antecedentes, se piden antes de decidir; si no llegan, se deniega (acción del Encargado y la Unidad Jurídica).")
+    caja(n, "j3", 4, 0, "Declara admisible")
+    caja(n, "e1", 3, 1, "No procede: causal y fundamento; se informa el derecho", "end")
+    caja(n, "j4", 4, 1, "Deriva al Área que trata los datos (ámbito)")
+    caja(n, "x1", 4, 2, "El Área analiza y propone la respuesta", "ext")
+    caja(n, "d2", 3, 2, "¿Conforme con el fundamento? (V°B°)", "dec")
+    caja(n, "j5", 2, 2, "Devuelve con observaciones al Área")
+    caja(n, "x2", 3, 3, "El Director firma la respuesta", "ext")
+    caja(n, "j6", 2, 3, "Envía la respuesta y cierra: correo, carta o retiro")
+    caja(n, "e2", 1, 3, "Caso cerrado", "end")
+    caja(n, "s1", 1, 1, "Prórroga: una vez, hasta 30 días corridos", "side")
+    caja(n, "s2", 1, 2, "Reclamo ante la Agencia: responde en 30 días corridos", "side")
+    a = [("j1", "r", "j2", "l", "", False), ("j2", "r", "d1", "l", "", False), ("d1", "r", "j3", "l", "sí", False),
+         ("d1", "b", "e1", "t", "no", False), ("j3", "b", "j4", "t", "", False), ("j4", "b", "x1", "t", "", False),
+         ("x1", "l", "d2", "r", "", False), ("d2", "l", "j5", "r", "no", False), ("d2", "b", "x2", "t", "sí", False),
+         ("x2", "l", "j6", "r", "", False), ("j6", "l", "e2", "r", "", False)]
+    diagramas["juridica"] = dibujar("Flujo de la Unidad Jurídica", n, a,
+                                     "Si faltan antecedentes, los pide antes de decidir. También asigna responsables, plazos internos y feriados.")
+
+    # 3. Delegado de protección de datos (seguimiento nacional, sólo lectura)
+    n = {}
+    caja(n, "p1", 1, 0, "Revisa el panel de alertas por sede")
+    caja(n, "d1", 2, 0, "¿Alguna sede con alertas?", "dec")
+    caja(n, "p2", 3, 0, "Abre la sede y el caso (sólo lectura)")
+    caja(n, "p3", 4, 0, "Avisa a la Unidad Jurídica de la sede")
+    caja(n, "x1", 4, 1, "La Unidad Jurídica tramita el caso", "ext")
+    caja(n, "p4", 2, 1, "Revisa reportes nacionales y bitácora")
+    a = [("p1", "r", "d1", "l", "", False), ("d1", "r", "p2", "l", "sí", False), ("p2", "r", "p3", "l", "", False),
+         ("p3", "b", "x1", "t", "", False), ("d1", "b", "p4", "t", "no", False)]
+    diagramas["delegado"] = dibujar("Flujo del Delegado de protección de datos", n, a,
+                                     "No tramita casos ni ve el RUN completo. Si se le avisará también por correo está por definir.")
 
     # 4. Área que trata los datos
     n = {}
-    caja(n, "g1", 1, 0, "Recibe el caso derivado por el Encargado", "ext")
+    caja(n, "g1", 1, 0, "Recibe el caso derivado por la Unidad Jurídica", "ext")
     caja(n, "g2", 2, 0, "Localiza los datos del ámbito")
     caja(n, "g3", 3, 0, "¿Qué decide? Acoge, acoge en parte o rechaza", "dec")
     caja(n, "g4", 3, 1, "Redacta la propuesta con su fundamento")
     caja(n, "g5", 2, 1, "Envía la propuesta a revisión jurídica")
     caja(n, "g6", 1, 1, "Unidad Jurídica revisa (V°B°)", "ext")
     caja(n, "g7", 1, 2, "Si la devuelven: revisa de nuevo y corrige", "step")
-    caja(n, "g8", 2, 2, "Pide prórroga al Encargado si falta plazo")
+    caja(n, "g8", 2, 2, "Pide prórroga a la Unidad Jurídica si falta plazo")
     a = [("g1", "r", "g2", "l", "", False), ("g2", "r", "g3", "l", "", False), ("g3", "b", "g4", "t", "decide", False),
          ("g4", "l", "g5", "r", "", False), ("g5", "l", "g6", "r", "", False), ("g6", "b", "g7", "t", "devuelto", True),
          ("g2", "b", "g8", "t", "si falta plazo", True)]
@@ -187,8 +182,8 @@ def generar():
     caja(n, "h2", 2, 0, "Revisa la respuesta y su fundamento")
     caja(n, "h3", 3, 0, "¿La firma?", "dec")
     caja(n, "h4", 3, 1, "Firma e indica el número del documento")
-    caja(n, "h5", 2, 1, "Devuelve la respuesta firmada al Encargado", "ext")
-    caja(n, "h6", 1, 1, "El Encargado envía la respuesta y cierra", "ext")
+    caja(n, "h5", 2, 1, "Devuelve la respuesta firmada a la Unidad Jurídica", "ext")
+    caja(n, "h6", 1, 1, "La Unidad Jurídica envía la respuesta y cierra", "ext")
     caja(n, "h7", 4, 0, "No firma: devuelve con observaciones a la Unidad Jurídica", "ext")
     a = [("h1", "r", "h2", "l", "", False), ("h2", "r", "h3", "l", "", False), ("h3", "b", "h4", "t", "sí", False),
          ("h4", "l", "h5", "r", "", False), ("h5", "l", "h6", "r", "", False), ("h3", "r", "h7", "l", "no", False)]

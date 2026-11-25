@@ -296,7 +296,29 @@
   --info: #93bfe6;
 }
 
-[data-theme='inmersivo'] body {
+/* ── El esquema de color, en la RAÍZ ────────────────────────────────────────
+   Lo que el tema oscuro NO puede pintar con tokens: las barras de scroll, los
+   desplegables nativos de `<select>`, el calendario de `<input type=date>`, el
+   relleno automático y el lienzo de la ventana. Sin esto, una aplicación en tema
+   oscuro tiene barras y desplegables blancos — el defecto que delata que el oscuro
+   está pintado por encima en vez de declarado.
+
+   En `:root` y NO en `body` (hasta el 2026-11-16 iba en `body`): el navegador mira
+   el elemento raíz para el lienzo y las barras de la ventana, y con la propiedad
+   sólo en `body` esas dos superficies se quedaban en claro. La base es siempre
+   `light dark`; cuando la persona ELIGIÓ un tema, los controles nativos lo siguen
+   a él y no al sistema. `index.html` declara lo mismo en `<meta name="color-scheme">`
+   para antes de que cargue esta hoja. */
+:root {
+  color-scheme: light dark;
+}
+
+:root[data-theme='claro'] {
+  color-scheme: light;
+}
+
+:root[data-theme='oscuro'],
+:root[data-theme='inmersivo'] {
   color-scheme: dark;
 }
 
@@ -324,27 +346,9 @@ body {
      Fonts): las familias, sus pesos y el porqué viven en `tipografia.css`. */
   /* Con respaldo: una página que cargue esta hoja sin `tipografia.css` (el arnés de
      `verificar-titulo` lo hacía) caía en Times, el serif por defecto del navegador. */
-  font-family: var(--letra-texto, system-ui, sans-serif);
+  font-family: var(--letra-texto, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif);
   font-optical-sizing: auto;
   font-kerning: normal;
-
-  /* Lo que el tema oscuro NO puede pintar con tokens: las barras de scroll, los
-     desplegables nativos de `<select>`, el calendario de `<input type=date>` y
-     el relleno automático del navegador. Sin esta línea, una aplicación en tema
-     oscuro tiene barras y desplegables blancos — el defecto que delata que el
-     oscuro está pintado por encima en vez de declarado. */
-  color-scheme: light dark;
-}
-
-/* Y cuando la persona ELIGIÓ un tema, los controles nativos lo siguen a él y no al
-   sistema. Con sólo `light dark`, quien elige claro con el sistema en oscuro veía
-   una página clara con barras y desplegables oscuros. */
-[data-theme='claro'] body {
-  color-scheme: light;
-}
-
-[data-theme='oscuro'] body {
-  color-scheme: dark;
 }
 
 /* ── El salto al contenido ───────────────────────────────────────────────────

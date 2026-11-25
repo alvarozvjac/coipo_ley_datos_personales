@@ -42,8 +42,8 @@
     "desdePx": 875,
     "hastaPx": 2704,
     "anchoAssetPx": 3032,
-    "estado": "MEDIDO_EL_2026-10-05_EN_LOS_7_ASSETS",
-    "_comoSeComprueba": "frontend/scripts/verificar-titulo.mjs vuelve a medir la marca, el campo plano y el remate sobre public/banner.jpg con sharp y exige que esta zona no toque ninguno. En la fabrica bloquea; en la aplicacion avisa (`continue-on-error`) hasta que se calibre el margen",
+    "estado": "MEDIDO_EL_2026-10-05_SOBRE_LOS_7_ASSETS_DE_ENTONCES",
+    "_comoSeComprueba": "`npm run verificar:titulo` (frontend/scripts/verificar-titulo.ts) vuelve a medir la marca, el campo plano y el remate sobre public/banner.jpg de ESTA gerencia y exige que esta zona no toque ninguno. En la fabrica bloquea; en la aplicacion avisa (`continue-on-error`) hasta que se calibre el margen",
     "_porQueHastaPx": "= remate (2744) - 40: el aire es DECISION DE MAQUETA, no una medida. Blanco sobre el remate da 3,88:1 y AA exige 4,5:1 (UI-5)",
     "fuente": "medido el 2026-10-05 sobre identidad/*_banner_*.jpg: marca 669-819, campo plano 858/875-2743, remate desde 2744. Ver el comentario de TITULO_DESDE_PX en semilla/sembrar.py"
   },

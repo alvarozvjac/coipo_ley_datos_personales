@@ -26,7 +26,7 @@
    corrige. Con `@property` y `syntax: "<number>"` el valor malo se descarta y vale el
    `initial-value`, elegido para que el texto quede FUERA de la pantalla: un titulo que no se ve
    se nota; uno encima de la marca se cuela. Firefox anterior a la 128 no entiende `@property`:
-   ahi lo cubre scripts/verificar-titulo.mjs, que mide los tokens que el navegador calcula. */
+   ahi lo cubre scripts/verificar-titulo.ts, que mide los tokens que el navegador calcula. */
 @property --ancho-asset {
   syntax: "<number>";
   inherits: true;
@@ -186,7 +186,7 @@
 
    EL PRECIO: este texto no adopta la paleta que la persona eligio. Es una decision de maqueta,
    no una medida. Si se prefiere respetarla, se borra este bloque y se quita de
-   scripts/verificar-titulo.mjs la pasada de colores forzados, que sin el bloque ve la placa
+   scripts/verificar-titulo.ts la pasada de colores forzados, que sin el bloque ve la placa
    (codigo W). */
 @media (forced-colors: active) {
   .banner-titulo {

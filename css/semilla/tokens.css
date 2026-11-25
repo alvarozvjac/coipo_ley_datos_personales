@@ -2,12 +2,13 @@
    ==================================================================
 
    Cada número de aquí sale de `src/marca.json`: o es una MEDIDA del JPEG de esta
-   gerencia (la razón de aspecto), o una zona que se midió una vez sobre los siete.
-   Los que son decisión de maqueta lo dicen.
+   gerencia (la razón de aspecto), o una zona que se midió una vez sobre los siete
+   banners de entonces (2026-10-05; hoy son nueve gerencias, y `verificar:titulo`
+   la vuelve a medir sobre el de ESTA). Los que son decisión de maqueta lo dicen.
 
    QUIÉN VIGILA QUÉ. `scripts/verify-banner.mjs` compara el alto PINTADO contra
    `src/marca.json`, o sea lo que dependa de `--razon-banner` y `--alto-minimo`; NO
-   mira la zona del título. Esa la comprueba `scripts/verificar-titulo.mjs` contra el
+   mira la zona del título. Esa la comprueba `scripts/verificar-titulo.ts` contra el
    JPEG (`--ancho-asset`, `--titulo-desde`, `--titulo-hasta`): en la fábrica bloquea,
    en la aplicación avisa mientras se calibra el margen.
 

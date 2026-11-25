@@ -84,9 +84,9 @@ python -X utf8 pruebas/probar_v4.py           # 65 comprobaciones del canal, esc
 ```
 
 Requiere `playwright` para Python con Chromium. Las capturas quedan en `pruebas/capturas/`
-(no se versionan). Las pruebas de la v3.x (`recorrido_caso.py`, `probar_v3*.py`) corresponden
-a la versión 3.x, que queda en el historial (commit `775435f`); `probar_v43.py` corresponde a
-la v4.3 y a la v4.4, y sale del árbol con la v5.
+(no se versionan). Las pruebas de versiones anteriores quedan en el historial: las de la v3.x
+(`recorrido_caso.py`, `probar_v3*.py` y `cedula_ficticia.png`) salen del árbol el 25-11-2026,
+y `probar_v43.py`, de la v4.3 y la v4.4, sale con la v5.
 
 ## Contenido del repositorio
 

@@ -1,7 +1,9 @@
 /* CON012 · datos de la maqueta. Todo es ficticio salvo lo marcado con su fuente.
    Marco normativo: Ley N° 21.719 (texto de la BCN, versión con vigencia diferida al 01-12-2026, en los antecedentes
    del proyecto). Antecedentes de la contraparte: correo del delegado de protección de datos del 28-10-2026 (vías de
-   ingreso confirmadas; perfiles y flujos por levantar) y observaciones de la reunión del 15-10-2026. */
+   ingreso confirmadas; perfiles y flujos por levantar), observaciones de la reunión del 15-10-2026, reunión del
+   18-11-2026 (Unidad Jurídica fusionada con el Encargado de Gestión; perfil del delegado para el seguimiento nacional)
+   y correo de Transparencia del 19-11-2026 (art. 14 ter, letras a) a f)). */
 "use strict";
 
 /* ---------- Parámetros del canal ---------- */
@@ -58,25 +60,26 @@ const ETAPAS = [
   { k: "respuesta", n: "Respuesta y cierre", col: "responde", hace: "Envía la respuesta escrita, guarda el respaldo y comunica a los cesionarios (art. 11)." }
 ];
 const ETAPA = Object.fromEntries(ETAPAS.map(e => [e.k, e]));
-const COLS = [["recibe", "Recibe y registra", "encargado"], ["admisibilidad", "Admisibilidad y bloqueo", "fiscalia"], ["deriva", "Deriva", "encargado"], ["ambito", "Análisis y propuesta", "gerencia"], ["revision", "Revisión jurídica", "fiscalia"], ["firma", "Firma", "director"], ["responde", "Responde y cierra", "encargado"], ["reclamos", "Reclamos ante la Agencia", "fiscalia"]];
-/* Una cuenta por función y sede: Oficina Central y cada dirección regional tienen su propio Encargado, Unidad Jurídica y Director (cuentas de prueba). */
+const COLS = [["recibe", "Recibe y registra", "fiscalia"], ["admisibilidad", "Admisibilidad y bloqueo", "fiscalia"], ["deriva", "Deriva", "fiscalia"], ["ambito", "Análisis y propuesta", "gerencia"], ["revision", "Revisión jurídica", "fiscalia"], ["firma", "Firma", "director"], ["responde", "Responde y cierra", "fiscalia"], ["reclamos", "Reclamos ante la Agencia", "fiscalia"]];
+/* Una cuenta por función y sede: Oficina Central y cada dirección regional tienen su propia Unidad Jurídica, Director y Área (cuentas de prueba).
+   Desde la reunión del 18-11-2026 la Unidad Jurídica de cada sede asume también las funciones del Encargado de Gestión. */
 const PERFIL_EN = (s, k) => COLS.find(c => c[0] === k)[2];
-const RECEPTOR = ["encargado"];   // perfiles que reciben y registran
+const RECEPTOR = ["fiscalia"];   // perfiles que reciben y registran (incluido el formulario físico de la Oficina de Partes)
 
 /* ---------- Perfiles: derivados de las funciones del canal ---------- */
 const PERFILES = {
   solicitante: { n: "Persona solicitante", ico: "user", d: "Titular, representante o heredero. Presenta solicitudes y consulta su estado." },
-  encargado: { n: "Encargado de Gestión", ico: "oficina", d: "Recibe y registra las solicitudes de su sede (incluida la Oficina de Partes), verifica identidad, deriva, responde y prorroga. Asigna los responsables por etapa y sede, define plazos internos y feriados, y lleva la bitácora." },
-  fiscalia: { n: "Unidad Jurídica", ico: "balanza", d: "Admisibilidad, bloqueo temporal, revisión jurídica (V°B°), reclamos ante la Agencia y reporte de vulneraciones (art. 14 sexies), en su sede." },
+  fiscalia: { n: "Unidad Jurídica", ico: "balanza", d: "Gestiona el canal en su sede: recibe y registra las solicitudes (incluida la Oficina de Partes), verifica identidad, resuelve la admisibilidad y el bloqueo temporal, deriva, hace la revisión jurídica (V°B°), responde, prorroga y atiende los reclamos ante la Agencia y el reporte de vulneraciones (art. 14 sexies). Asigna responsables por etapa y sede, plazos internos y feriados." },
+  delegado: { n: "Delegado de protección de datos", ico: "escudo", d: "Seguimiento nacional: ve las solicitudes de todas las sedes, las alertas de plazo por sede, los reportes y la bitácora. No tramita casos." },
   director: { n: "Director o directora", ico: "firma", d: "Revisa y firma las respuestas de su sede. No deriva." },
   gerencia: { n: "Área que trata los datos", ico: "equipo", d: "Analiza los casos de sus ámbitos en su sede y propone la respuesta. Sólo ve los casos en su etapa de análisis." }
 };
 const USUARIOS_CANAL = [
-  { id: "u1", perfil: "solicitante", nom: "Carolina Andrea Muñoz Pérez", run: runFicticio(16482337), cargo: "Titular de los datos" }
+  { id: "u1", perfil: "solicitante", nom: "Carolina Andrea Muñoz Pérez", run: runFicticio(16482337), cargo: "Titular de los datos" },
+  { id: "dpo", perfil: "delegado", sede: "Oficina Central", cargo: "Nivel nacional" }   // una sola cuenta, para todas las sedes
 ];
-/* Un Encargado, una Unidad Jurídica, un Director y un Área que trata los datos por sede (Oficina Central y cada región). Cuentas de prueba, sin nombres de personas. */
+/* Una Unidad Jurídica, un Director y un Área que trata los datos por sede (Oficina Central y cada región). Cuentas de prueba, sin nombres de personas. */
 const EQUIPO_SEDE = SEDES.flatMap((s, i) => [
-  { id: "enc" + i, perfil: "encargado", sede: s, cargo: s },
   { id: "fis" + i, perfil: "fiscalia", sede: s, cargo: s },
   { id: "dir" + i, perfil: "director", sede: s, cargo: s },
   { id: "ger" + i, perfil: "gerencia", sede: s, cargo: s }
@@ -86,7 +89,7 @@ const U = Object.fromEntries(USUARIOS.map(u => [u.id, u]));
 const nomU = id => U[id] ? PERFILES[U[id].perfil].n : "—";   // los usuarios de prueba se nombran por su perfil
 
 /* Responsables por sede y etapa: cada sede tiene su equipo (cuentas de prueba). Los ámbitos siguen a nivel nacional. */
-const RESP = Object.fromEntries(SEDES.map((s, i) => [s, { recibe: "enc" + i, admisibilidad: "fis" + i, deriva: "enc" + i, revision: "fis" + i, firma: "dir" + i, responde: "enc" + i, reclamos: "fis" + i, ambito: "ger" + i, prueba: true }]));
+const RESP = Object.fromEntries(SEDES.map((s, i) => [s, { recibe: "fis" + i, admisibilidad: "fis" + i, deriva: "fis" + i, revision: "fis" + i, firma: "dir" + i, responde: "fis" + i, reclamos: "fis" + i, ambito: "ger" + i, prueba: true }]));
 
 /* Ámbitos de EJEMPLO hasta cargar la matriz de datos personales (compartida por el delegado el 28-10-2026). */
 const AMBITOS = [
@@ -139,7 +142,7 @@ const CASOS = [
   T("DP-2027-000005", "2027-01-07", { via: "fisica", folio: "OP-LAG-0057", sede: "Dirección Regional Los Lagos", derechos: ["rectificacion"], etapa: "recepcion", desde: "2027-01-07", detalle: "Corregir mi fecha de nacimiento.", medio: "carta" })
 ];
 CASOS.forEach(c => {
-  c.bit.push({ f: c.ingreso, u: c.via === "web" ? "Sistema" : "Responsable de datos", a: c.via === "web" ? "Ingreso por formulario web · acuse de recibo enviado" : "Registro manual del formulario físico " + (c.folio || "") + " · acuse de recibo" });
+  c.bit.push({ f: c.ingreso, u: c.via === "web" ? "Sistema" : "Unidad Jurídica", a: c.via === "web" ? "Ingreso por formulario web · acuse de recibo enviado" : "Registro manual del formulario físico " + (c.folio || "") + " · acuse de recibo" });
   if (c.etapa !== "recepcion") c.bit.push({ f: c.desde, u: "—", a: "En etapa: " + (ETAPA[c.etapa] ? ETAPA[c.etapa].n : "cerrado") });
   if (c.reclamo) c.bit.push({ f: c.reclamo.notif, u: "Fiscalía", a: "La Agencia notificó un reclamo del titular (art. 41)" });
 });

@@ -30,6 +30,7 @@ def entrar(pg, texto, sede="Oficina Central"):
         pg.locator("#login .l-usuario", has_text=texto).first.click()
     else:  # el ingreso sólo entra a Oficina Central; la cuenta de cada sede se abre por su id
         uid = pg.evaluate("([t, s]) => { const u = USUARIOS.find(x => PERFILES[x.perfil].n.includes(t) && x.sede === s); return u ? u.id : null; }", [texto, sede])
+        pg.evaluate("window.tostada = () => {}")   # sin avisos flotantes sobre las capturas
         pg.evaluate("id => entrar(id)", uid)
     pg.wait_for_selector("#vista .hero, #vista .items-14ter")
 
@@ -76,24 +77,31 @@ with sync_playwright() as p:
     pg.get_by_role("button", name="Ver mis solicitudes").click()
     foto(pg, "09-mis")
 
-    # Encargado de Gestión (recibe en todas las sedes)
-    entrar(pg, "Encargado de Gestión")
-    foto(pg, "10-inicio-encargado")
+    # Unidad Jurídica de Oficina Central: asume las funciones del Encargado de Gestión (reunión del 18-11-2026).
+    # Todos los casos son de Oficina Central, para que el panel muestre las acciones de la cuenta.
+    entrar(pg, "Unidad Jurídica")
+    foto(pg, "10-inicio-juridica")
     pg.locator(".acceso", has_text="Mis tareas").first.click()
     foto(pg, "11-casos")
     caso(pg, "DP-2027-000004", "12-caso-recepcion")
+    caso(pg, "DP-2027-000003", "21-caso-bloqueo")
+    caso(pg, "DP-2027-000001", "22-caso-admisibilidad")
     caso(pg, "DP-2026-000110", "13-caso-derivacion")
+    caso(pg, "DP-2026-000105", "23-caso-revision")
     caso(pg, "DP-2026-000111", "14-caso-respuesta")
+    caso(pg, "DP-2026-000103", "24-caso-reclamo")
     pg.evaluate("ir('registrar')")
     foto(pg, "15-registrar")
 
-    # Fiscalía
-    entrar(pg, "Unidad Jurídica")
-    foto(pg, "20-inicio-fiscalia")
-    caso(pg, "DP-2027-000003", "21-caso-bloqueo")
-    caso(pg, "DP-2027-000002", "22-caso-admisibilidad")
-    caso(pg, "DP-2026-000105", "23-caso-revision")
-    caso(pg, "DP-2026-000103", "24-caso-reclamo")
+    # Delegado de protección de datos: seguimiento nacional, sólo lectura
+    entrar(pg, "Delegado de protección de datos")
+    foto(pg, "50-inicio-delegado")
+    foto(pg, "51-panel-sedes", "#panel-sedes")
+    caso(pg, "DP-2027-000003", "52-caso-delegado")
+    pg.evaluate("ir('calendario')")
+    foto(pg, "70-calendario")
+    pg.evaluate("ir('reportes')")
+    foto(pg, "71-reportes")
 
     # Área que trata los datos
     entrar(pg, "Área que trata")
@@ -105,8 +113,8 @@ with sync_playwright() as p:
     foto(pg, "40-inicio-director")
     caso(pg, "DP-2026-000104", "41-caso-firma")
 
-    # Encargado de Gestión, en la parte de administración del canal (antes perfil «Administración del canal»)
-    entrar(pg, "Encargado de Gestión")
+    # Unidad Jurídica, en la configuración del canal (antes del Encargado de Gestión)
+    entrar(pg, "Unidad Jurídica")
     pg.evaluate("ir('responsables')")
     foto(pg, "61-responsables")
     pg.evaluate("editarCelda('Dirección Regional Valparaíso', 'recibe')")
@@ -114,10 +122,6 @@ with sync_playwright() as p:
     pg.evaluate("cerrarCapa()")
     pg.evaluate("ir('parametros')")
     foto(pg, "63-parametros")
-    pg.evaluate("ir('calendario')")
-    foto(pg, "70-calendario")
-    pg.evaluate("ir('reportes')")
-    foto(pg, "71-reportes")
     pg.evaluate("ir('bitacora')")
     foto(pg, "64-bitacora")
 
@@ -130,5 +134,9 @@ with sync_playwright() as p:
     tel.locator("#login .l-usuario", has_text="Persona solicitante").first.click()
     tel.wait_for_selector("#vista .items-14ter")
     foto(tel, "80-telefono-pagina")
+    tel.locator("#btn-salir").click()
+    tel.evaluate("entrar('dpo')")
+    tel.wait_for_selector("#panel-sedes")
+    foto(tel, "81-telefono-delegado")
     nav.close()
 print("capturas en", SAL)

@@ -1,4 +1,5 @@
-/* CON012 · Encargado de Gestión (antes «Administración del canal»): responsables por etapa y sede, parámetros y bitácora. */
+/* CON012 · configuración del canal (Unidad Jurídica, que asume las funciones del Encargado de Gestión desde el 18-11-2026):
+   responsables por etapa y sede, parámetros y bitácora. La bitácora la ve también el delegado, a nivel nacional. */
 "use strict";
 
 const celdasPorDefinir = () => SEDES.reduce((n, s) => n + COLS.filter(([k]) => !RESP[s][k]).length, 0);
@@ -9,7 +10,7 @@ function vResponsables() {
   const completas = SEDES.filter(s => COLS.every(([k]) => RESP[s][k])).length, sinR = CASOS.filter(sinResponsable).length;
   const celda = (s, k) => { const v = RESP[s][k]; const txt = !v ? porDefinir() : esc(nomU(v)); return `<td><button type="button" class="celda-resp" data-s="${esc(s)}" data-k="${k}" aria-label="${esc(s)} · ${COLS.find(c => c[0] === k)[1]}: ${v ? esc(nomU(v)) : "por definir"}">${txt}</button></td>`; };
   return volverHTML() + cab("Responsables por etapa y sede", "Quién actúa en cada etapa, en Oficina Central y en cada dirección regional. Un caso cuya etapa no tiene responsable queda detenido y aparece en «Casos sin responsable».", "") +
-    `<div class="regla av" style="margin-bottom:var(--e-4)"><span class="ico">?</span><div><b>Responsables por definir</b><span>Los perfiles de gestión en Oficina Central y en regiones y los flujos de cada una los está levantando la contraparte (correo del 28-10-2026). Oficina Central y Biobío llevan una asignación de prueba, con usuarios ficticios, para que la maqueta se pueda recorrer.</span></div></div>
+    `<div class="regla av" style="margin-bottom:var(--e-4)"><span class="ico">?</span><div><b>Responsables por definir</b><span>Reunión del 18-11-2026: en cada sede la Unidad Jurídica recibe, resuelve la admisibilidad, deriva, revisa y responde; el Área analiza y el Director firma. Quién ocupa cada cuenta está por confirmar. Todas las sedes llevan una asignación de prueba, con cuentas ficticias, para que la maqueta se pueda recorrer.</span></div></div>
     <div class="contadores"><div class="contador"><b>${completas}</b><span>sedes con todas<br>las etapas cubiertas</span></div><div class="contador ${celdasPorDefinir() ? "alerta" : ""}"><b>${celdasPorDefinir()}</b><span>asignaciones<br>por definir</span></div><div class="contador ${sinR ? "alerta" : ""}"><b>${sinR}</b><span>casos abiertos<br>sin responsable</span></div></div>
     <section class="panel" style="margin-bottom:var(--e-4)"><header><div><h2>Por sede</h2><span class="sub">Toque una celda para asignar. Cada columna admite usuarios del perfil que hace esa etapa.</span></div><div class="acciones"><button class="boton secundario chico" type="button" id="vaciar">Dejar todo por definir</button>${RESP_PRUEBA ? `<button class="boton secundario chico" type="button" id="restaurar">Restaurar la asignación de prueba</button>` : ""}</div></header>
     <div class="tabla-env"><table class="t-resp"><thead><tr><th>Sede</th>${COLS.map(([, t]) => `<th>${t}</th>`).join("")}</tr></thead><tbody>${SEDES.map(s => `<tr><th scope="row">${esc(corta(s))}${RESP[s].prueba ? ` ${chip("prueba", "c-excl", "◆")}` : ""}</th>${COLS.map(([k]) => celda(s, k)).join("")}</tr>`).join("")}</tbody></table></div></section>
@@ -49,8 +50,8 @@ POST.parametros = () => {
 /* ---------- Bitácora ---------- */
 function vBitacora() {
   const sedes = sedesDeEquipo(SESION), enSede = num => sedes.includes((CASOS.find(c => c.num === num) || {}).sede);
-  const filas = BIT.filter(b => b.caso ? enSede(b.caso) : SESION.perfil === "encargado")   // la configuración sólo la ve el Encargado
-    .concat(CASOS.filter(c => sedes.includes(c.sede)).flatMap(c => c.bit.filter(b => b.u === "Sistema" || b.u === "Recepción").map(b => ({ f: b.f, u: b.u, caso: c.num, a: b.a }))))
+  const filas = BIT.filter(b => b.caso && b.caso !== "—" ? enSede(b.caso) : ["fiscalia", "delegado"].includes(SESION.perfil))   // la configuración la ven la Unidad Jurídica y el delegado
+    .concat(CASOS.filter(c => sedes.includes(c.sede)).flatMap(c => c.bit.filter(b => b.u === "Sistema" || b.u === "Unidad Jurídica").map(b => ({ f: b.f, u: b.u, caso: c.num, a: b.a }))))
     .sort((a, b) => b.f.localeCompare(a.f));
   return volverHTML() + cab("Bitácora", "Acciones sobre los casos y la configuración. En la versión institucional es inalterable y registra cada lectura del RUN completo y de los adjuntos.", "") +
     `<section class="panel"><div class="tabla-env"><table><thead><tr><th>Fecha</th><th>Usuario</th><th>Caso</th><th>Acción</th></tr></thead><tbody>${filas.slice(0, 120).map(b => `<tr><td class="num">${fF(b.f)}</td><td class="peq">${esc(b.u)}</td><td class="mono peq">${esc(b.caso)}</td><td>${esc(b.a)}</td></tr>`).join("")}</tbody></table></div></section>`;
